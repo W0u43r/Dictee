@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staal Dictee – Groep 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blauw:        #2e7fc1;
+  --blauw-donker: #1b5f96;
+  --blauw-licht:  #e8f3fb;
+  --blauw-mid:    #b3d4ee;
+  --oranje:       #f4873a;
+  --oranje-licht: #fef0e6;
+  --geel:         #f9d94e;
+  --geel-licht:   #fefae8;
+  --rood:         #e04a3c;
+  --rood-licht:   #fdecea;
+  --groen:        #2e8a55;
+  --groen-licht:  #e4f5ec;
+  --wit:          #ffffff;
+  --achter:       #eef4fb;
+  --tekst:        #0f2d47;
+  --tekst-zacht:  #3d6280;
+  --schaduw:      rgba(30,95,150,0.13);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--achter);
+  color: var(--tekst);
+  font-family: 'Nunito Sans', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1rem 3rem;
+  background-image:
+    radial-gradient(ellipse at 5% 10%, rgba(46,127,193,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 95% 88%, rgba(249,217,78,0.10) 0%, transparent 50%);
+}
+
+/* ── Kaart ── */
+.kaart {
+  background: var(--wit);
+  border-radius: 22px;
+  box-shadow: 0 6px 28px var(--schaduw), 0 1px 4px rgba(0,0,0,0.05);
+  max-width: 620px; width: 100%;
+  padding: 2rem 2rem 1.8rem;
+  display: flex; flex-direction: column; gap: 1.4rem;
+  position: relative; overflow: hidden;
+}
+.kaart::before {
+  content:''; position:absolute; top:-45px; right:-45px;
+  width:170px; height:170px; border-radius:50%;
+  background: radial-gradient(circle, rgba(46,127,193,0.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.kaart::after {
+  content:''; position:absolute; bottom:-28px; left:-28px;
+  width:130px; height:130px; border-radius:50%;
+  background: radial-gradient(circle, rgba(249,217,78,0.14) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* ── Kop ── */
+.kaart-header {
+  display:flex; justify-content:space-between; align-items:center; gap:1rem;
+  position:relative; z-index:1;
+}
+.kaart-titel {
+  font-family:'Nunito',sans-serif; font-weight:900; font-size:1.65rem;
+  color:var(--blauw-donker); line-height:1.1;
+}
+.kaart-titel span {
+  display:block; font-weight:600; font-size:0.82rem; color:var(--tekst-zacht);
+  margin-top:3px; font-family:'Nunito Sans',sans-serif;
+}
+.score-chip {
+  background: var(--blauw); color: white;
+  font-family:'Nunito',sans-serif; font-weight:800; font-size:0.72rem;
+  padding:8px 16px; border-radius:50px; text-align:center; line-height:1.4;
+  box-shadow: 0 2px 10px rgba(46,127,193,0.35); white-space:nowrap;
+}
+.score-chip strong { display:block; font-size:1.4rem; line-height:1; }
+
+/* ── Cat grid ── */
+.sectie-label {
+  font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem;
+  text-transform:uppercase; letter-spacing:0.08em; color:var(--tekst-zacht); margin-bottom:4px;
+}
+.cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.cat-btn {
+  background: var(--blauw-licht); border: 2px solid var(--blauw-mid);
+  border-radius: 14px; padding: 12px 14px; cursor: pointer; text-align: left;
+  transition: all 0.17s; font-family:'Nunito',sans-serif;
+}
+.cat-btn:hover {
+  background: var(--blauw-mid); border-color: var(--blauw);
+  transform: translateY(-2px); box-shadow: 0 5px 14px var(--schaduw);
+}
+.cat-btn .lbl { font-weight:800; font-size:0.9rem; color:var(--blauw-donker); display:block; }
+.cat-btn .sub { font-weight:400; font-size:0.7rem; color:var(--tekst-zacht); display:block; margin-top:2px; }
+
+/* ── Voortgang ── */
+.progress-row { display:flex; gap:5px; }
+.pip { flex:1; height:6px; border-radius:3px; background:rgba(46,127,193,0.15); transition:background 0.3s; }
+.pip.huidig { background:rgba(244,135,58,0.5); }
+.pip.goed   { background:var(--groen); }
+.pip.fout   { background:var(--rood); }
+
+/* ── Luisterkaart ── */
+.luister-kaart {
+  background: var(--blauw-licht);
+  border: 2px solid var(--blauw-mid);
+  border-radius: 16px;
+  padding: 1.6rem 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  position: relative; z-index: 1;
+}
+
+.woord-num {
+  font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem;
+  color:var(--tekst-zacht); letter-spacing:0.04em;
+}
+
+.luister-knop {
+  background: var(--blauw); border: none; border-radius: 50%;
+  width: 80px; height: 80px; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px rgba(46,127,193,0.40); transition: all 0.17s;
+}
+.luister-knop:hover { background: var(--blauw-donker); transform: scale(1.06); }
+.luister-knop.bezig {
+  background: var(--oranje);
+  box-shadow: 0 4px 18px rgba(244,135,58,0.45);
+  animation: klop 0.7s ease-in-out infinite alternate;
+}
+@keyframes klop { from{transform:scale(1)} to{transform:scale(1.09)} }
+.luister-knop svg { width:32px; height:32px; }
+
+.knop-label {
+  font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem;
+  color:var(--tekst-zacht); text-align:center;
+}
+
+/* luisterstatus-balletjes */
+.golven {
+  display: flex; gap: 5px; align-items: center; height: 24px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.golven.actief { opacity: 1; }
+.golf {
+  width: 5px; border-radius: 3px; background: var(--blauw);
+  animation: golf 1s ease-in-out infinite;
+}
+.golf:nth-child(1) { animation-delay: 0s;    height:8px; }
+.golf:nth-child(2) { animation-delay: 0.15s; height:16px; }
+.golf:nth-child(3) { animation-delay: 0.30s; height:22px; }
+.golf:nth-child(4) { animation-delay: 0.45s; height:16px; }
+.golf:nth-child(5) { animation-delay: 0.60s; height:8px; }
+@keyframes golf {
+  0%,100% { transform: scaleY(0.5); opacity:0.5; }
+  50%      { transform: scaleY(1);   opacity:1; }
+}
+
+.knop-rij-klein { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
+.klein-knop {
+  background: white; border: 2px solid var(--blauw-mid); border-radius: 50px;
+  padding: 7px 16px; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.78rem;
+  color: var(--blauw-donker); cursor: pointer; transition: all 0.15s;
+}
+.klein-knop:hover { background: var(--blauw-mid); border-color: var(--blauw); }
+
+/* ── Invoer ── */
+.invoer-rij { display:flex; gap:10px; align-items:center; position:relative; z-index:1; }
+#spell-input {
+  flex:1; font-family:'Nunito',sans-serif; font-weight:700; font-size:1.45rem;
+  letter-spacing:0.05em; background: var(--blauw-licht); border: 2.5px solid var(--blauw-mid);
+  border-radius: 12px; padding: 10px 16px; color: var(--tekst); outline: none;
+  text-transform: lowercase; transition: border-color 0.2s, background 0.2s;
+}
+#spell-input::placeholder { color: rgba(61,98,128,0.4); font-weight:400; }
+#spell-input:focus { border-color: var(--blauw); background: var(--wit); }
+#spell-input.goed-input { border-color: var(--groen); background: var(--groen-licht); }
+#spell-input.fout-input { border-color: var(--rood);  background: var(--rood-licht); }
+
+.controleer-knop {
+  font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem;
+  background: var(--oranje); color: white; border: none; border-radius: 12px;
+  padding: 12px 22px; cursor: pointer; white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(244,135,58,0.35); transition: all 0.17s;
+}
+.controleer-knop:hover { background: #d96e25; transform: translateY(-1px); }
+
+/* ── Feedback ── */
+.feedback { min-height:72px; position:relative; z-index:1; display:flex; flex-direction:column; gap:6px; }
+.fb-hoofd {
+  font-family:'Nunito',sans-serif; font-weight:800; font-size:1.05rem;
+  opacity:0; transform:translateY(6px); transition:all 0.22s;
+}
+.fb-hoofd.toon { opacity:1; transform:none; }
+.fb-hoofd.goed { color: var(--groen); }
+.fb-hoofd.fout { color: var(--rood); }
+.fb-woord { font-size:0.88rem; letter-spacing:0.04em; opacity:0; transition:opacity 0.3s 0.14s; color:var(--tekst-zacht); }
+.fb-woord.toon { opacity:1; }
+.char-diff { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; opacity:0; transition:opacity 0.3s 0.2s; }
+.char-diff.toon { opacity:1; }
+.char-box {
+  font-family:'Nunito',sans-serif; font-weight:700; font-size:1.05rem;
+  width:30px; height:34px; display:flex; align-items:center; justify-content:center;
+  border-radius:7px; border:2px solid transparent;
+}
+.char-box.ok    { background: var(--groen-licht); border-color: var(--groen); color: var(--groen); }
+.char-box.fout  { background: var(--rood-licht);  border-color: var(--rood);  color: var(--rood); }
+.char-box.extra { background: var(--geel-licht);  border-color: var(--geel);  color: #7a6200; }
+
+/* ── Resultaten ── */
+.resultaten { display:none; flex-direction:column; align-items:center; gap:1.4rem; text-align:center; position:relative; z-index:1; }
+.resultaten.toon { display:flex; }
+.score-ster { font-size:2.8rem; animation: sterren 0.5s ease forwards; }
+@keyframes sterren { 0%{transform:scale(0) rotate(-20deg);opacity:0} 65%{transform:scale(1.2) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0);opacity:1} }
+.grote-score { font-family:'Nunito',sans-serif; font-weight:900; font-size:4rem; color:var(--blauw-donker); line-height:1; }
+.grote-score span { font-size:1.5rem; font-weight:400; color:var(--tekst-zacht); }
+.res-bericht { font-size:0.98rem; color:var(--tekst-zacht); font-style:italic; max-width:320px; }
+.woord-lijst { width:100%; display:flex; flex-direction:column; gap:5px; max-height:220px; overflow-y:auto; }
+.woord-rij {
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:0.85rem; padding:7px 10px; border-radius:9px; background:var(--achter);
+}
+.woord-rij .links { display:flex; gap:8px; align-items:center; font-family:'Nunito',sans-serif; font-weight:700; }
+.woord-rij .antwoord { color:var(--tekst-zacht); text-decoration:line-through; font-size:0.8rem; }
+.woord-rij .antwoord.ok { text-decoration:none; color:var(--groen); }
+.herstart-knop {
+  font-family:'Nunito',sans-serif; font-weight:800; font-size:0.95rem;
+  background: var(--blauw); color:white; border:none; border-radius:50px;
+  padding:12px 28px; cursor:pointer; transition:all 0.17s;
+  box-shadow: 0 3px 10px rgba(46,127,193,0.3);
+}
+.herstart-knop:hover { background:var(--blauw-donker); transform:translateY(-1px); }
+.herstart-knop.wit { background:var(--wit); color:var(--blauw-donker); border:2px solid var(--blauw-mid); box-shadow:none; }
+.herstart-knop.wit:hover { background:var(--blauw-licht); }
+
+
+/* stem selector */
+.stem-rij { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.stem-select {
+  flex:1; min-width:0;
+  font-family:'Nunito',sans-serif; font-weight:600; font-size:0.85rem;
+  background:var(--blauw-licht); border:2px solid var(--blauw-mid);
+  border-radius:10px; padding:8px 12px; color:var(--tekst); outline:none;
+  cursor:pointer; transition:border-color 0.2s;
+}
+.stem-select:focus { border-color:var(--blauw); }
+
+/* stem melding */
+.stem-melding { font-size:0.74rem; color:var(--blauw-donker); background:var(--blauw-licht); border:1.5px solid var(--blauw-mid); padding:8px 12px; border-radius:10px; display:none; }
+.stem-melding.toon { display:block; }
+
+#spel-area { display:none; flex-direction:column; gap:1.2rem; }
+</style>
+</head>
+<body>
+
+<div class="kaart">
+
+  <div class="stem-melding" id="stem-melding">
+    ℹ️ Geen Nederlandse stem gevonden. Controleer of nl-NL beschikbaar is in je browser.
+  </div>
+
+
+  <div class="stem-rij" id="stem-rij" style="display:none">
+    <span class="sectie-label" style="white-space:nowrap;margin:0">🎙️ Stem:</span>
+    <select id="stem-select" class="stem-select" onchange="kiesStem(this.value)"></select>
+    <button class="klein-knop" onclick="testStem()" style="white-space:nowrap;flex-shrink:0">▶ Test</button>
+  </div>
+  <div class="kaart-header">
+    <div class="kaart-titel">
+      Staal Dictee
+      <span>Groep 4 – Spelling oefenen</span>
+    </div>
+    <div class="score-chip">Score<br><strong id="score-display">0 / 0</strong></div>
+  </div>
+
+  <!-- Categorie keuze -->
+  <div id="cat-sectie">
+    <div class="sectie-label">Kies een woordsoort</div>
+    <div class="cat-grid" id="cat-grid"></div>
+  </div>
+
+  <!-- Voortgang -->
+  <div class="progress-row" id="progress-row" style="display:none"></div>
+
+  <!-- Spel -->
+  <div id="spel-area">
+
+    <div class="luister-kaart">
+      <div class="woord-num" id="woord-num">Woord 1 van 10</div>
+
+      <button class="luister-knop" id="luister-knop" onclick="speakFull(); focusInput();" title="Hoor zin + woord">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M3 9v6h4l5 5V4L7 9H3z" fill="white"/>
+          <path d="M16.5 12A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="white"/>
+          <path d="M19 12c0 3.53-2.53 6.44-5.87 7v-2.02A5 5 0 0019 12a5 5 0 00-5.87-4.98V5c3.34.56 5.87 3.47 5.87 7z" fill="white"/>
+        </svg>
+      </button>
+
+      <div class="golven" id="golven">
+        <div class="golf"></div><div class="golf"></div><div class="golf"></div>
+        <div class="golf"></div><div class="golf"></div>
+      </div>
+
+      <div class="knop-label" id="knop-label">🔊 Druk om de zin te horen</div>
+
+      <div class="knop-rij-klein">
+        <button class="klein-knop" onclick="speakWoordAlleen(); focusInput();">🔁 Herhaal woord</button>
+        <button class="klein-knop" onclick="speakFull(true); focusInput();">🐢 Langzaam</button>
+      </div>
+    </div>
+
+    <div class="invoer-rij">
+      <input type="text" id="spell-input" placeholder="typ het woord…"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        inputmode="text"
+        onkeydown="handleKey(event)">
+      <button class="controleer-knop" id="controleer-knop" onclick="checkAntwoord()">Controleer →</button>
+    </div>
+
+    <div class="feedback">
+      <div class="fb-hoofd" id="fb-hoofd"></div>
+      <div class="fb-woord" id="fb-woord"></div>
+      <div class="char-diff"  id="char-diff"></div>
+    </div>
+  </div>
+
+  <!-- Resultaten -->
+  <div class="resultaten" id="resultaten">
+    <div class="score-ster" id="score-ster">⭐</div>
+    <div class="grote-score" id="grote-score">0 <span>/ 10</span></div>
+    <div class="res-bericht" id="res-bericht"></div>
+    <div class="woord-lijst" id="woord-lijst"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button class="herstart-knop wit" onclick="naarCats()">← Andere categorie</button>
+      <button class="herstart-knop" onclick="herstart()">Opnieuw ↺</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const CATEGORIEEN = [
+  {
+    id:'hakwoord', label:'Hakwoorden', sub:'Korte stamwoorden – MKM',
+    items:[
+      {word:'bak',   sentence:'Maurits zet de bak op tafel.'},
+      {word:'boom',  sentence:'Maurits klimt in de grote boom in de tuin.'},
+      {word:'dak',   sentence:'Maurits ziet de vogel op het dak zitten.'},
+      {word:'jas',   sentence:'Maurits hangt zijn jas aan de kapstok.'},
+      {word:'zaak',  sentence:'Maurits wil later een eigen zaak beginnen.'},
+      {word:'rook',  sentence:'Maurits kijkt naar de rook uit de schoorsteen.'},
+      {word:'toon',  sentence:'Maurits speelt de goede toon op zijn blokfluit.'},
+      {word:'muur',  sentence:'Maurits tekent een ster op de muur.'},
+      {word:'hoog',  sentence:'Maurits springt zo hoog als hij kan.'},
+      {word:'hut',   sentence:'Maurits bouwt een hut in het bos.'},
+    ]
+  },
+  {
+    id:'zangwoord', label:'Zangwoorden', sub:'Tweeklanken – bouw, dief, zoet…',
+    items:[
+      {word:'bouw',  sentence:'Maurits helpt mee met de bouw van het boomhuis.'},
+      {word:'hout',  sentence:'Maurits hakt hout voor het kampvuur.'},
+      {word:'dief',  sentence:'Maurits zag de dief snel weglopen.'},
+      {word:'doek',  sentence:'Maurits droogt zijn handen aan een doek.'},
+      {word:'jouw',  sentence:'Maurits vraagt: is dit jouw fiets?'},
+      {word:'kous',  sentence:'Maurits heeft een gat in zijn kous.'},
+      {word:'poes',  sentence:'Maurits aait de poes van de buren.'},
+      {word:'luik',  sentence:'Maurits opent het zware luik van de kelder.'},
+      {word:'zoet',  sentence:'Maurits vindt de aardbei heel zoet.'},
+      {word:'wieg',  sentence:'Maurits wiegt het babytje zachtjes in de wieg.'},
+    ]
+  },
+  {
+    id:'klankwoord', label:'Klankwoorden', sub:'Medeklinkercluster – MMK',
+    items:[
+      {word:'bleek',  sentence:'Maurits werd bleek van schrik toen hij de spin zag.'},
+      {word:'bruin',  sentence:'Maurits heeft een bruin konijn als huisdier.'},
+      {word:'fluit',  sentence:'Maurits speelt elke week fluit bij de muziekschool.'},
+      {word:'groot',  sentence:'Maurits wil later in een groot huis wonen.'},
+      {word:'klaar',  sentence:'Maurits is als eerste klaar met zijn werk.'},
+      {word:'knoop',  sentence:'Maurits legt een stevige knoop in het touw.'},
+      {word:'ploeg',  sentence:'Maurits speelt in de voetbalploeg van de school.'},
+      {word:'slaap',  sentence:'Maurits heeft veel slaap nodig na een drukke dag.'},
+      {word:'spek',   sentence:'Maurits eet graag een boterham met spek.'},
+      {word:'tram',   sentence:'Maurits neemt de tram naar het centrum.'},
+    ]
+  },
+  {
+    id:'struikelwoord', label:'Struikelwoorden', sub:'STR / SPR – vaste clusters',
+    items:[
+      {word:'straat',  sentence:'Maurits speelt voetbal op straat met zijn vrienden.'},
+      {word:'streek',  sentence:'Maurits fietst door de prachtige groene streek.'},
+      {word:'streep',  sentence:'Maurits trekt een rechte streep op het papier.'},
+      {word:'straf',   sentence:'Maurits heeft straf gekregen van de juf.'},
+      {word:'strip',   sentence:'Maurits leest iedere avond een grappige strip.'},
+      {word:'stroop',  sentence:'Maurits smeert dikke stroop op zijn boterham.'},
+      {word:'struik',  sentence:'Maurits verstopt zich achter de grote struik.'},
+      {word:'spraak',  sentence:'Maurits heeft een heldere en duidelijke spraak.'},
+      {word:'spreek',  sentence:'Maurits zegt: spreek je woorden goed uit.'},
+      {word:'spruit',  sentence:'Maurits lust geen spruit bij het avondeten.'},
+    ]
+  },
+  {
+    id:'sisklank', label:'Sisklankwoorden', sub:'SCH en SCHR',
+    items:[
+      {word:'school',   sentence:'Maurits gaat elke dag blij naar school.'},
+      {word:'schaaf',   sentence:'Maurits gebruikt de schaaf om het hout glad te maken.'},
+      {word:'schep',    sentence:'Maurits graaft met de schep in de zandbak.'},
+      {word:'schuur',   sentence:'Maurits stalt zijn fiets elke avond in de schuur.'},
+      {word:'schuim',   sentence:'Maurits maakt veel schuim in bad.'},
+      {word:'schrijf',  sentence:'Maurits zegt: schrijf je naam op je schrift.'},
+      {word:'schroef',  sentence:'Maurits draait de schroef stevig vast.'},
+      {word:'schiet',   sentence:'Maurits schiet de bal keihard in het doel.'},
+      {word:'schram',   sentence:'Maurits heeft een schram op zijn knie.'},
+      {word:'scheur',   sentence:'Maurits ontdekt een scheur in zijn broek.'},
+    ]
+  },
+  {
+    id:'twijfelwoord', label:'Twijfelwoorden', sub:'EI / AU – onthouden!',
+    items:[
+      {word:'eik',    sentence:'Maurits leunt tegen de dikke eik in het park.'},
+      {word:'trein',  sentence:'Maurits neemt de trein naar zijn opa en oma.'},
+      {word:'klei',   sentence:'Maurits maakt een mooie pot van klei.'},
+      {word:'steil',  sentence:'Maurits rent het steile pad omhoog.'},
+      {word:'prei',   sentence:'Maurits snijdt de prei voor de soep.'},
+      {word:'blauw',  sentence:'Maurits wijst naar de mooie blauwe lucht.'},
+      {word:'dauw',   sentence:'Maurits ziet dauw op het gras liggen in de ochtend.'},
+      {word:'klauw',  sentence:'Maurits kijkt naar de scherpe klauw van de arend.'},
+      {word:'pauw',   sentence:'Maurits vindt de kleurrijke pauw het mooiste dier.'},
+      {word:'mei',    sentence:'Maurits is jarig in de maand mei.'},
+    ]
+  },
+  {
+    id:'cht-woord', label:'CHT-woorden', sub:'acht, licht, vlucht…',
+    items:[
+      {word:'acht',    sentence:'Maurits telt hardop tot acht.'},
+      {word:'dicht',   sentence:'Maurits doet de deur stevig dicht.'},
+      {word:'gracht',  sentence:'Maurits vaart in een bootje door de gracht.'},
+      {word:'kracht',  sentence:'Maurits tilt de zware doos op met veel kracht.'},
+      {word:'licht',   sentence:'Maurits knijpt het licht aan in de donkere gang.'},
+      {word:'pech',    sentence:'Maurits heeft pech: zijn fietsband is lek.'},
+      {word:'vlucht',  sentence:'Maurits kijkt naar het vliegtuig in zijn lange vlucht.'},
+      {word:'vracht',  sentence:'Maurits helpt de zware vracht lossen.'},
+      {word:'vrucht',  sentence:'Maurits weet dat een peer een vrucht is.'},
+      {word:'zocht',   sentence:'Maurits zocht zijn rugzak door de hele school.'},
+    ]
+  },
+  {
+    id:'open-lettergreep', label:'Open lettergreepwoorden', sub:'aa→a, ee→e, oo→o',
+    items:[
+      {word:'apen',    sentence:'Maurits lacht om de gekke apen in de dierentuin.'},
+      {word:'avond',   sentence:'Maurits leest iedere avond voor het slapen.'},
+      {word:'deken',   sentence:'Maurits trekt de warme deken over zich heen.'},
+      {word:'koning',  sentence:'Maurits wil zo dapper zijn als een echte koning.'},
+      {word:'leraar',  sentence:'Maurits luistert heel goed naar zijn leraar.'},
+      {word:'motor',   sentence:'Maurits droomt ervan om later op een motor te rijden.'},
+      {word:'muziek',  sentence:'Maurits danst altijd vrolijk op muziek.'},
+      {word:'paling',  sentence:'Maurits proeft voor het eerst gerookte paling.'},
+      {word:'regen',   sentence:'Maurits springt in de plassen na de regen.'},
+      {word:'woning',  sentence:'Maurits helpt meeverhuizen naar de nieuwe woning.'},
+    ]
+  },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let cat = null, items = [], idx = 0, score = 0, res = [], beantwoord = false, nlStem = null;
+
+// ── Stemmen ───────────────────────────────────────────────────────────────────
+function laadStemmen() {
+  const s = speechSynthesis.getVoices();
+  // Bouw dropdown: alle nl stemmen + fallback
+  const nlStemmen = s.filter(v => v.lang.startsWith('nl'));
+  const sel = document.getElementById('stem-select');
+  if (nlStemmen.length > 0) {
+    sel.innerHTML = '';
+    nlStemmen.forEach((v, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      // Markeer Vlaams zodat Maurits het kan herkennen
+      const flag = v.lang === 'nl-BE' ? ' 🇧🇪' : ' 🇳🇱';
+      opt.textContent = v.name + flag;
+      sel.appendChild(opt);
+    });
+    document.getElementById('stem-rij').style.display = 'flex';
+    // Kies automatisch beste NL-NL stem als default
+    let bestIdx = 0;
+    for (const test of [
+      v => v.lang === 'nl-NL' && /frank|fenna|xander/i.test(v.name),
+      v => v.lang === 'nl-NL' && !/belgi|flemish/i.test(v.name),
+      v => v.lang === 'nl-NL',
+    ]) {
+      const idx = nlStemmen.findIndex(test);
+      if (idx !== -1) { bestIdx = idx; break; }
+    }
+    sel.value = bestIdx;
+    nlStem = nlStemmen[bestIdx];
+  } else {
+    document.getElementById('stem-melding').classList.add('toon');
+  }
+  console.log('Stem:', nlStem ? `${nlStem.name} (${nlStem.lang})` : 'geen');
+}
+
+function kiesStem(idx) {
+  const s = speechSynthesis.getVoices().filter(v => v.lang.startsWith('nl'));
+  nlStem = s[idx] || null;
+}
+
+function testStem() {
+  spreek('Hallo Maurits, ik ben jouw dictee stem. Klopt dit?', 0.88);
+}
+speechSynthesis.addEventListener('voiceschanged', laadStemmen);
+window.addEventListener('load', () => { speechSynthesis.getVoices(); laadStemmen(); bouwGrid(); });
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+function bouwGrid() {
+  const g = document.getElementById('cat-grid');
+  g.innerHTML = '';
+  CATEGORIEEN.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'cat-btn';
+    b.innerHTML = `<span class="lbl">${c.label}</span><span class="sub">${c.sub}</span>`;
+    b.onclick = () => start(c);
+    g.appendChild(b);
+  });
+}
+
+function start(c) {
+  cat = c; items = mix([...c.items]); idx = 0; score = 0; res = []; beantwoord = false;
+  document.getElementById('cat-sectie').style.display = 'none';
+  document.getElementById('resultaten').classList.remove('toon');
+  document.getElementById('progress-row').style.display = 'flex';
+  document.getElementById('spel-area').style.display = 'flex';
+  bouwVoortgang(); updateScore(); toonItem();
+}
+
+function bouwVoortgang() {
+  const r = document.getElementById('progress-row');
+  r.innerHTML = '';
+  items.forEach((_, i) => {
+    const p = document.createElement('div');
+    p.className = 'pip' + (i === 0 ? ' huidig' : '');
+    p.id = 'pip-' + i;
+    r.appendChild(p);
+  });
+}
+function updatePip(i, cls) {
+  const p = document.getElementById('pip-' + i); if (p) p.className = 'pip ' + cls;
+  const n = document.getElementById('pip-' + (i+1)); if (n) n.classList.add('huidig');
+}
+function updateScore() { document.getElementById('score-display').textContent = `${score} / ${items.length}`; }
+
+// ── Toon item ─────────────────────────────────────────────────────────────────
+function toonItem() {
+  beantwoord = false;
+  document.getElementById('woord-num').textContent = `Woord ${idx+1} van ${items.length}`;
+  const inp = document.getElementById('spell-input');
+  inp.value = ''; inp.className = '';
+  inp.removeAttribute('readonly');
+  document.getElementById('controleer-knop').textContent = 'Controleer →';
+  verbergFB();
+  setKnopLabel('🔊 Druk om de zin te horen');
+  // Desktop: direct focussen. iOS: focus pas na gebruikersinteractie (zie luisterknop + controleerknop).
+  if (!isIOS()) {
+    setTimeout(() => inp.focus(), 450);
+  }
+  setTimeout(speakFull, 450);
+}
+
+// ── Spraak ────────────────────────────────────────────────────────────────────
+function spreek(t, rate = 0.88, cb = null) {
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = 'nl-NL'; u.rate = rate; u.pitch = 1.0;
+  if (nlStem) u.voice = nlStem;
+  if (cb) u.onend = cb;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function setBezigKnop(aan) {
+  document.getElementById('luister-knop').classList.toggle('bezig', aan);
+  document.getElementById('golven').classList.toggle('actief', aan);
+  setKnopLabel(aan ? '🔊 Bezig…' : '🔊 Druk om de zin te horen');
+}
+function setKnopLabel(t) { document.getElementById('knop-label').textContent = t; }
+
+function speakFull(langzaam = false) {
+  if (!items[idx]) return;
+  const {sentence, word} = items[idx], r = langzaam ? 0.62 : 0.85;
+  setBezigKnop(true);
+  // Zin → pauze → woord → pauze → woord nogmaals
+  spreek(sentence, r, () =>
+    setTimeout(() =>
+      spreek(word, r * 0.88, () =>
+        setTimeout(() =>
+          spreek(word, r * 0.82, () => setBezigKnop(false))
+        , 500)
+      )
+    , 650)
+  );
+}
+
+function speakWoordAlleen() {
+  if (!items[idx]) return;
+  setBezigKnop(true);
+  spreek(items[idx].word, 0.76, () => setBezigKnop(false));
+}
+
+// ── Antwoord ──────────────────────────────────────────────────────────────────
+function handleKey(e) { if (e.key === 'Enter') checkAntwoord(); }
+
+function checkAntwoord() {
+  if (beantwoord) { volgende(); return; }
+  const inp = document.getElementById('spell-input');
+  const getypt = inp.value.trim().toLowerCase();
+  if (!getypt) { speakFull(); return; }
+  const correct = items[idx].word.toLowerCase();
+  const ok = getypt === correct;
+  beantwoord = true;
+  inp.classList.add(ok ? 'goed-input' : 'fout-input');
+
+  const fbH = document.getElementById('fb-hoofd');
+  const fbW = document.getElementById('fb-woord');
+  const chD = document.getElementById('char-diff');
+
+  if (ok) {
+    score++;
+    fbH.textContent = kiesPos(); fbH.className = 'fb-hoofd toon goed';
+    fbW.textContent = '✓ ' + items[idx].word; fbW.className = 'fb-woord toon';
+    chD.className = 'char-diff';
+    updatePip(idx, 'goed');
+  } else {
+    fbH.textContent = 'Helaas, dat klopt niet!'; fbH.className = 'fb-hoofd toon fout';
+    fbW.textContent = 'Het juiste woord: ' + items[idx].word; fbW.className = 'fb-woord toon';
+    toonDiff(getypt, correct); chD.className = 'char-diff toon';
+    updatePip(idx, 'fout');
+    setTimeout(() => spreek(correct, 0.78), 300);
+  }
+  res.push({word: items[idx].word, answer: getypt, correct: ok});
+  updateScore();
+  document.getElementById('controleer-knop').textContent = 'Volgende →';
+  setTimeout(volgende, 2100);
+}
+
+function toonDiff(getypt, correct) {
+  const box = document.getElementById('char-diff');
+  box.innerHTML = '';
+  const max = Math.max(getypt.length, correct.length);
+  for (let i = 0; i < max; i++) {
+    const tc = getypt[i] || '', cc = correct[i] || '';
+    const el = document.createElement('div');
+    el.className = 'char-box';
+    if (!cc)        { el.classList.add('extra'); el.textContent = tc; }
+    else if (tc===cc){ el.classList.add('ok');   el.textContent = cc; }
+    else             { el.classList.add('fout');  el.textContent = cc; el.title=`Jij: "${tc||'–'}"`; }
+    box.appendChild(el);
+  }
+}
+
+function verbergFB() {
+  document.getElementById('fb-hoofd').className = 'fb-hoofd';
+  document.getElementById('fb-woord').className = 'fb-woord';
+  document.getElementById('char-diff').className = 'char-diff';
+}
+
+function volgende() { idx++; if (idx < items.length) toonItem(); else toonResultaten(); }
+
+// ── Resultaten ────────────────────────────────────────────────────────────────
+function toonResultaten() {
+  document.getElementById('spel-area').style.display = 'none';
+  document.getElementById('progress-row').style.display = 'none';
+  document.getElementById('resultaten').classList.add('toon');
+  const pct = score / items.length;
+  document.getElementById('grote-score').innerHTML = `${score} <span>/ ${items.length}</span>`;
+  document.getElementById('score-ster').textContent = pct===1 ? '🏆' : pct>=0.8 ? '⭐⭐⭐' : pct>=0.6 ? '⭐⭐' : '⭐';
+  document.getElementById('res-bericht').textContent =
+    pct===1   ? 'Perfect! Alle woorden goed! Maurits is een spellingsheld! 🎉' :
+    pct>=0.8  ? 'Super goed gedaan, Maurits! Bijna allemaal goed!' :
+    pct>=0.6  ? 'Goed bezig, Maurits! Nog een keer oefenen.' :
+    pct>=0.4  ? 'Aardig begin! Blijf oefenen, Maurits!' :
+                'Probeer het nog eens – jij kan het zeker! 💪';
+  const lijst = document.getElementById('woord-lijst');
+  lijst.innerHTML = '';
+  res.forEach(r => {
+    const rij = document.createElement('div');
+    rij.className = 'woord-rij';
+    rij.innerHTML = `<div class="links"><span>${r.correct?'✅':'❌'}</span><span>${r.word}</span></div><span class="antwoord ${r.correct?'ok':''}">${r.answer}</span>`;
+    lijst.appendChild(rij);
+  });
+}
+
+function isIOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function focusInput() {
+  const inp = document.getElementById('spell-input');
+  inp.removeAttribute('readonly');
+  inp.focus();
+  // Zorg dat het invoerveld zichtbaar blijft als het toetsenbord omhoog komt
+  setTimeout(() => inp.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+}
+
+function naarCats() {
+  speechSynthesis.cancel();
+  document.getElementById('resultaten').classList.remove('toon');
+  document.getElementById('cat-sectie').style.display = '';
+  document.getElementById('score-display').textContent = '0 / 0';
+}
+function herstart() { speechSynthesis.cancel(); start(cat); }
+function mix(a) {
+  for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function kiesPos() {
+  return ['Goed gedaan! 🎉','Helemaal goed!','Super Maurits!','Uitstekend!','Top zo!'][Math.floor(Math.random()*5)];
+}
+</script>
+</body>
+</html>
