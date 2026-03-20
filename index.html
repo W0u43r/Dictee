@@ -193,14 +193,13 @@ details[open] summary::before { content: '▼ '; }
 
   <!-- Tip voor betere stem -->
   <div class="stem-tip" id="stem-tip" style="display:none">
-    ⚠️ <strong>Alleen standaardstemmen gevonden.</strong> Jouw apparaat heeft geen Neural-stemmen.
-    Die klinken veel natuurlijker — ze zijn gratis te installeren.
+    ⚠️ <strong>Geen verbeterde stem gevonden.</strong> Betere stemmen zijn gratis te installeren.
     <details>
       <summary>Hoe installeer ik betere stemmen?</summary>
       <ol>
+        <li><strong>iPhone/iPad:</strong> Instellingen → Toegankelijkheid → Gesproken inhoud → Stemmen → Nederlands → tik op <em>Fleur</em> of <em>Xander</em> → kies <strong>Uitgebreid</strong> en download</li>
         <li><strong>Windows:</strong> Instellingen → Toegankelijkheid → Spraak → Nederlandse stemmen toevoegen → kies <em>Microsoft Fenna</em> of <em>Microsoft Colette</em></li>
-        <li><strong>iPad/iPhone:</strong> Instellingen → Toegankelijkheid → Gesproken inhoud → Stemmen → Nederlands → download <em>Enhanced</em> stem</li>
-        <li>Herlaad daarna deze pagina</li>
+        <li>Herlaad daarna deze pagina — de betere stem wordt automatisch gekozen</li>
       </ol>
     </details>
   </div>
@@ -341,9 +340,11 @@ var alleStemmen = [];
 function stemScore(v) {
   var n = v.name.toLowerCase();
   var lang = v.lang.toLowerCase();
-  if (lang === 'nl-be') return 0;                                    // Vlaams: laagste prio
-  if (/neural|fenna|colette|enhanced/.test(n)) return 100;          // Neural: hoogste
-  if (/wavenet|premium/.test(n)) return 60;
+  if (lang === 'nl-be') return 0;                     // Vlaams: laagste prio
+  if (/neural|fenna|colette/.test(n)) return 100;     // Neural (Windows/Edge): hoogste
+  if (/fleur/.test(n))  return 90;                    // Fleur  (iPhone/iPad): beste iOS stem
+  if (/xander/.test(n)) return 80;                    // Xander (iPhone/iPad): goed alternatief
+  if (/enhanced|premium|wavenet/.test(n)) return 60;  // Uitgebreide kwaliteit
   if (lang === 'nl-nl') return 40;
   if (lang.startsWith('nl')) return 20;
   return 10;
@@ -368,7 +369,7 @@ function laadStemmen() {
     var opt = document.createElement('option');
     opt.value = i;
     var isVlaams = v.lang.toLowerCase() === 'nl-be';
-    var isNeural = /neural|fenna|colette|enhanced/i.test(v.name);
+    var isNeural = /neural|fenna|colette|enhanced|fleur|xander/i.test(v.name);
     var label = v.name;
     if (isVlaams) label += ' 🇧🇪';
     if (isNeural) label += ' ✦';
@@ -385,7 +386,7 @@ function laadStemmen() {
 
   // Toon tip als er geen neural stem is
   var heeftNeural = nl.some(function(v) {
-    return /neural|fenna|colette|enhanced/i.test(v.name);
+    return /neural|fenna|colette|enhanced|fleur|xander/i.test(v.name);
   });
   if (!heeftNeural) {
     document.getElementById('stem-tip').style.display = 'block';
@@ -402,7 +403,7 @@ function kiesStem(idxStr) {
 function updateKwaliteitsBadge(stem) {
   var badge = document.getElementById('kwaliteit-badge');
   if (!stem) return;
-  var isNeural = /neural|fenna|colette|enhanced/i.test(stem.name);
+  var isNeural = /neural|fenna|colette|enhanced|fleur|xander/i.test(stem.name);
   if (isNeural) {
     badge.textContent = '✦ Neural';
     badge.className = 'kwaliteit-badge neural';
