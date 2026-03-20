@@ -56,8 +56,8 @@ body {
 .stem-rij { display:none; align-items:center; gap:8px; flex-wrap:wrap; position:relative; z-index:1; }
 .stem-rij.toon { display:flex; }
 .lbl-klein { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--tekst-zacht); white-space:nowrap; }
-.stem-select { flex:1; min-width:0; font-family:'Nunito',sans-serif; font-weight:600; font-size:0.82rem; background:var(--blauw-licht); border:2px solid var(--blauw-mid); border-radius:10px; padding:8px 10px; color:var(--tekst); outline:none; cursor:pointer; }
-.stem-select:focus { border-color:var(--blauw); }
+
+
 
 .sectie-lbl { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--tekst-zacht); margin-bottom:4px; }
 .cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
@@ -134,6 +134,33 @@ body {
 
 #spel-area { display:none; flex-direction:column; gap:1.2rem; }
 
+
+/* ── Snelheid schuifje ── */
+.snelheid-rij {
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.snelheid-rij label {
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.76rem;
+  color: var(--tekst-zacht); white-space: nowrap;
+}
+.snelheid-slider {
+  flex: 1; -webkit-appearance: none; appearance: none;
+  height: 5px; border-radius: 3px;
+  background: linear-gradient(to right, var(--blauw) 0%, var(--blauw) 50%, var(--blauw-mid) 50%, var(--blauw-mid) 100%);
+  outline: none; cursor: pointer;
+}
+.snelheid-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--blauw); box-shadow: 0 2px 6px rgba(46,127,193,0.4);
+  cursor: pointer;
+}
+.snelheid-waarde {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
+  color: var(--blauw); min-width: 30px; text-align: right;
+}
+
 /* ── Stem tip banner ── */
 .stem-tip {
   background: var(--blauw-licht); border: 2px solid var(--blauw-mid);
@@ -157,20 +184,11 @@ details[open] summary::before { content: '▼ '; }
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   position: relative; z-index: 1;
 }
-.stem-select {
-  flex: 1; min-width: 0;
-  font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 0.82rem;
-  background: var(--blauw-licht); border: 2px solid var(--blauw-mid);
-  border-radius: 10px; padding: 7px 12px; color: var(--tekst);
-  outline: none; cursor: pointer; transition: border-color 0.2s;
-}
-.stem-select:focus { border-color: var(--blauw); }
-.kwaliteit-badge {
-  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.65rem;
-  padding: 2px 8px; border-radius: 50px; white-space: nowrap;
-}
-.kwaliteit-badge.neural { background: #d4edda; color: #1a5c2e; }
-.kwaliteit-badge.standaard { background: var(--geel-licht); color: #7a6200; }
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -181,31 +199,13 @@ details[open] summary::before { content: '▼ '; }
     <div class="score-chip">Score<br><strong id="score-display">0 / 0</strong></div>
   </div>
 
-  <!-- Stem keuze -->
-  <div class="stem-rij" id="stem-rij">
-    <span class="sectie-label" style="margin:0;white-space:nowrap">🎙️</span>
-    <select id="stem-select" class="stem-select" onchange="kiesStem(this.value)">
-      <option value="">Stemmen laden…</option>
-    </select>
-    <span class="kwaliteit-badge standaard" id="kwaliteit-badge">laden</span>
-    <button class="klein-knop" onclick="testStem()" style="white-space:nowrap;flex-shrink:0">▶ Test</button>
-  </div>
-
-  <!-- Debug knop -->
-  <div id="stem-debug" style="display:none; font-family:'Nunito Sans',sans-serif; font-size:0.75rem; background:#f0f0f0; border-radius:10px; padding:10px 12px; line-height:1.7; color:#333; word-break:break-all;"></div>
-  <button onclick="toonDebug()" style="font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:700;background:none;border:1.5px solid #b3d4ee;border-radius:50px;padding:4px 12px;color:#3d6280;cursor:pointer;">🔍 Welke stemmen ziet Safari?</button>
-
-  <!-- Tip voor betere stem -->
-  <div class="stem-tip" id="stem-tip" style="display:none">
-    ⚠️ <strong>Geen verbeterde stem gevonden.</strong> Betere stemmen zijn gratis te installeren.
-    <details>
-      <summary>Hoe installeer ik betere stemmen?</summary>
-      <ol>
-        <li><strong>iPhone/iPad:</strong> Instellingen → Toegankelijkheid → Gesproken inhoud → Stemmen → Nederlands → tik op <em>Fleur</em> of <em>Xander</em> → kies <strong>Uitgebreid</strong> en download</li>
-        <li><strong>Windows:</strong> Instellingen → Toegankelijkheid → Spraak → Nederlandse stemmen toevoegen → kies <em>Microsoft Fenna</em> of <em>Microsoft Colette</em></li>
-        <li>Herlaad daarna deze pagina — de betere stem wordt automatisch gekozen</li>
-      </ol>
-    </details>
+  <!-- Snelheid schuifje -->
+  <div class="snelheid-rij">
+    <label for="snelheid-slider">🐢 Snelheid</label>
+    <input type="range" id="snelheid-slider" class="snelheid-slider"
+      min="0.4" max="1.1" step="0.05" value="0.8"
+      oninput="updateSnelheid(this.value)">
+    <span class="snelheid-waarde" id="snelheid-waarde">0.8×</span>
   </div>
 
   <!-- Categorie keuze -->
@@ -220,7 +220,10 @@ details[open] summary::before { content: '▼ '; }
   <!-- Spel -->
   <div id="spel-area" style="display:none; flex-direction:column; gap:1.2rem;">
     <div class="luister-kaart">
-      <div class="woord-num" id="woord-num">Woord 1 van 10</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <div class="woord-num" id="woord-num">Woord 1 van 10</div>
+        <button onclick="stopEnTerug()" style="font-family:'Nunito',sans-serif;font-weight:700;font-size:0.72rem;background:none;border:1.5px solid var(--blauw-mid);border-radius:50px;padding:4px 12px;color:var(--tekst-zacht);cursor:pointer;">← Stop</button>
+      </div>
 
       <button class="luister-knop" id="luister-knop"
         onclick="speakFull(); focusInput();" title="Hoor zin + woord">
@@ -335,8 +338,8 @@ var CATS = [
 
 // ── State ─────────────────────────────────────────────────────────────────────
 var huidigeCat=null, items=[], idx=0, score=0, sessieRes=[], beantwoord=false;
+var spraakSnelheid = 0.80;  // instelbaar via schuifje
 var gekozenStem = null;
-var alleStemmen = [];
 
 // ── Stemmen laden ─────────────────────────────────────────────────────────────
 // Rangschik: Neural (beste) > Wavenet/Enhanced > standaard
@@ -344,11 +347,12 @@ var alleStemmen = [];
 function stemScore(v) {
   var n = v.name.toLowerCase();
   var lang = v.lang.toLowerCase();
-  if (lang === 'nl-be') return 0;                     // Vlaams: laagste prio
-  if (/neural|fenna|colette/.test(n)) return 100;     // Neural (Windows/Edge): hoogste
-  if (/fleur/.test(n))  return 90;                    // Fleur  (iPhone/iPad): beste iOS stem
-  if (/xander/.test(n)) return 80;                    // Xander (iPhone/iPad): goed alternatief
-  if (/enhanced|premium|wavenet/.test(n)) return 60;  // Uitgebreide kwaliteit
+  if (lang === 'nl-be') return 0;                      // Vlaams: laagste prio
+  if (/neural|fenna|colette/.test(n)) return 100;      // Neural (Windows/Edge): hoogste
+  if (/fleur/.test(n))   return 90;                    // Fleur  (iPhone/iPad)
+  if (/ellen/.test(n))   return 85;                    // Ellen  (iPhone/iPad): goed
+  if (/xander/.test(n))  return 70;                    // Xander (iPhone/iPad)
+  if (/enhanced|premium|wavenet/.test(n)) return 60;
   if (lang === 'nl-nl') return 40;
   if (lang.startsWith('nl')) return 20;
   return 10;
@@ -357,69 +361,24 @@ function stemScore(v) {
 function laadStemmen() {
   var raw = speechSynthesis.getVoices();
   var nl = raw.filter(function(v) { return v.lang.startsWith('nl'); });
-  if (nl.length === 0) {
-    // Probeer opnieuw na 500ms (Safari laadt stemmen async)
-    setTimeout(laadStemmen, 500);
-    return;
-  }
-
-  // Sorteer: beste eerst
+  if (nl.length === 0) { setTimeout(laadStemmen, 500); return; }
   nl.sort(function(a, b) { return stemScore(b) - stemScore(a); });
-  alleStemmen = nl;
-
-  var sel = document.getElementById('stem-select');
-  sel.innerHTML = '';
-  nl.forEach(function(v, i) {
-    var opt = document.createElement('option');
-    opt.value = i;
-    var isVlaams = v.lang.toLowerCase() === 'nl-be';
-    var isNeural = /neural|fenna|colette|enhanced|fleur|xander/i.test(v.name);
-    var label = v.name;
-    if (isVlaams) label += ' 🇧🇪';
-    if (isNeural) label += ' ✦';
-    opt.textContent = label;
-    sel.appendChild(opt);
-  });
-
-  // Herstel opgeslagen keuze
-  var savedIdx = parseInt(localStorage.getItem('stem_idx') || '0');
-  if (savedIdx >= nl.length) savedIdx = 0;
-  sel.value = savedIdx;
-  gekozenStem = nl[savedIdx];
-  updateKwaliteitsBadge(gekozenStem);
-
-  // Toon tip als er geen neural stem is
-  var heeftNeural = nl.some(function(v) {
-    return /neural|fenna|colette|enhanced|fleur|xander/i.test(v.name);
-  });
-  if (!heeftNeural) {
-    document.getElementById('stem-tip').style.display = 'block';
-  }
+  gekozenStem = nl[0];
+  console.log('Stem:', gekozenStem ? gekozenStem.name + ' (' + gekozenStem.lang + ')' : 'geen');
 }
 
-function kiesStem(idxStr) {
-  var i = parseInt(idxStr);
-  gekozenStem = alleStemmen[i];
-  localStorage.setItem('stem_idx', i);
-  updateKwaliteitsBadge(gekozenStem);
-}
-
-function updateKwaliteitsBadge(stem) {
-  var badge = document.getElementById('kwaliteit-badge');
-  if (!stem) return;
-  var isNeural = /neural|fenna|colette|enhanced|fleur|xander/i.test(stem.name);
-  if (isNeural) {
-    badge.textContent = '✦ Neural';
-    badge.className = 'kwaliteit-badge neural';
-    document.getElementById('stem-tip').style.display = 'none';
-  } else {
-    badge.textContent = 'Standaard';
-    badge.className = 'kwaliteit-badge standaard';
-  }
+function updateSnelheid(val) {
+  spraakSnelheid = parseFloat(val);
+  document.getElementById('snelheid-waarde').textContent = spraakSnelheid.toFixed(2) + '×';
+  // Update slider gradient
+  var pct = ((spraakSnelheid - 0.4) / (1.1 - 0.4)) * 100;
+  document.getElementById('snelheid-slider').style.background =
+    'linear-gradient(to right, var(--blauw) 0%, var(--blauw) ' + pct + '%, var(--blauw-mid) ' + pct + '%, var(--blauw-mid) 100%)';
+  localStorage.setItem('spraak_snelheid', spraakSnelheid);
 }
 
 function testStem() {
-  spreek('Hallo Maurits, dit is jouw dictee stem!', 1.0, null);
+  spreek('Hallo Florine, dit is jouw dictee stem!', 1.0, null);
 }
 
 speechSynthesis.addEventListener('voiceschanged', laadStemmen);
@@ -427,6 +386,14 @@ window.addEventListener('load', function() {
   speechSynthesis.getVoices(); // trigger
   laadStemmen();
   bouwGrid();
+  // Herstel opgeslagen snelheid
+  var savedSpeed = localStorage.getItem('spraak_snelheid');
+  if (savedSpeed) {
+    spraakSnelheid = parseFloat(savedSpeed);
+    var sl = document.getElementById('snelheid-slider');
+    sl.value = spraakSnelheid;
+    updateSnelheid(spraakSnelheid);
+  }
 });
 
 // ── TTS spreekfunctie ─────────────────────────────────────────────────────────
@@ -434,8 +401,9 @@ function spreek(tekst, rate, cb) {
   speechSynthesis.cancel();
   var u = new SpeechSynthesisUtterance(tekst);
   u.lang  = 'nl-NL';
-  u.rate  = rate || 0.90;
-  u.pitch = 1.0;
+  u.rate  = rate || spraakSnelheid;
+  u.pitch = 0.85;   // iets lager = minder robotachtig
+  u.volume = 1.0;
   if (gekozenStem) u.voice = gekozenStem;
   u.onend   = function() { setBezigKnop(false); if (cb) cb(); };
   u.onerror = function() { setBezigKnop(false); if (cb) cb(); };
@@ -447,15 +415,15 @@ function speakFull(langzaam) {
   if (!items[idx]) return;
   var zin   = items[idx].sentence;
   var woord = items[idx].word;
-  var rate  = langzaam ? 0.70 : 0.90;
+  var rate  = langzaam ? spraakSnelheid * 0.75 : spraakSnelheid;
   speechSynthesis.cancel();
   setBezigKnop(true);
   // Zin → woord → woord: drie losse utterances voor betere pauzes
   var u1 = maakUtterance(zin,   rate);
-  var u2 = maakUtterance(woord, rate * 0.88);
-  var u3 = maakUtterance(woord, rate * 0.82);
-  u1.onend = function() { setTimeout(function() { speechSynthesis.speak(u2); }, 650); };
-  u2.onend = function() { setTimeout(function() { speechSynthesis.speak(u3); }, 500); };
+  var u2 = maakUtterance(woord, rate * 0.82);  // woord iets langzamer dan zin
+  var u3 = maakUtterance(woord, rate * 0.78);  // tweede herhaling nog iets langzamer
+  u1.onend = function() { setTimeout(function() { speechSynthesis.speak(u2); }, 800); };  // langere pauze
+  u2.onend = function() { setTimeout(function() { speechSynthesis.speak(u3); }, 650); };
   u3.onend = function() { setBezigKnop(false); };
   u1.onerror = u2.onerror = u3.onerror = function() { setBezigKnop(false); };
   speechSynthesis.speak(u1);
@@ -465,7 +433,7 @@ function speakWoordAlleen() {
   if (!items[idx]) return;
   speechSynthesis.cancel();
   setBezigKnop(true);
-  var u = maakUtterance(items[idx].word, 0.80);
+  var u = maakUtterance(items[idx].word, 0.72);
   u.onend  = function() { setBezigKnop(false); };
   u.onerror= function() { setBezigKnop(false); };
   speechSynthesis.speak(u);
@@ -473,9 +441,10 @@ function speakWoordAlleen() {
 
 function maakUtterance(tekst, rate) {
   var u = new SpeechSynthesisUtterance(tekst);
-  u.lang  = 'nl-NL';
-  u.rate  = rate || 0.90;
-  u.pitch = 1.0;
+  u.lang   = 'nl-NL';
+  u.rate   = rate || spraakSnelheid;
+  u.pitch  = 0.85;   // iets lager = minder robotachtig
+  u.volume = 1.0;
   if (gekozenStem) u.voice = gekozenStem;
   return u;
 }
@@ -566,7 +535,7 @@ function checkAntwoord() {
     fbW.textContent='Het juiste woord: '+items[idx].word; fbW.className='fb-woord toon';
     toonDiff(getypt,correct); chD.className='char-diff toon';
     updatePip(idx,'fout');
-    setTimeout(function(){ spreek(correct, 0.82, null); }, 400);
+    setTimeout(function(){ spreek(correct, 0.72, null); }, 400);
   }
   sessieRes.push({word:items[idx].word, answer:getypt, correct:ok});
   updateScore();
@@ -599,10 +568,10 @@ function toonResultaten() {
   document.getElementById('grote-score').innerHTML=score+' <span>/ '+items.length+'</span>';
   document.getElementById('score-ster').textContent=pct===1?'🏆':pct>=0.8?'⭐⭐⭐':pct>=0.6?'⭐⭐':'⭐';
   document.getElementById('res-bericht').textContent=
-    pct===1  ?'Perfect! Alle woorden goed! Maurits is een spellingsheld! 🎉':
-    pct>=0.8 ?'Super goed gedaan, Maurits! Bijna allemaal goed!':
-    pct>=0.6 ?'Goed bezig, Maurits! Nog een keer oefenen.':
-    pct>=0.4 ?'Aardig begin! Blijf oefenen, Maurits!':
+    pct===1  ?'Perfect! Alle woorden goed! Florine is een spellingsheld! 🎉':
+    pct>=0.8 ?'Super goed gedaan, Florine! Bijna allemaal goed!':
+    pct>=0.6 ?'Goed bezig, Florine! Nog een keer oefenen.':
+    pct>=0.4 ?'Aardig begin! Blijf oefenen, Florine!':
               'Probeer het nog eens – jij kan het zeker! 💪';
   var lijst=document.getElementById('woord-lijst'); lijst.innerHTML='';
   sessieRes.forEach(function(r) {
@@ -612,6 +581,16 @@ function toonResultaten() {
     lijst.appendChild(rij);
   });
 }
+function stopEnTerug() {
+  speechSynthesis.cancel();
+  beantwoord = false;
+  document.getElementById('spel-area').style.display = 'none';
+  document.getElementById('progress-row').style.display = 'none';
+  document.getElementById('resultaten').classList.remove('toon');
+  document.getElementById('cat-sectie').style.display = '';
+  document.getElementById('score-display').textContent = '0 / 0';
+}
+
 function naarCats() {
   speechSynthesis.cancel();
   document.getElementById('resultaten').classList.remove('toon');
@@ -640,7 +619,7 @@ function toonDebug() {
 }
 
 function kiesPos() {
-  return ['Goed gedaan! 🎉','Helemaal goed!','Super Maurits!','Uitstekend!','Top zo!'][Math.floor(Math.random()*5)];
+  return ['Goed gedaan! 🎉','Helemaal goed!','Super Florine!','Uitstekend!','Top zo!'][Math.floor(Math.random()*5)];
 }
 </script>
 </body>
