@@ -137,6 +137,34 @@ body {
 
 
 
+
+/* ── Welkom overlay ── */
+.welkom-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: var(--achter);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.4rem; padding: 2rem; text-align: center;
+}
+.welkom-titel {
+  font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 2rem;
+  color: var(--blauw-donker); line-height: 1.1;
+}
+.welkom-titel span {
+  display: block; font-weight: 600; font-size: 1rem;
+  color: var(--tekst-zacht); margin-top: 4px;
+}
+.welkom-knop {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1.1rem;
+  background: var(--blauw); color: white; border: none;
+  border-radius: 50px; padding: 16px 40px; cursor: pointer;
+  box-shadow: 0 4px 18px rgba(46,127,193,0.4); transition: all 0.18s;
+}
+.welkom-knop:hover, .welkom-knop:active { background: var(--blauw-donker); transform: scale(1.04); }
+.welkom-sub {
+  font-size: 0.82rem; color: var(--tekst-zacht); font-style: italic;
+}
+
 /* ── Niveau knoppen ── */
 .niveau-rij {
   display: flex; align-items: center; gap: 10px;
@@ -232,6 +260,19 @@ details[open] summary::before { content: '▼ '; }
 </style>
 </head>
 <body>
+<!-- Welkom scherm: ontgrendelt audio op iOS -->
+<div class="welkom-overlay" id="welkom-overlay">
+  <div class="welkom-titel">
+    Staal Dictee
+    <span>Groep 4 – Spelling oefenen</span>
+  </div>
+  <div style="font-size:3rem">📝</div>
+  <button class="welkom-knop" onclick="startApp()">
+    Tik om te beginnen
+  </button>
+  <div class="welkom-sub">Voor Florine</div>
+</div>
+
 <div class="kaart">
 
   <div class="kaart-header">
@@ -754,6 +795,18 @@ function stemScore(v) {
   return 10;
 }
 
+function startApp() {
+  // Ontgrendel audio op iOS door een stille utterance af te spelen bij gebruikerstap
+  var u = new SpeechSynthesisUtterance(' ');
+  u.volume = 0;
+  speechSynthesis.speak(u);
+  speechSynthesis.cancel();
+
+  document.getElementById('welkom-overlay').style.display = 'none';
+  laadStemmen();
+  bouwGrid();
+}
+
 function laadStemmen() {
   var raw = speechSynthesis.getVoices();
   var nl = raw.filter(function(v) { return v.lang.startsWith('nl'); });
@@ -779,9 +832,7 @@ function testStem() {
 
 speechSynthesis.addEventListener('voiceschanged', laadStemmen);
 window.addEventListener('load', function() {
-  speechSynthesis.getVoices(); // trigger
-  laadStemmen();
-  bouwGrid();
+  speechSynthesis.getVoices(); // trigger stemmen voorladen
   // Herstel opgeslagen snelheid
   var savedNiveau = localStorage.getItem('niveau');
   if (savedNiveau !== null) { kiesNiveau(parseInt(savedNiveau)); }
