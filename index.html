@@ -191,6 +191,10 @@ details[open] summary::before { content: '▼ '; }
     <button class="klein-knop" onclick="testStem()" style="white-space:nowrap;flex-shrink:0">▶ Test</button>
   </div>
 
+  <!-- Debug knop -->
+  <div id="stem-debug" style="display:none; font-family:'Nunito Sans',sans-serif; font-size:0.75rem; background:#f0f0f0; border-radius:10px; padding:10px 12px; line-height:1.7; color:#333; word-break:break-all;"></div>
+  <button onclick="toonDebug()" style="font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:700;background:none;border:1.5px solid #b3d4ee;border-radius:50px;padding:4px 12px;color:#3d6280;cursor:pointer;">🔍 Welke stemmen ziet Safari?</button>
+
   <!-- Tip voor betere stem -->
   <div class="stem-tip" id="stem-tip" style="display:none">
     ⚠️ <strong>Geen verbeterde stem gevonden.</strong> Betere stemmen zijn gratis te installeren.
@@ -619,6 +623,22 @@ function mix(a) {
   for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}
   return a;
 }
+function toonDebug() {
+  var alle = speechSynthesis.getVoices();
+  var box = document.getElementById('stem-debug');
+  if (alle.length === 0) {
+    box.innerHTML = '⚠️ Geen stemmen gevonden. Probeer de pagina te herladen.';
+  } else {
+    var nl = alle.filter(function(v){ return v.lang.startsWith('nl'); });
+    var rest = alle.filter(function(v){ return !v.lang.startsWith('nl'); });
+    var txt = '<strong>Nederlandse stemmen (' + nl.length + '):</strong><br>';
+    nl.forEach(function(v){ txt += '• ' + v.name + ' (' + v.lang + ')<br>'; });
+    txt += '<br><strong>Alle stemmen totaal: ' + alle.length + '</strong>';
+    box.innerHTML = txt;
+  }
+  box.style.display = 'block';
+}
+
 function kiesPos() {
   return ['Goed gedaan! 🎉','Helemaal goed!','Super Maurits!','Uitstekend!','Top zo!'][Math.floor(Math.random()*5)];
 }
