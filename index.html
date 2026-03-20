@@ -135,6 +135,46 @@ body {
 #spel-area { display:none; flex-direction:column; gap:1.2rem; }
 
 
+
+
+/* ── Niveau knoppen ── */
+.niveau-rij {
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.niveau-rij label {
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.76rem;
+  color: var(--tekst-zacht); white-space: nowrap;
+}
+.niveau-knoppen { display: flex; gap: 6px; }
+.niveau-knop {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.8rem;
+  padding: 7px 16px; border-radius: 50px;
+  border: 2px solid var(--blauw-mid); background: var(--blauw-licht);
+  color: var(--blauw-donker); cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.niveau-knop:hover { background: var(--blauw-mid); border-color: var(--blauw); }
+.niveau-knop.actief { background: var(--blauw); border-color: var(--blauw); color: white; box-shadow: 0 2px 8px rgba(46,127,193,0.35); }
+
+/* ── Aantal woorden ── */
+.aantal-rij {
+  display: flex; align-items: center; gap: 10px;
+  position: relative; z-index: 1;
+}
+.aantal-rij label {
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 0.76rem;
+  color: var(--tekst-zacht); white-space: nowrap;
+}
+.aantal-knoppen { display: flex; gap: 6px; flex-wrap: wrap; }
+.aantal-knop {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.88rem;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 2px solid var(--blauw-mid); background: var(--blauw-licht);
+  color: var(--blauw-donker); cursor: pointer; transition: all 0.15s;
+}
+.aantal-knop:hover { background: var(--blauw-mid); border-color: var(--blauw); }
+.aantal-knop.actief { background: var(--blauw); border-color: var(--blauw); color: white; box-shadow: 0 2px 8px rgba(46,127,193,0.35); }
+
 /* ── Snelheid schuifje ── */
 .snelheid-rij {
   display: flex; align-items: center; gap: 10px;
@@ -197,6 +237,28 @@ details[open] summary::before { content: '▼ '; }
   <div class="kaart-header">
     <div class="kaart-titel">Staal Dictee<span>Groep 4 – Spelling oefenen</span></div>
     <div class="score-chip">Score<br><strong id="score-display">0 / 0</strong></div>
+  </div>
+
+  <!-- Niveau -->
+  <div class="niveau-rij">
+    <label>⭐ Niveau</label>
+    <div class="niveau-knoppen">
+      <button class="niveau-knop actief" id="niveau-0" onclick="kiesNiveau(0)">Alles</button>
+      <button class="niveau-knop" id="niveau-1" onclick="kiesNiveau(1)">Makkelijk</button>
+      <button class="niveau-knop" id="niveau-2" onclick="kiesNiveau(2)">Gemiddeld</button>
+      <button class="niveau-knop" id="niveau-3" onclick="kiesNiveau(3)">Moeilijk</button>
+    </div>
+  </div>
+
+  <!-- Aantal woorden -->
+  <div class="aantal-rij">
+    <label>📝 Woorden</label>
+    <div class="aantal-knoppen">
+      <button class="aantal-knop" onclick="kiesAantal(5)">5</button>
+      <button class="aantal-knop actief" id="aantal-10" onclick="kiesAantal(10)">10</button>
+      <button class="aantal-knop" onclick="kiesAantal(15)">15</button>
+      <button class="aantal-knop" onclick="kiesAantal(20)">20</button>
+    </div>
   </div>
 
   <!-- Snelheid schuifje -->
@@ -278,66 +340,400 @@ details[open] summary::before { content: '▼ '; }
 <script>
 
 var CATS = [
-  { id:'hakwoord', label:'Hakwoorden', sub:'Korte stamwoorden - MKM', items:[
-    {word:'bak',sentence:'Maurits zet de bak op tafel.'},{word:'boom',sentence:'Maurits klimt in de grote boom in de tuin.'},
-    {word:'dak',sentence:'Maurits ziet de vogel op het dak zitten.'},{word:'jas',sentence:'Maurits hangt zijn jas aan de kapstok.'},
-    {word:'zaak',sentence:'Maurits wil later een eigen zaak beginnen.'},{word:'rook',sentence:'Maurits kijkt naar de rook uit de schoorsteen.'},
-    {word:'toon',sentence:'Maurits speelt de goede toon op zijn blokfluit.'},{word:'muur',sentence:'Maurits tekent een ster op de muur.'},
-    {word:'hoog',sentence:'Maurits springt zo hoog als hij kan.'},{word:'hut',sentence:'Maurits bouwt een hut in het bos.'}
-  ]},
-  { id:'zangwoord', label:'Zangwoorden', sub:'Tweeklanken - bouw, dief, zoet', items:[
-    {word:'bouw',sentence:'Maurits helpt mee met de bouw van het boomhuis.'},{word:'hout',sentence:'Maurits hakt hout voor het kampvuur.'},
-    {word:'dief',sentence:'Maurits zag de dief snel weglopen.'},{word:'doek',sentence:'Maurits droogt zijn handen aan een doek.'},
-    {word:'jouw',sentence:'Maurits vraagt: is dit jouw fiets?'},{word:'kous',sentence:'Maurits heeft een gat in zijn kous.'},
-    {word:'poes',sentence:'Maurits aait de poes van de buren.'},{word:'luik',sentence:'Maurits opent het zware luik van de kelder.'},
-    {word:'zoet',sentence:'Maurits vindt de aardbei heel zoet.'},{word:'wieg',sentence:'Maurits wiegt het babytje zachtjes in de wieg.'}
-  ]},
-  { id:'klankwoord', label:'Klankwoorden', sub:'Medeklinkercluster - MMK', items:[
-    {word:'bleek',sentence:'Maurits werd bleek van schrik toen hij de spin zag.'},{word:'bruin',sentence:'Maurits heeft een bruin konijn als huisdier.'},
-    {word:'fluit',sentence:'Maurits speelt elke week fluit bij de muziekschool.'},{word:'groot',sentence:'Maurits wil later in een groot huis wonen.'},
-    {word:'klaar',sentence:'Maurits is als eerste klaar met zijn werk.'},{word:'knoop',sentence:'Maurits legt een stevige knoop in het touw.'},
-    {word:'ploeg',sentence:'Maurits speelt in de voetbalploeg van de school.'},{word:'slaap',sentence:'Maurits heeft veel slaap nodig na een drukke dag.'},
-    {word:'spek',sentence:'Maurits eet graag een boterham met spek.'},{word:'tram',sentence:'Maurits neemt de tram naar het centrum.'}
-  ]},
-  { id:'struikelwoord', label:'Struikelwoorden', sub:'STR en SPR - vaste clusters', items:[
-    {word:'straat',sentence:'Maurits speelt voetbal op straat met zijn vrienden.'},{word:'streek',sentence:'Maurits fietst door de prachtige groene streek.'},
-    {word:'streep',sentence:'Maurits trekt een rechte streep op het papier.'},{word:'straf',sentence:'Maurits heeft straf gekregen van de juf.'},
-    {word:'strip',sentence:'Maurits leest iedere avond een grappige strip.'},{word:'stroop',sentence:'Maurits smeert dikke stroop op zijn boterham.'},
-    {word:'struik',sentence:'Maurits verstopt zich achter de grote struik.'},{word:'spraak',sentence:'Maurits heeft een heldere en duidelijke spraak.'},
-    {word:'spreek',sentence:'Maurits zegt: spreek je woorden goed uit.'},{word:'spruit',sentence:'Maurits lust geen spruit bij het avondeten.'}
-  ]},
-  { id:'sisklank', label:'Sisklankwoorden', sub:'SCH en SCHR', items:[
-    {word:'school',sentence:'Maurits gaat elke dag blij naar school.'},{word:'schaaf',sentence:'Maurits gebruikt de schaaf om het hout glad te maken.'},
-    {word:'schep',sentence:'Maurits graaft met de schep in de zandbak.'},{word:'schuur',sentence:'Maurits stalt zijn fiets elke avond in de schuur.'},
-    {word:'schuim',sentence:'Maurits maakt veel schuim in bad.'},{word:'schrijf',sentence:'Maurits zegt: schrijf je naam op je schrift.'},
-    {word:'schroef',sentence:'Maurits draait de schroef stevig vast.'},{word:'schiet',sentence:'Maurits schiet de bal keihard in het doel.'},
-    {word:'schram',sentence:'Maurits heeft een schram op zijn knie.'},{word:'scheur',sentence:'Maurits ontdekt een scheur in zijn broek.'}
-  ]},
-  { id:'twijfelwoord', label:'Twijfelwoorden', sub:'EI en AU - onthouden!', items:[
-    {word:'eik',sentence:'Maurits leunt tegen de dikke eik in het park.'},{word:'trein',sentence:'Maurits neemt de trein naar zijn opa en oma.'},
-    {word:'klei',sentence:'Maurits maakt een mooie pot van klei.'},{word:'steil',sentence:'Maurits rent het steile pad omhoog.'},
-    {word:'prei',sentence:'Maurits snijdt de prei voor de soep.'},{word:'blauw',sentence:'Maurits wijst naar de mooie blauwe lucht.'},
-    {word:'dauw',sentence:'Maurits ziet dauw op het gras liggen in de ochtend.'},{word:'klauw',sentence:'Maurits kijkt naar de scherpe klauw van de arend.'},
-    {word:'pauw',sentence:'Maurits vindt de kleurrijke pauw het mooiste dier.'},{word:'mei',sentence:'Maurits is jarig in de maand mei.'}
-  ]},
-  { id:'cht-woord', label:'CHT-woorden', sub:'acht, licht, vlucht', items:[
-    {word:'acht',sentence:'Maurits telt hardop tot acht.'},{word:'dicht',sentence:'Maurits doet de deur stevig dicht.'},
-    {word:'gracht',sentence:'Maurits vaart in een bootje door de gracht.'},{word:'kracht',sentence:'Maurits tilt de zware doos op met veel kracht.'},
-    {word:'licht',sentence:'Maurits knijpt het licht aan in de donkere gang.'},{word:'pech',sentence:'Maurits heeft pech: zijn fietsband is lek.'},
-    {word:'vlucht',sentence:'Maurits kijkt naar het vliegtuig in zijn lange vlucht.'},{word:'vracht',sentence:'Maurits helpt de zware vracht lossen.'},
-    {word:'vrucht',sentence:'Maurits weet dat een peer een vrucht is.'},{word:'zocht',sentence:'Maurits zocht zijn rugzak door de hele school.'}
-  ]},
-  { id:'open-lg', label:'Open lettergreepwoorden', sub:'aa naar a, ee naar e, oo naar o', items:[
-    {word:'apen',sentence:'Maurits lacht om de gekke apen in de dierentuin.'},{word:'avond',sentence:'Maurits leest iedere avond voor het slapen.'},
-    {word:'deken',sentence:'Maurits trekt de warme deken over zich heen.'},{word:'koning',sentence:'Maurits wil zo dapper zijn als een echte koning.'},
-    {word:'leraar',sentence:'Maurits luistert heel goed naar zijn leraar.'},{word:'motor',sentence:'Maurits droomt ervan om later op een motor te rijden.'},
-    {word:'muziek',sentence:'Maurits danst altijd vrolijk op muziek.'},{word:'paling',sentence:'Maurits proeft voor het eerst gerookte paling.'},
-    {word:'regen',sentence:'Maurits springt in de plassen na de regen.'},{word:'woning',sentence:'Maurits helpt meeverhuizen naar de nieuwe woning.'}
-  ]},
+  {
+    id:'hakwoord', label:'Hakwoorden', sub:'Cat. 1a/1b – MKM, tweeklanken',
+    items:[
+      {word:'as',    niveau:1, sentence:'Maurits veegt de as uit de haard.'},
+      {word:'bak',   niveau:1, sentence:'Maurits zet de bak op tafel.'},
+      {word:'dak',   niveau:1, sentence:'Maurits ziet de vogel op het dak.'},
+      {word:'dom',   niveau:1, sentence:'Maurits maakt een domme fout.'},
+      {word:'hoog',  niveau:1, sentence:'Maurits springt zo hoog als hij kan.'},
+      {word:'hut',   niveau:1, sentence:'Maurits bouwt een hut in het bos.'},
+      {word:'jas',   niveau:1, sentence:'Maurits hangt zijn jas aan de kapstok.'},
+      {word:'rook',  niveau:1, sentence:'Maurits ziet rook uit de schoorsteen.'},
+      {word:'val',   niveau:1, sentence:'Maurits maakt een val voor de muis.'},
+      {word:'zaak',  niveau:1, sentence:'Maurits wil later een eigen zaak beginnen.'},
+      {word:'boom',  niveau:1, sentence:'Maurits klimt in de grote boom.'},
+      {word:'den',   niveau:1, sentence:'Maurits ziet een hoge den in het bos.'},
+      {word:'dit',   niveau:1, sentence:'Maurits zegt: dit is mijn boek.'},
+      {word:'muur',  niveau:1, sentence:'Maurits tekent een ster op de muur.'},
+      {word:'toon',  niveau:1, sentence:'Maurits speelt de goede toon op zijn blokfluit.'},
+      {word:'beul',  niveau:2, sentence:'Maurits leest over een beul in zijn geschiedenisboek.'},
+      {word:'bouw',  niveau:2, sentence:'Maurits helpt mee met de bouw van het boomhuis.'},
+      {word:'deuk',  niveau:2, sentence:'Maurits ziet een deuk in de auto.'},
+      {word:'dief',  niveau:2, sentence:'Maurits zag de dief snel weglopen.'},
+      {word:'doek',  niveau:2, sentence:'Maurits droogt zijn handen aan een doek.'},
+      {word:'geul',  niveau:2, sentence:'Maurits springt over de smalle geul.'},
+      {word:'hout',  niveau:2, sentence:'Maurits hakt hout voor het kampvuur.'},
+      {word:'jouw',  niveau:2, sentence:'Maurits vraagt: is dit jouw fiets?'},
+      {word:'kous',  niveau:2, sentence:'Maurits heeft een gat in zijn kous.'},
+      {word:'luik',  niveau:2, sentence:'Maurits opent het zware luik van de kelder.'},
+      {word:'mouw',  niveau:2, sentence:'Maurits trekt aan de mouw van zijn trui.'},
+      {word:'poes',  niveau:2, sentence:'Maurits aait de poes van de buren.'},
+      {word:'rouw',  niveau:2, sentence:'Maurits begrijpt wat rouw betekent.'},
+      {word:'wieg',  niveau:2, sentence:'Maurits wiegt het babytje in de wieg.'},
+      {word:'zoet',  niveau:2, sentence:'Maurits vindt de aardbei heel zoet.'},
+    ]
+  },
+  {
+    id:'eerooreur', label:'EER-OOR-EUR woorden', sub:'Cat. 1c – heer, boor, deur',
+    items:[
+      {word:'heer',  niveau:1, sentence:'Maurits groet de heer beleefd.'},
+      {word:'meer',  niveau:1, sentence:'Maurits zwemt in het meer bij het bos.'},
+      {word:'peer',  niveau:1, sentence:'Maurits eet een sappige peer.'},
+      {word:'weer',  niveau:1, sentence:'Maurits kijkt naar het wisselvallige weer.'},
+      {word:'zeer',  niveau:1, sentence:'Maurits heeft zeer aan zijn knie.'},
+      {word:'deur',  niveau:1, sentence:'Maurits houdt de deur open voor zijn moeder.'},
+      {word:'geur',  niveau:1, sentence:'Maurits ruikt de geur van versgebakken brood.'},
+      {word:'boor',  niveau:2, sentence:'Maurits helpt zijn vader met de boor.'},
+      {word:'goor',  niveau:2, sentence:'Maurits vindt het goor als zijn schoenen vies zijn.'},
+      {word:'hoor',  niveau:2, sentence:'Maurits zegt: hoor je dat mooie geluid?'},
+      {word:'koor',  niveau:2, sentence:'Maurits zingt mee in het koor op school.'},
+      {word:'voor',  niveau:2, sentence:'Maurits zet alles klaar voor het feest.'},
+      {word:'keur',  niveau:2, sentence:'Maurits kiest uit een grote keur aan kleuren.'},
+      {word:'zeur',  niveau:2, sentence:'Maurits is geen zeur als er iets misgaat.'},
+      {word:'neer',  niveau:3, sentence:'Maurits legt zijn pen neer als hij klaar is.'},
+      {word:'steer', niveau:3, sentence:'Maurits leest over een steer in zijn boek.'},
+      {word:'sneer', niveau:3, sentence:'Maurits hoort een sneer in de opmerking.'},
+      {word:'spoor', niveau:3, sentence:'Maurits volgt het spoor van het dier.'},
+      {word:'floor', niveau:3, sentence:'Maurits tekent een bloem op de floor.'},
+      {word:'stoor', niveau:3, sentence:'Maurits wil niemand stoor tijdens het werk.'},
+    ]
+  },
+  {
+    id:'klankwoord', label:'Klankwoorden', sub:'Cat. 2a/2b/2c – MMK clusters',
+    items:[
+      {word:'bleek', niveau:1, sentence:'Maurits werd bleek van schrik.'},
+      {word:'bruin', niveau:1, sentence:'Maurits heeft een bruin konijn.'},
+      {word:'groot', niveau:1, sentence:'Maurits wil later in een groot huis wonen.'},
+      {word:'klaar', niveau:1, sentence:'Maurits is klaar met zijn huiswerk.'},
+      {word:'knoop', niveau:1, sentence:'Maurits legt een knoop in het touw.'},
+      {word:'slaap', niveau:1, sentence:'Maurits heeft veel slaap nodig.'},
+      {word:'spek',  niveau:1, sentence:'Maurits eet graag een boterham met spek.'},
+      {word:'tram',  niveau:1, sentence:'Maurits neemt de tram naar het centrum.'},
+      {word:'vlot',  niveau:1, sentence:'Maurits bouwt een vlot van hout.'},
+      {word:'zweet', niveau:1, sentence:'Maurits is nat van het zweet na het sporten.'},
+      {word:'baars', niveau:2, sentence:'Maurits vangt een baars in de vijver.'},
+      {word:'buurt', niveau:2, sentence:'Maurits kent iedereen in zijn buurt.'},
+      {word:'dwaas', niveau:2, sentence:'Maurits lacht om de dwaas in het toneelstuk.'},
+      {word:'fluit', niveau:2, sentence:'Maurits speelt fluit op school.'},
+      {word:'geeft', niveau:2, sentence:'Maurits geeft zijn vriend een hand.'},
+      {word:'gilt',  niveau:2, sentence:'Maurits gilt als hij de spin ziet.'},
+      {word:'haalt', niveau:2, sentence:'Maurits haalt een hoog cijfer voor spelling.'},
+      {word:'hoest', niveau:2, sentence:'Maurits hoest omdat hij verkouden is.'},
+      {word:'kaft',  niveau:2, sentence:'Maurits plakt een nieuw kaft om zijn schrift.'},
+      {word:'kluis', niveau:2, sentence:'Maurits verstopt zijn spaargeld in een kluis.'},
+      {word:'blaast',niveau:3, sentence:'Maurits blaast de kaarsjes op zijn taart uit.'},
+      {word:'draagt',niveau:3, sentence:'Maurits draagt een zware rugzak naar school.'},
+      {word:'flits', niveau:3, sentence:'Maurits ziet een flits van de bliksem.'},
+      {word:'glans', niveau:3, sentence:'Maurits poetst zijn schoenen tot ze glans hebben.'},
+      {word:'glimt', niveau:3, sentence:'Maurits ziet hoe de ster glimt in de nacht.'},
+      {word:'knalt', niveau:3, sentence:'Maurits schikt als de ballon knalt.'},
+      {word:'kreet', niveau:3, sentence:'Maurits slaakt een kreet van verbazing.'},
+      {word:'ploeg', niveau:3, sentence:'Maurits speelt mee in de voetbalploeg.'},
+      {word:'stuurt',niveau:3, sentence:'Maurits stuurt een berichtje naar zijn vriend.'},
+      {word:'trimt', niveau:3, sentence:'Maurits trimt de heg in de tuin.'},
+    ]
+  },
+  {
+    id:'borst-woord', label:'Borstwoorden', sub:'Cat. 3a – borst, winst, worst',
+    items:[
+      {word:'borst', niveau:1, sentence:'Maurits heeft pijn op zijn borst na het rennen.'},
+      {word:'dorst', niveau:1, sentence:'Maurits heeft dorst na het sporten.'},
+      {word:'worst', niveau:1, sentence:'Maurits eet een broodje worst in de pauze.'},
+      {word:'winst', niveau:1, sentence:'Maurits is blij met zijn winst in het spel.'},
+      {word:'danst', niveau:1, sentence:'Maurits danst op zijn favoriete muziek.'},
+      {word:'fietst',niveau:1, sentence:'Maurits fietst elke dag naar school.'},
+      {word:'koorts',niveau:2, sentence:'Maurits blijft thuis omdat hij koorts heeft.'},
+      {word:'vorst', niveau:2, sentence:'Maurits ziet de vorst op het gras liggen.'},
+      {word:'laagst',niveau:2, sentence:'Maurits springt van de laagste duikplank.'},
+      {word:'leukst',niveau:2, sentence:'Maurits vindt dit het leukste spel van school.'},
+      {word:'minst', niveau:2, sentence:'Maurits heeft het minst gegeten van iedereen.'},
+      {word:'poetst',niveau:2, sentence:'Maurits poetst elke avond zijn tanden.'},
+      {word:'walst', niveau:2, sentence:'Maurits walst met zijn moeder op haar verjaardag.'},
+      {word:'wenst', niveau:2, sentence:'Maurits wenst iedereen een fijne dag.'},
+      {word:'diepst',niveau:3, sentence:'Maurits duikt naar het diepste punt van het zwembad.'},
+    ]
+  },
+  {
+    id:'struikelwoord', label:'Struikelwoorden', sub:'Cat. 3b – STR/SPR clusters',
+    items:[
+      {word:'straat', niveau:1, sentence:'Maurits speelt voetbal op straat.'},
+      {word:'straf',  niveau:1, sentence:'Maurits heeft straf gekregen van de juf.'},
+      {word:'strip',  niveau:1, sentence:'Maurits leest iedere avond een grappige strip.'},
+      {word:'stroop', niveau:1, sentence:'Maurits smeert dikke stroop op zijn boterham.'},
+      {word:'struik', niveau:1, sentence:'Maurits verstopt zich achter de grote struik.'},
+      {word:'spraak', niveau:1, sentence:'Maurits heeft een heldere spraak.'},
+      {word:'spreek', niveau:1, sentence:'Maurits zegt: spreek je woorden goed uit.'},
+      {word:'spruit', niveau:1, sentence:'Maurits lust geen spruit bij het avondeten.'},
+      {word:'streep', niveau:1, sentence:'Maurits trekt een rechte streep op het papier.'},
+      {word:'streek', niveau:1, sentence:'Maurits fietst door de prachtige streek.'},
+      {word:'spriet', niveau:2, sentence:'Maurits ziet een spriet gras door de stoep groeien.'},
+      {word:'sproet', niveau:2, sentence:'Maurits heeft een sproet op zijn neus.'},
+      {word:'strek',  niveau:2, sentence:'Maurits doet een strek met zijn armen omhoog.'},
+      {word:'striem', niveau:2, sentence:'Maurits heeft een rode striem op zijn arm.'},
+      {word:'stroef', niveau:2, sentence:'Maurits merkt dat de deur stroef opengaat.'},
+      {word:'strook', niveau:2, sentence:'Maurits plakt een strook tape op het pakket.'},
+      {word:'sprong', niveau:3, sentence:'Maurits maakt een grote sprong over de plas.'},
+      {word:'spreuk', niveau:3, sentence:'Maurits leert een spreuk uit zijn hoofd.'},
+      {word:'stroom', niveau:3, sentence:'Maurits ziet de stroom van de rivier.'},
+      {word:'straalt',niveau:3, sentence:'Maurits straalt van trots als hij zijn rapport laat zien.'},
+    ]
+  },
+  {
+    id:'sisklank', label:'Sisklankwoorden', sub:'Cat. 4 – SCH en SCHR',
+    items:[
+      {word:'schaaf', niveau:1, sentence:'Maurits gebruikt de schaaf voor het hout.'},
+      {word:'schep',  niveau:1, sentence:'Maurits graaft met de schep in de zandbak.'},
+      {word:'scheur', niveau:1, sentence:'Maurits ontdekt een scheur in zijn broek.'},
+      {word:'schiet', niveau:1, sentence:'Maurits schiet de bal in het doel.'},
+      {word:'schim',  niveau:1, sentence:'Maurits ziet een schim in de donkere gang.'},
+      {word:'school', niveau:1, sentence:'Maurits gaat elke dag blij naar school.'},
+      {word:'schuim', niveau:1, sentence:'Maurits maakt veel schuim in bad.'},
+      {word:'schuur', niveau:1, sentence:'Maurits stalt zijn fiets in de schuur.'},
+      {word:'schaam', niveau:2, sentence:'Maurits hoeft zich niet te schamen voor zijn fout.'},
+      {word:'schaft', niveau:2, sentence:'Maurits schaft een broodje op het schoolplein.'},
+      {word:'schram', niveau:2, sentence:'Maurits heeft een schram op zijn knie.'},
+      {word:'schreef',niveau:2, sentence:'Maurits schreef een brief aan zijn opa.'},
+      {word:'schrijf',niveau:2, sentence:'Maurits zegt: schrijf je naam op je schrift.'},
+      {word:'schroef',niveau:2, sentence:'Maurits draait de schroef stevig vast.'},
+      {word:'schroot',niveau:2, sentence:'Maurits gooit het oude fietswiel bij het schroot.'},
+      {word:'schoonmaak',niveau:3, sentence:'Maurits helpt mee met de grote schoonmaak thuis.'},
+      {word:'schrijven', niveau:3, sentence:'Maurits kan al netjes schrijven met zijn vulpen.'},
+      {word:'schildpad', niveau:3, sentence:'Maurits heeft een schildpad als huisdier.'},
+      {word:'schitterend',niveau:3, sentence:'Maurits vindt het uitzicht schitterend mooi.'},
+      {word:'schroevendraaier',niveau:3, sentence:'Maurits pakt de schroevendraaier uit de kist.'},
+    ]
+  },
+  {
+    id:'twijfelwoord', label:'Twijfelwoorden', sub:'Cat. 5 – EI/AU onthouden',
+    items:[
+      {word:'blauw', niveau:1, sentence:'Maurits wijst naar de mooie blauwe lucht.'},
+      {word:'dauw',  niveau:1, sentence:'Maurits ziet dauw op het gras in de ochtend.'},
+      {word:'eik',   niveau:1, sentence:'Maurits leunt tegen de dikke eik in het park.'},
+      {word:'gein',  niveau:1, sentence:'Maurits maakt een grapje voor de gein.'},
+      {word:'klei',  niveau:1, sentence:'Maurits maakt een mooie pot van klei.'},
+      {word:'klauw', niveau:1, sentence:'Maurits kijkt naar de scherpe klauw van de arend.'},
+      {word:'mei',   niveau:1, sentence:'Maurits is jarig in de maand mei.'},
+      {word:'pauw',  niveau:1, sentence:'Maurits vindt de kleurrijke pauw het mooiste dier.'},
+      {word:'prei',  niveau:1, sentence:'Maurits snijdt de prei voor de soep.'},
+      {word:'trein', niveau:1, sentence:'Maurits neemt de trein naar zijn opa en oma.'},
+      {word:'sein',  niveau:2, sentence:'Maurits wacht op het sein om te vertrekken.'},
+      {word:'snauw', niveau:2, sentence:'Maurits reageert niet op een snauw.'},
+      {word:'steil', niveau:2, sentence:'Maurits rent het steile pad omhoog.'},
+      {word:'teil',  niveau:2, sentence:'Maurits wast zijn sokken in een teil.'},
+      {word:'zeis',  niveau:2, sentence:'Maurits heeft een plaatje gezien van een zeis.'},
+      {word:'rijbewijs',niveau:3, sentence:'Maurits weet dat je een rijbewijs nodig hebt om auto te rijden.'},
+      {word:'eigenlijk',niveau:3, sentence:'Maurits zegt: eigenlijk wil ik liever voetballen.'},
+      {word:'vergelijking',niveau:3, sentence:'Maurits maakt een vergelijking tussen twee getallen.'},
+      {word:'bijzonder',niveau:3, sentence:'Maurits vindt dit een bijzonder cadeau.'},
+      {word:'tijdelijk',niveau:3, sentence:'Maurits weet dat de pijn tijdelijk is.'},
+    ]
+  },
+  {
+    id:'ngwoord', label:'NG/NK-woorden', sub:'Cat. 6 – breng, drank, stank',
+    items:[
+      {word:'breng', niveau:1, sentence:'Maurits zegt: breng de tas maar naar binnen.'},
+      {word:'drang', niveau:1, sentence:'Maurits voelt een sterke drang om te winnen.'},
+      {word:'drank', niveau:1, sentence:'Maurits schenkt een glas drank in.'},
+      {word:'zing',  niveau:1, sentence:'Maurits zegt: zing het liedje nog eens.'},
+      {word:'zink',  niveau:1, sentence:'Maurits weet dat zink een soort metaal is.'},
+      {word:'blank', niveau:1, sentence:'Maurits staat met zijn laarzen blank in het water.'},
+      {word:'bonk',  niveau:1, sentence:'Maurits hoort een harde bonk boven zijn hoofd.'},
+      {word:'stank', niveau:2, sentence:'Maurits ruikt de stank van de vuilnisbak.'},
+      {word:'stronk',niveau:2, sentence:'Maurits zit op een boomstronk in het bos.'},
+      {word:'pronk', niveau:2, sentence:'Maurits zet zijn trofee op de pronk.'},
+      {word:'slonk', niveau:2, sentence:'Maurits ziet dat zijn ballon slonk na een dag.'},
+      {word:'kreng', niveau:2, sentence:'Maurits vindt een vervelend dier soms een kreng.'},
+      {word:'meng',  niveau:2, sentence:'Maurits mengt de verf goed door elkaar.'},
+      {word:'hinkt', niveau:2, sentence:'Maurits hinkt op één been over het schoolplein.'},
+      {word:'klinkt',niveau:2, sentence:'Maurits zegt: dat klinkt als een goed plan.'},
+    ]
+  },
+  {
+    id:'tussenU', label:'Tussen-U woorden', sub:'Cat. 7 – arm, storm, markt',
+    items:[
+      {word:'arm',   niveau:1, sentence:'Maurits breekt bijna zijn arm bij het vallen.'},
+      {word:'golf',  niveau:1, sentence:'Maurits surft op een grote golf in zee.'},
+      {word:'kalm',  niveau:1, sentence:'Maurits blijft kalm als er iets misgaat.'},
+      {word:'palm',  niveau:1, sentence:'Maurits ziet een hoge palm op vakantie.'},
+      {word:'warm',  niveau:1, sentence:'Maurits drinkt warme chocolademelk.'},
+      {word:'wok',   niveau:1, sentence:'Maurits helpt zijn vader met de wok.'},
+      {word:'borg',  niveau:2, sentence:'Maurits weet dat je borg betaalt voor een huurhuis.'},
+      {word:'dwerg', niveau:2, sentence:'Maurits leest een verhaal over een dwerg.'},
+      {word:'ernst', niveau:2, sentence:'Maurits neemt zijn spelling in ernst.'},
+      {word:'jurk',  niveau:2, sentence:'Maurits vindt de jurk van zijn moeder mooi.'},
+      {word:'markt', niveau:2, sentence:'Maurits gaat met zijn vader naar de markt.'},
+      {word:'storm', niveau:2, sentence:'Maurits kijkt naar de storm buiten.'},
+      {word:'twaalf',niveau:2, sentence:'Maurits telt twaalf eieren in de doos.'},
+      {word:'zalm',  niveau:2, sentence:'Maurits eet gerookte zalm op zijn brood.'},
+      {word:'zulk',  niveau:3, sentence:'Maurits zegt: zulk mooi weer hebben we zelden.'},
+    ]
+  },
+  {
+    id:'cht-woord', label:'CHT-woorden', sub:'Cat. 8 – acht, licht, vlucht',
+    items:[
+      {word:'acht',   niveau:1, sentence:'Maurits telt hardop tot acht.'},
+      {word:'dicht',  niveau:1, sentence:'Maurits doet de deur stevig dicht.'},
+      {word:'licht',  niveau:1, sentence:'Maurits knijpt het licht aan in de donkere gang.'},
+      {word:'pech',   niveau:1, sentence:'Maurits heeft pech: zijn fietsband is lek.'},
+      {word:'vrucht', niveau:1, sentence:'Maurits weet dat een peer een vrucht is.'},
+      {word:'zocht',  niveau:1, sentence:'Maurits zocht zijn rugzak door de hele school.'},
+      {word:'zucht',  niveau:1, sentence:'Maurits geeft een zucht van verlichting.'},
+      {word:'gracht', niveau:2, sentence:'Maurits vaart in een bootje door de gracht.'},
+      {word:'kracht', niveau:2, sentence:'Maurits tilt de zware doos op met veel kracht.'},
+      {word:'knecht', niveau:2, sentence:'Maurits leest over een knecht in zijn boek.'},
+      {word:'pracht', niveau:2, sentence:'Maurits vindt het landschap van een grote pracht.'},
+      {word:'schacht',niveau:2, sentence:'Maurits kijkt naar de diepe schacht van de mijn.'},
+      {word:'vlucht', niveau:2, sentence:'Maurits kijkt naar het vliegtuig in zijn lange vlucht.'},
+      {word:'vracht', niveau:2, sentence:'Maurits helpt de zware vracht lossen.'},
+      {word:'opdracht',niveau:3, sentence:'Maurits maakt zijn opdracht af voor het einde van de les.'},
+      {word:'verwacht',niveau:3, sentence:'Maurits verwacht een leuke verrassing.'},
+      {word:'verplicht',niveau:3, sentence:'Maurits weet dat gymles verplicht is.'},
+      {word:'onverwacht',niveau:3, sentence:'Maurits krijgt onverwacht bezoek.'},
+      {word:'gedicht', niveau:3, sentence:'Maurits leert een gedicht uit zijn hoofd.'},
+      {word:'bericht', niveau:3, sentence:'Maurits stuurt een bericht naar zijn vriend.'},
+    ]
+  },
+  {
+    id:'eeuwwoord', label:'EEUW/IEUW/UW-woorden', sub:'Cat. 9 – sneeuw, nieuw, sluw',
+    items:[
+      {word:'eeuw',   niveau:1, sentence:'Maurits leert dat een eeuw honderd jaar duurt.'},
+      {word:'geeuw',  niveau:1, sentence:'Maurits geeft een geeuw omdat hij moe is.'},
+      {word:'leeuw',  niveau:1, sentence:'Maurits ziet een leeuw in de dierentuin.'},
+      {word:'nieuw',  niveau:1, sentence:'Maurits krijgt een nieuw schrift van de juf.'},
+      {word:'nieuws', niveau:1, sentence:'Maurits luistert naar het nieuws met zijn vader.'},
+      {word:'sneeuw', niveau:1, sentence:'Maurits bouwt een sneeuwpop in de tuin.'},
+      {word:'uw',     niveau:1, sentence:'Maurits zegt: is dit uw auto meneer?'},
+      {word:'kieuw',  niveau:2, sentence:'Maurits ziet de kieuw van de vis bewegen.'},
+      {word:'luw',    niveau:2, sentence:'Maurits zoekt een luwe plek achter de schuur.'},
+      {word:'sluw',   niveau:2, sentence:'Maurits weet dat een vos een slim en sluw dier is.'},
+      {word:'spreeuw',niveau:2, sentence:'Maurits kijkt naar de spreeuw in de boom.'},
+      {word:'spuw',   niveau:2, sentence:'Maurits let erop dat hij niet spuw op straat.'},
+      {word:'stuw',   niveau:3, sentence:'Maurits ziet een stuw in de rivier.'},
+    ]
+  },
+  {
+    id:'aaiooi', label:'AAI/OOI/OEI-woorden', sub:'Cat. 10 – baai, mooi, groeit',
+    items:[
+      {word:'baai',   niveau:1, sentence:'Maurits zwemt in de rustige baai.'},
+      {word:'foei',   niveau:1, sentence:'Maurits zegt foei tegen de hond die bijt.'},
+      {word:'gooi',   niveau:1, sentence:'Maurits zegt: gooi de bal maar naar mij.'},
+      {word:'mooi',   niveau:1, sentence:'Maurits vindt de tekening heel mooi.'},
+      {word:'naai',   niveau:1, sentence:'Maurits kijkt toe hoe zijn moeder een knoop naait.'},
+      {word:'waai',   niveau:1, sentence:'Maurits ziet de vlag waai in de wind.'},
+      {word:'zwaai',  niveau:1, sentence:'Maurits geeft een grote zwaai als hij weggaat.'},
+      {word:'bloei',  niveau:2, sentence:'Maurits ziet de bloem in volle bloei staan.'},
+      {word:'dooi',   niveau:2, sentence:'Maurits ziet de dooi beginnen na de vorst.'},
+      {word:'graai',  niveau:2, sentence:'Maurits ziet de kraai graai naar het brood.'},
+      {word:'groeit', niveau:2, sentence:'Maurits meet hoe snel de plant groeit.'},
+      {word:'sproei', niveau:2, sentence:'Maurits sproei de planten elke ochtend.'},
+      {word:'strooi', niveau:2, sentence:'Maurits strooi zout op de besneeuwde stoep.'},
+      {word:'woei',   niveau:3, sentence:'Maurits zag hoe de wind hard woei gisteren.'},
+      {word:'schooit',niveau:3, sentence:'Maurits weet dat schooit betekent: om eten vragen.'},
+    ]
+  },
+  {
+    id:'stomme-e', label:'Stomme-E woorden', sub:'Cat. 11 – honden, dochter',
+    items:[
+      {word:'aarde',    niveau:1, sentence:'Maurits graaft in de aarde voor zijn moestuin.'},
+      {word:'bloemen',  niveau:1, sentence:'Maurits plukt bloemen voor zijn moeder.'},
+      {word:'honden',   niveau:1, sentence:'Maurits telt drie honden in het park.'},
+      {word:'touwen',   niveau:1, sentence:'Maurits klimt aan de touwen in de gymzaal.'},
+      {word:'wachten',  niveau:1, sentence:'Maurits moet wachten tot de les begint.'},
+      {word:'achter',   niveau:1, sentence:'Maurits zoekt zijn bal achter de schuur.'},
+      {word:'dochter',  niveau:2, sentence:'Maurits hoort dat hij de dochter van de buurvrouw kent.'},
+      {word:'engel',    niveau:2, sentence:'Maurits maakt een engel in de sneeuw.'},
+      {word:'fluiten',  niveau:2, sentence:'Maurits hoort de vogels fluiten in de ochtend.'},
+      {word:'grachten', niveau:2, sentence:'Maurits vaart door de grachten van Amsterdam.'},
+      {word:'laatste',  niveau:2, sentence:'Maurits is de laatste die binnenkomt.'},
+      {word:'monster',  niveau:2, sentence:'Maurits leest een boek over een vriendelijk monster.'},
+      {word:'nagel',    niveau:2, sentence:'Maurits knipt zijn nagels netjes kort.'},
+      {word:'stempel',  niveau:2, sentence:'Maurits krijgt een stempel in zijn hand van de juf.'},
+      {word:'vinger',   niveau:2, sentence:'Maurits steekt zijn vinger op als hij iets weet.'},
+      {word:'bewoners',  niveau:3, sentence:'Maurits kent alle bewoners van zijn straat.'},
+      {word:'november',  niveau:3, sentence:'Maurits weet dat november de elfde maand is.'},
+      {word:'snorkel',   niveau:3, sentence:'Maurits duikt met een snorkel in het zwembad.'},
+      {word:'zwanger',   niveau:3, sentence:'Maurits hoort dat de buurvrouw zwanger is.'},
+      {word:'drempel',   niveau:3, sentence:'Maurits struikelt bijna over de drempel.'},
+    ]
+  },
+  {
+    id:'eindD', label:'Woorden op -D', sub:'Cat. 12a – aard, kwaad, zwaard',
+    items:[
+      {word:'aard',   niveau:1, sentence:'Maurits heeft een vriendelijke aard.'},
+      {word:'baard',  niveau:1, sentence:'Maurits ziet dat zijn vader een baard heeft.'},
+      {word:'dood',   niveau:1, sentence:'Maurits vindt een dode bij in de tuin.'},
+      {word:'kwaad',  niveau:1, sentence:'Maurits wordt kwaad als iemand vals speelt.'},
+      {word:'naald',  niveau:1, sentence:'Maurits past op de scherpe naald van zijn moeder.'},
+      {word:'zand',   niveau:1, sentence:'Maurits speelt in het zand op het strand.'},
+      {word:'beeld',  niveau:2, sentence:'Maurits kijkt naar een oud beeld in het museum.'},
+      {word:'eerbied',niveau:2, sentence:'Maurits heeft eerbied voor zijn leraar.'},
+      {word:'iemand', niveau:2, sentence:'Maurits vraagt of iemand zijn pen heeft gezien.'},
+      {word:'stand',  niveau:2, sentence:'Maurits kijkt naar de stand van de wedstrijd.'},
+      {word:'vreemd', niveau:2, sentence:'Maurits vindt het vreemd dat zijn vriend niet belt.'},
+      {word:'wild',   niveau:2, sentence:'Maurits ziet een wild konijn in de wei.'},
+      {word:'afgrond',niveau:3, sentence:'Maurits kijkt met schrik in de diepe afgrond.'},
+      {word:'akkoord',niveau:3, sentence:'Maurits zegt: ik ga akkoord met het plan.'},
+      {word:'zwaard', niveau:3, sentence:'Maurits leest over een ridder met een zwaard.'},
+    ]
+  },
+  {
+    id:'verkleinwoord', label:'Verkleinwoorden', sub:'Cat. 13a – -je, -tje, -pje',
+    items:[
+      {word:'aapje',   niveau:1, sentence:'Maurits ziet een klein aapje in de boom.'},
+      {word:'pakje',   niveau:1, sentence:'Maurits maakt een pakje open op zijn verjaardag.'},
+      {word:'werkje',  niveau:1, sentence:'Maurits maakt zijn werkje af voor de les.'},
+      {word:'baantje', niveau:1, sentence:'Maurits wil een baantje als hij groter is.'},
+      {word:'krantje', niveau:1, sentence:'Maurits leest een krantje over zijn school.'},
+      {word:'meertje', niveau:1, sentence:'Maurits zwemt in het kleine meertje.'},
+      {word:'schoentje',niveau:2, sentence:'Maurits zet zijn schoentje voor Sinterklaas.'},
+      {word:'vrouwtje', niveau:2, sentence:'Maurits helpt het oude vrouwtje oversteken.'},
+      {word:'klauwtje', niveau:2, sentence:'Maurits ziet het kleine klauwtje van de hamster.'},
+      {word:'armpje',   niveau:2, sentence:'Maurits pakt het armpje van zijn kleine neefje vast.'},
+      {word:'duimpje',  niveau:2, sentence:'Maurits geeft een duimpje omhoog als teken van succes.'},
+      {word:'helmpje',  niveau:2, sentence:'Maurits zet zijn helmpje op voor het fietsen.'},
+      {word:'raampje',  niveau:2, sentence:'Maurits kijkt door het kleine raampje naar buiten.'},
+      {word:'wormpje',  niveau:2, sentence:'Maurits vindt een wormpje in de aarde.'},
+      {word:'fietsje',  niveau:3, sentence:'Maurits rijdt op een klein fietsje zonder zijwieltjes.'},
+    ]
+  },
+  {
+    id:'open-lettergreep', label:'Open lettergreepwoorden', sub:'Cat. 14 – aa→a, ee→e, oo→o',
+    items:[
+      {word:'apen',   niveau:1, sentence:'Maurits lacht om de gekke apen in de dierentuin.'},
+      {word:'avond',  niveau:1, sentence:'Maurits leest iedere avond voor het slapen.'},
+      {word:'deken',  niveau:1, sentence:'Maurits trekt de warme deken over zich heen.'},
+      {word:'motor',  niveau:1, sentence:'Maurits droomt ervan om later op een motor te rijden.'},
+      {word:'muziek', niveau:1, sentence:'Maurits danst altijd vrolijk op muziek.'},
+      {word:'regen',  niveau:1, sentence:'Maurits springt in de plassen na de regen.'},
+      {word:'brede',  niveau:1, sentence:'Maurits fietst over de brede weg naar school.'},
+      {word:'droge',  niveau:1, sentence:'Maurits eet een droge boterham zonder beleg.'},
+      {word:'meren',  niveau:1, sentence:'Maurits vaart op veel meren in de zomer.'},
+      {word:'oma',    niveau:1, sentence:'Maurits gaat dit weekend naar zijn oma.'},
+      {word:'kleding',niveau:2, sentence:'Maurits legt zijn kleding klaar voor morgen.'},
+      {word:'koning', niveau:2, sentence:'Maurits wil zo dapper zijn als een echte koning.'},
+      {word:'leraar', niveau:2, sentence:'Maurits luistert heel goed naar zijn leraar.'},
+      {word:'moment', niveau:2, sentence:'Maurits kiest het juiste moment om te vragen.'},
+      {word:'paling', niveau:2, sentence:'Maurits proeft voor het eerst gerookte paling.'},
+      {word:'poging', niveau:2, sentence:'Maurits doet een tweede poging om het te leren.'},
+      {word:'schepen',niveau:2, sentence:'Maurits kijkt naar de grote schepen in de haven.'},
+      {word:'woning', niveau:2, sentence:'Maurits helpt meeverhuizen naar de nieuwe woning.'},
+      {word:'enorm',  niveau:3, sentence:'Maurits is enorm trots op zijn diploma.'},
+      {word:'gratis', niveau:3, sentence:'Maurits krijgt een gratis ijsje bij de supermarkt.'},
+      {word:'konijn', niveau:3, sentence:'Maurits heeft een konijn als huisdier.'},
+      {word:'schaduw',niveau:3, sentence:'Maurits zit lekker in de schaduw op een warme dag.'},
+      {word:'student',niveau:3, sentence:'Maurits wil later student worden.'},
+      {word:'zoveel', niveau:3, sentence:'Maurits heeft zoveel geleerd dit jaar.'},
+      {word:'draden', niveau:3, sentence:'Maurits knoopt de draden van het net aan elkaar.'},
+    ]
+  },
 ];
 
 // ── State ─────────────────────────────────────────────────────────────────────
 var huidigeCat=null, items=[], idx=0, score=0, sessieRes=[], beantwoord=false;
+var gekozenAantal = 10;
+var gekozenNiveau = 0;  // 0 = alles
 var spraakSnelheid = 0.80;  // instelbaar via schuifje
 var gekozenStem = null;
 
@@ -387,6 +783,12 @@ window.addEventListener('load', function() {
   laadStemmen();
   bouwGrid();
   // Herstel opgeslagen snelheid
+  var savedNiveau = localStorage.getItem('niveau');
+  if (savedNiveau !== null) { kiesNiveau(parseInt(savedNiveau)); }
+
+  var savedAantal = localStorage.getItem('aantal_woorden');
+  if (savedAantal) { kiesAantal(parseInt(savedAantal)); }
+
   var savedSpeed = localStorage.getItem('spraak_snelheid');
   if (savedSpeed) {
     spraakSnelheid = parseFloat(savedSpeed);
@@ -480,7 +882,13 @@ function bouwGrid() {
 }
 
 function start(c) {
-  huidigeCat=c; items=mix([].concat(c.items)); idx=0; score=0; sessieRes=[]; beantwoord=false;
+  huidigeCat=c;
+  var gefilterd = gekozenNiveau === 0
+    ? [].concat(c.items)
+    : c.items.filter(function(w) { return w.niveau === gekozenNiveau; });
+  if (gefilterd.length === 0) gefilterd = [].concat(c.items); // fallback
+  items = mix(gefilterd).slice(0, gekozenAantal);
+  idx=0; score=0; sessieRes=[]; beantwoord=false;
   document.getElementById('cat-sectie').style.display='none';
   document.getElementById('resultaten').classList.remove('toon');
   document.getElementById('progress-row').style.display='flex';
@@ -581,6 +989,24 @@ function toonResultaten() {
     lijst.appendChild(rij);
   });
 }
+function kiesNiveau(n) {
+  gekozenNiveau = n;
+  localStorage.setItem('niveau', n);
+  document.querySelectorAll('.niveau-knop').forEach(function(b) {
+    b.classList.remove('actief');
+  });
+  document.getElementById('niveau-' + n).classList.add('actief');
+}
+
+function kiesAantal(n) {
+  gekozenAantal = n;
+  localStorage.setItem('aantal_woorden', n);
+  // Update actieve knop
+  document.querySelectorAll('.aantal-knop').forEach(function(b) {
+    b.classList.toggle('actief', parseInt(b.textContent) === n);
+  });
+}
+
 function stopEnTerug() {
   speechSynthesis.cancel();
   beantwoord = false;
