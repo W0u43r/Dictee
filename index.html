@@ -267,9 +267,10 @@ details[open] summary::before { content: '▼ '; }
     <span>Groep 4 – Spelling oefenen</span>
   </div>
   <div style="font-size:3rem">📝</div>
-  <button class="welkom-knop" onclick="startApp()">
-    Tik om te beginnen
+  <button class="welkom-knop" id="welkom-knop" onclick="startApp()">
+    Tik om te beginnen 🔊
   </button>
+  <div id="audio-debug" style="font-size:0.78rem;color:var(--tekst-zacht);font-family:'Nunito Sans',sans-serif;min-height:60px;line-height:1.8;"></div>
   <div class="welkom-sub">Voor Florine</div>
 </div>
 
@@ -796,15 +797,43 @@ function stemScore(v) {
 }
 
 function startApp() {
-  // Ontgrendel audio op iOS door een stille utterance af te spelen bij gebruikerstap
-  var u = new SpeechSynthesisUtterance(' ');
-  u.volume = 0;
-  speechSynthesis.speak(u);
-  speechSynthesis.cancel();
+  var dbg = document.getElementById('audio-debug');
+  dbg.innerHTML = '⏳ Bezig…<br>';
 
-  document.getElementById('welkom-overlay').style.display = 'none';
-  laadStemmen();
-  bouwGrid();
+  // Stap 1: check speechSynthesis beschikbaar
+  if (!window.speechSynthesis) {
+    dbg.innerHTML += '❌ speechSynthesis niet beschikbaar in deze browser.<br>';
+    return;
+  }
+  dbg.innerHTML += '✓ speechSynthesis aanwezig<br>';
+
+  // Stap 2: stemmen ophalen
+  var stemmen = speechSynthesis.getVoices();
+  dbg.innerHTML += '✓ Stemmen gevonden: ' + stemmen.length + '<br>';
+  var nl = stemmen.filter(function(v){ return v.lang.startsWith('nl'); });
+  dbg.innerHTML += '✓ NL stemmen: ' + nl.length + (nl.length > 0 ? ' (' + nl[0].name + ')' : '') + '<br>';
+
+  // Stap 3: probeer te spreken
+  var u = new SpeechSynthesisUtterance('Hallo Florine!');
+  u.lang = 'nl-NL';
+  u.rate = 0.9;
+  u.volume = 1;
+  if (nl.length > 0) u.voice = nl[0];
+  u.onstart = function() { dbg.innerHTML += '▶ Stem gestart<br>'; };
+  u.onend   = function() {
+    dbg.innerHTML += '✓ Klaar! Tik nogmaals om het spel te starten.<br>';
+    document.getElementById('welkom-knop').textContent = '▶ Start het spel';
+    document.getElementById('welkom-knop').onclick = function() {
+      document.getElementById('welkom-overlay').style.display = 'none';
+      laadStemmen(); bouwGrid();
+    };
+  };
+  u.onerror = function(e) {
+    dbg.innerHTML += '❌ Fout: ' + e.error + '<br>';
+    dbg.innerHTML += 'Probeer: zet het volume hoger en schakel de stille modus uit.<br>';
+  };
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
 }
 
 function laadStemmen() {
