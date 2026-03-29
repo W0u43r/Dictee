@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Staal Dictee – Groep 4</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<title>Staal Spelling – Groep 4</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --blauw:        #2e7fc1;
@@ -12,254 +12,248 @@
   --blauw-licht:  #e8f3fb;
   --blauw-mid:    #b3d4ee;
   --oranje:       #f4873a;
-  --geel:         #f9d94e;
-  --geel-licht:   #fefae8;
+  --oranje-licht: #fff0e6;
   --rood:         #e04a3c;
   --rood-licht:   #fdecea;
   --groen:        #2e8a55;
   --groen-licht:  #e4f5ec;
+  --geel:         #f9d94e;
+  --geel-licht:   #fefae8;
   --wit:          #ffffff;
   --achter:       #eef4fb;
   --tekst:        #0f2d47;
   --tekst-zacht:  #3d6280;
   --schaduw:      rgba(30,95,150,0.13);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body {
-  background: var(--achter); color: var(--tekst);
-  font-family: 'Nunito Sans', sans-serif; min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-  padding: 2rem 1rem 3rem;
-  background-image: radial-gradient(ellipse at 5% 10%, rgba(46,127,193,0.10) 0%, transparent 55%),
-    radial-gradient(ellipse at 95% 88%, rgba(249,217,78,0.10) 0%, transparent 50%);
-}
-.welkom-overlay {
-  position: fixed; inset: 0; z-index: 999; background: var(--achter);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 1.4rem; padding: 2rem; text-align: center;
-}
-.welkom-titel { font-family:'Nunito',sans-serif; font-weight:900; font-size:2rem; color:var(--blauw-donker); line-height:1.1; }
-.welkom-titel span { display:block; font-weight:600; font-size:1rem; color:var(--tekst-zacht); margin-top:4px; }
-.welkom-knop {
-  font-family:'Nunito',sans-serif; font-weight:800; font-size:1.1rem;
-  background:var(--blauw); color:white; border:none; border-radius:50px;
-  padding:16px 40px; cursor:pointer; box-shadow:0 4px 18px rgba(46,127,193,0.4); transition:all 0.18s;
-}
-.welkom-knop:hover, .welkom-knop:active { background:var(--blauw-donker); transform:scale(1.04); }
-.welkom-sub { font-size:0.82rem; color:var(--tekst-zacht); font-style:italic; }
-.kaart {
-  background:var(--wit); border-radius:22px;
-  box-shadow:0 6px 28px var(--schaduw), 0 1px 4px rgba(0,0,0,0.05);
-  max-width:620px; width:100%; padding:2rem 2rem 1.8rem;
-  display:flex; flex-direction:column; gap:1.4rem;
-  position:relative; overflow:hidden;
-}
-.kaart::before { content:''; position:absolute; top:-45px; right:-45px; width:170px; height:170px; border-radius:50%; background:radial-gradient(circle,rgba(46,127,193,0.12) 0%,transparent 70%); pointer-events:none; }
-.kaart::after  { content:''; position:absolute; bottom:-28px; left:-28px; width:130px; height:130px; border-radius:50%; background:radial-gradient(circle,rgba(249,217,78,0.14) 0%,transparent 70%); pointer-events:none; }
-.kaart-header { display:flex; justify-content:space-between; align-items:center; gap:1rem; position:relative; z-index:1; }
-.kaart-titel { font-family:'Nunito',sans-serif; font-weight:900; font-size:1.65rem; color:var(--blauw-donker); line-height:1.1; }
-.kaart-titel span { display:block; font-weight:600; font-size:0.82rem; color:var(--tekst-zacht); margin-top:3px; }
-.score-chip { background:var(--blauw); color:white; font-family:'Nunito',sans-serif; font-weight:800; font-size:0.72rem; padding:8px 16px; border-radius:50px; text-align:center; line-height:1.4; box-shadow:0 2px 10px rgba(46,127,193,0.35); white-space:nowrap; }
-.score-chip strong { display:block; font-size:1.4rem; line-height:1; }
-.sectie-label { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--tekst-zacht); margin-bottom:4px; }
-/* Niveau */
-.niveau-rij { display:flex; align-items:center; gap:8px; flex-wrap:wrap; position:relative; z-index:1; }
-.niveau-rij label { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; color:var(--tekst-zacht); white-space:nowrap; }
-.niveau-knoppen { display:flex; gap:5px; flex-wrap:wrap; }
-.niveau-knop { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.78rem; padding:6px 14px; border-radius:50px; border:2px solid var(--blauw-mid); background:var(--blauw-licht); color:var(--blauw-donker); cursor:pointer; transition:all 0.15s; white-space:nowrap; }
-.niveau-knop:hover { background:var(--blauw-mid); border-color:var(--blauw); }
-.niveau-knop.actief { background:var(--blauw); border-color:var(--blauw); color:white; box-shadow:0 2px 8px rgba(46,127,193,0.35); }
-/* Aantal */
-.aantal-rij { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
-.aantal-rij label { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; color:var(--tekst-zacht); white-space:nowrap; }
-.aantal-knoppen { display:flex; gap:6px; flex-wrap:wrap; }
-.aantal-knop { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.88rem; width:42px; height:42px; border-radius:50%; border:2px solid var(--blauw-mid); background:var(--blauw-licht); color:var(--blauw-donker); cursor:pointer; transition:all 0.15s; }
-.aantal-knop:hover { background:var(--blauw-mid); border-color:var(--blauw); }
-.aantal-knop.actief { background:var(--blauw); border-color:var(--blauw); color:white; box-shadow:0 2px 8px rgba(46,127,193,0.35); }
-/* Snelheid */
-.snelheid-rij { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
-.snelheid-rij label { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; color:var(--tekst-zacht); white-space:nowrap; }
-.snelheid-slider { flex:1; -webkit-appearance:none; appearance:none; height:5px; border-radius:3px; background:linear-gradient(to right, var(--blauw) 50%, var(--blauw-mid) 50%); outline:none; cursor:pointer; }
-.snelheid-slider::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; border-radius:50%; background:var(--blauw); box-shadow:0 2px 6px rgba(46,127,193,0.4); cursor:pointer; }
-.snelheid-waarde { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.82rem; color:var(--blauw); min-width:36px; text-align:right; }
-/* Cat grid */
-.cat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
-.cat-btn { background:var(--blauw-licht); border:2px solid var(--blauw-mid); border-radius:14px; padding:12px 14px; cursor:pointer; text-align:left; transition:all 0.17s; font-family:'Nunito',sans-serif; }
-.cat-btn:hover { background:var(--blauw-mid); border-color:var(--blauw); transform:translateY(-2px); box-shadow:0 5px 14px var(--schaduw); }
-.cat-btn .lbl { font-weight:800; font-size:0.9rem; color:var(--blauw-donker); display:block; }
-.cat-btn .sub { font-weight:400; font-size:0.7rem; color:var(--tekst-zacht); display:block; margin-top:2px; }
-/* Voortgang */
-.progress-row { display:flex; gap:5px; }
-.pip { flex:1; height:6px; border-radius:3px; background:rgba(46,127,193,0.15); transition:background 0.3s; }
-.pip.huidig { background:rgba(244,135,58,0.5); }
-.pip.goed   { background:var(--groen); }
-.pip.fout   { background:var(--rood); }
-/* Luisterkaart */
-.luister-kaart { background:var(--blauw-licht); border:2px solid var(--blauw-mid); border-radius:16px; padding:1.6rem 1rem; display:flex; flex-direction:column; align-items:center; gap:12px; position:relative; z-index:1; }
-.woord-num { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; color:var(--tekst-zacht); letter-spacing:0.04em; }
-.woord-num-rij { display:flex; align-items:center; justify-content:space-between; width:100%; }
-.stop-knop { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.72rem; background:none; border:1.5px solid var(--blauw-mid); border-radius:50px; padding:4px 12px; color:var(--tekst-zacht); cursor:pointer; transition:all 0.15s; }
-.stop-knop:hover { border-color:var(--blauw); color:var(--blauw); }
-.luister-knop { background:var(--blauw); border:none; border-radius:50%; width:80px; height:80px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 4px 18px rgba(46,127,193,0.40); transition:all 0.17s; }
-.luister-knop:hover { background:var(--blauw-donker); transform:scale(1.06); }
-.luister-knop.bezig { background:var(--oranje); box-shadow:0 4px 18px rgba(244,135,58,0.45); animation:klop 0.7s ease-in-out infinite alternate; }
-@keyframes klop { from{transform:scale(1)} to{transform:scale(1.09)} }
-.luister-knop svg { width:32px; height:32px; }
-.golven { display:flex; gap:5px; align-items:center; height:24px; opacity:0; transition:opacity 0.2s; }
-.golven.actief { opacity:1; }
-.golf { width:5px; border-radius:3px; background:var(--blauw); animation:golf 1s ease-in-out infinite; }
-.golf:nth-child(1){animation-delay:0s;height:8px}.golf:nth-child(2){animation-delay:.15s;height:16px}.golf:nth-child(3){animation-delay:.30s;height:22px}.golf:nth-child(4){animation-delay:.45s;height:16px}.golf:nth-child(5){animation-delay:.60s;height:8px}
-@keyframes golf { 0%,100%{transform:scaleY(0.5);opacity:0.5} 50%{transform:scaleY(1);opacity:1} }
-.knop-label { font-family:'Nunito',sans-serif; font-weight:700; font-size:0.76rem; color:var(--tekst-zacht); text-align:center; }
-.knop-rij-klein { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; }
-.klein-knop { background:white; border:2px solid var(--blauw-mid); border-radius:50px; padding:7px 16px; font-family:'Nunito',sans-serif; font-weight:700; font-size:0.78rem; color:var(--blauw-donker); cursor:pointer; transition:all 0.15s; }
-.klein-knop:hover { background:var(--blauw-mid); border-color:var(--blauw); }
-/* Invoer */
-.invoer-rij { display:flex; gap:10px; align-items:center; position:relative; z-index:1; }
-#spell-input { flex:1; font-family:'Nunito',sans-serif; font-weight:700; font-size:1.45rem; letter-spacing:0.05em; background:var(--blauw-licht); border:2.5px solid var(--blauw-mid); border-radius:12px; padding:10px 16px; color:var(--tekst); outline:none; text-transform:lowercase; transition:border-color 0.2s, background 0.2s; }
-#spell-input::placeholder { color:rgba(61,98,128,0.4); font-weight:400; }
-#spell-input:focus { border-color:var(--blauw); background:var(--wit); }
-#spell-input.goed-input { border-color:var(--groen); background:var(--groen-licht); }
-#spell-input.fout-input { border-color:var(--rood); background:var(--rood-licht); }
-.controleer-knop { font-family:'Nunito',sans-serif; font-weight:800; font-size:1rem; background:var(--oranje); color:white; border:none; border-radius:12px; padding:12px 22px; cursor:pointer; white-space:nowrap; box-shadow:0 3px 10px rgba(244,135,58,0.35); transition:all 0.17s; }
-.controleer-knop:hover { background:#d96e25; transform:translateY(-1px); }
-/* Feedback */
-.feedback { min-height:72px; position:relative; z-index:1; display:flex; flex-direction:column; gap:6px; }
-.fb-hoofd { font-family:'Nunito',sans-serif; font-weight:800; font-size:1.05rem; opacity:0; transform:translateY(6px); transition:all 0.22s; }
-.fb-hoofd.toon { opacity:1; transform:none; }
-.fb-hoofd.goed { color:var(--groen); }
-.fb-hoofd.fout { color:var(--rood); }
-.fb-woord { font-size:0.88rem; letter-spacing:0.04em; opacity:0; transition:opacity 0.3s 0.14s; color:var(--tekst-zacht); }
-.fb-woord.toon { opacity:1; }
-.char-diff { display:flex; gap:4px; flex-wrap:wrap; margin-top:4px; opacity:0; transition:opacity 0.3s 0.2s; }
-.char-diff.toon { opacity:1; }
-.char-box { font-family:'Nunito',sans-serif; font-weight:700; font-size:1.05rem; width:30px; height:34px; display:flex; align-items:center; justify-content:center; border-radius:7px; border:2px solid transparent; }
-.char-box.ok   { background:var(--groen-licht); border-color:var(--groen); color:var(--groen); }
-.char-box.fout { background:var(--rood-licht);  border-color:var(--rood);  color:var(--rood); }
-.char-box.extra{ background:var(--geel-licht);  border-color:var(--geel);  color:#7a6200; }
-/* Resultaten */
-.resultaten { display:none; flex-direction:column; align-items:center; gap:1.4rem; text-align:center; position:relative; z-index:1; }
-.resultaten.toon { display:flex; }
-.score-ster { font-size:2.8rem; animation:sterren 0.5s ease forwards; }
-@keyframes sterren { 0%{transform:scale(0) rotate(-20deg);opacity:0} 65%{transform:scale(1.2) rotate(5deg);opacity:1} 100%{transform:scale(1) rotate(0);opacity:1} }
-.grote-score { font-family:'Nunito',sans-serif; font-weight:900; font-size:4rem; color:var(--blauw-donker); line-height:1; }
-.grote-score span { font-size:1.5rem; font-weight:400; color:var(--tekst-zacht); }
-.res-bericht { font-size:0.98rem; color:var(--tekst-zacht); font-style:italic; max-width:320px; }
-.woord-lijst { width:100%; display:flex; flex-direction:column; gap:5px; max-height:220px; overflow-y:auto; }
-.woord-rij { display:flex; align-items:center; justify-content:space-between; font-size:0.85rem; padding:7px 10px; border-radius:9px; background:var(--achter); }
-.woord-rij .links { display:flex; gap:8px; align-items:center; font-family:'Nunito',sans-serif; font-weight:700; }
-.woord-rij .antwoord { color:var(--tekst-zacht); text-decoration:line-through; font-size:0.8rem; }
-.woord-rij .antwoord.ok { text-decoration:none; color:var(--groen); }
-.herstart-knop { font-family:'Nunito',sans-serif; font-weight:800; font-size:0.95rem; background:var(--blauw); color:white; border:none; border-radius:50px; padding:12px 28px; cursor:pointer; transition:all 0.17s; box-shadow:0 3px 10px rgba(46,127,193,0.3); }
-.herstart-knop:hover { background:var(--blauw-donker); transform:translateY(-1px); }
-.herstart-knop.wit { background:var(--wit); color:var(--blauw-donker); border:2px solid var(--blauw-mid); box-shadow:none; }
-.herstart-knop.wit:hover { background:var(--blauw-licht); }
-#spel-area { display:none; flex-direction:column; gap:1.2rem; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 3rem;}
+
+/* Kaart */
+.kaart{background:var(--wit);border-radius:20px;box-shadow:0 6px 28px var(--schaduw);max-width:660px;width:100%;padding:1.8rem;display:flex;flex-direction:column;gap:1.3rem;position:relative;overflow:hidden;}
+.kaart::before{content:'';position:absolute;top:-40px;right:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(46,127,193,0.10) 0%,transparent 70%);pointer-events:none;}
+
+/* Header */
+.hdr{display:flex;justify-content:space-between;align-items:center;gap:1rem;}
+.titel{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.55rem;color:var(--blauw-donker);line-height:1.1;}
+.titel span{display:block;font-weight:600;font-size:0.8rem;color:var(--tekst-zacht);margin-top:3px;}
+.score-chip{background:var(--blauw);color:white;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.7rem;padding:7px 14px;border-radius:50px;text-align:center;line-height:1.4;box-shadow:0 2px 10px rgba(46,127,193,0.3);white-space:nowrap;}
+.score-chip strong{display:block;font-size:1.3rem;line-height:1;}
+
+/* Schermen */
+.scherm{display:none;flex-direction:column;gap:1.2rem;}
+.scherm.actief{display:flex;}
+
+/* ── Startscherm ── */
+.sectie-lbl{font-family:'Nunito',sans-serif;font-weight:700;font-size:0.74rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--tekst-zacht);}
+.cat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.cat-vak{background:var(--blauw-licht);border:2px solid var(--blauw-mid);border-radius:12px;padding:10px 13px;cursor:pointer;text-align:left;transition:all 0.15s;position:relative;}
+.cat-vak:hover{background:var(--blauw-mid);border-color:var(--blauw);}
+.cat-vak.gekozen{background:var(--blauw);border-color:var(--blauw);color:white;}
+.cat-vak.gekozen .cat-lbl{color:white;}
+.cat-vak.gekozen .cat-sub{color:rgba(255,255,255,0.75);}
+.cat-vak .cat-lbl{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.88rem;color:var(--blauw-donker);display:block;}
+.cat-vak .cat-sub{font-weight:400;font-size:0.68rem;color:var(--tekst-zacht);display:block;margin-top:2px;}
+.cat-vak .vinkje{position:absolute;top:8px;right:10px;font-size:0.85rem;display:none;}
+.cat-vak.gekozen .vinkje{display:block;}
+
+.opties-rij{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.opt-lbl{font-family:'Nunito',sans-serif;font-weight:700;font-size:0.74rem;color:var(--tekst-zacht);white-space:nowrap;}
+.opt-knoppen{display:flex;gap:5px;}
+.opt-knop{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.82rem;width:38px;height:38px;border-radius:50%;border:2px solid var(--blauw-mid);background:var(--blauw-licht);color:var(--blauw-donker);cursor:pointer;transition:all 0.15s;}
+.opt-knop.actief{background:var(--blauw);border-color:var(--blauw);color:white;}
+
+/* Foutwoordenlijst knop */
+.fout-preview{background:var(--rood-licht);border:2px solid rgba(224,74,60,0.25);border-radius:12px;padding:10px 14px;display:none;flex-direction:column;gap:6px;}
+.fout-preview.toon{display:flex;}
+.fout-preview-hdr{display:flex;justify-content:space-between;align-items:center;}
+.fout-preview-titel{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.85rem;color:var(--rood);}
+.fout-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.fout-chip{font-family:'Nunito',sans-serif;font-weight:700;font-size:0.75rem;background:white;border:1.5px solid rgba(224,74,60,0.3);border-radius:50px;padding:3px 10px;color:var(--rood);}
+
+.start-knop{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;background:var(--oranje);color:white;border:none;border-radius:50px;padding:13px;cursor:pointer;box-shadow:0 3px 12px rgba(244,135,58,0.35);transition:all 0.17s;width:100%;}
+.start-knop:hover{background:#d96e25;transform:translateY(-1px);}
+.start-knop:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
+/* ── Spelscherm ── */
+.voortgang{display:flex;gap:4px;}
+.pip{flex:1;height:6px;border-radius:3px;background:rgba(46,127,193,0.15);transition:background 0.3s;}
+.pip.huidig{background:rgba(244,135,58,0.45);}
+.pip.goed{background:var(--groen);}
+.pip.fout{background:var(--rood);}
+
+.vraag-teller{font-family:'Nunito',sans-serif;font-weight:700;font-size:0.74rem;color:var(--tekst-zacht);display:flex;justify-content:space-between;align-items:center;}
+.stop-knop{font-family:'Nunito',sans-serif;font-weight:700;font-size:0.72rem;background:none;border:1.5px solid var(--blauw-mid);border-radius:50px;padding:4px 12px;color:var(--tekst-zacht);cursor:pointer;transition:all 0.15s;}
+.stop-knop:hover{border-color:var(--blauw);color:var(--blauw);}
+
+.zin-kaart{background:var(--blauw-licht);border:2px solid var(--blauw-mid);border-radius:14px;padding:14px 16px;font-size:1rem;line-height:1.65;font-style:italic;position:relative;z-index:1;}
+.zin-woord-gat{display:inline-block;background:white;border-bottom:2.5px solid var(--blauw);border-radius:4px;padding:1px 20px;font-weight:800;font-style:normal;color:transparent;letter-spacing:0.05em;}
+
+.vraag-lbl{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:var(--tekst);}
+
+/* Antwoordknoppen */
+.antwoord-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.antw-knop{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.03em;background:var(--blauw-licht);border:2.5px solid var(--blauw-mid);border-radius:13px;padding:14px 10px;cursor:pointer;transition:all 0.17s;text-align:center;color:var(--tekst);position:relative;}
+.antw-knop:hover:not(:disabled){background:var(--blauw-mid);border-color:var(--blauw);transform:translateY(-1px);}
+.antw-knop:disabled{cursor:default;}
+.antw-knop .letter{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--blauw-mid);color:var(--blauw-donker);font-size:0.72rem;line-height:22px;text-align:center;margin-right:6px;transition:all 0.15s;flex-shrink:0;}
+.antw-knop.juist{background:var(--groen-licht);border-color:var(--groen);color:var(--groen);}
+.antw-knop.juist .letter{background:var(--groen);color:white;}
+.antw-knop.fout-keuze{background:var(--rood-licht);border-color:var(--rood);color:var(--rood);}
+.antw-knop.fout-keuze .letter{background:var(--rood);color:white;}
+.antw-knop.grijs{opacity:0.4;}
+
+/* Feedback blok */
+.feedback-blok{border-radius:14px;padding:14px 16px;display:none;flex-direction:column;gap:8px;}
+.feedback-blok.toon{display:flex;}
+.feedback-blok.goed-blok{background:var(--groen-licht);border:2px solid var(--groen);}
+.feedback-blok.fout-blok{background:var(--rood-licht);border:2px solid var(--rood);}
+.feedback-titel{font-family:'Nunito',sans-serif;font-weight:900;font-size:1rem;}
+.feedback-blok.goed-blok .feedback-titel{color:var(--groen);}
+.feedback-blok.fout-blok .feedback-titel{color:var(--rood);}
+.feedback-uitleg{font-size:0.85rem;line-height:1.6;color:var(--tekst);}
+.feedback-uitleg strong{color:var(--blauw-donker);}
+.feedback-woord{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.4rem;letter-spacing:0.08em;text-align:center;padding:8px;border-radius:8px;background:white;}
+.feedback-blok.goed-blok .feedback-woord{color:var(--groen);}
+.feedback-blok.fout-blok .feedback-woord{color:var(--rood);}
+.feedback-onthoud{font-size:0.78rem;color:var(--tekst-zacht);font-style:italic;}
+
+.volgende-knop{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.95rem;background:var(--blauw);color:white;border:none;border-radius:50px;padding:12px;cursor:pointer;transition:all 0.17s;width:100%;box-shadow:0 3px 10px rgba(46,127,193,0.3);}
+.volgende-knop:hover{background:var(--blauw-donker);}
+
+/* ── Resultaten ── */
+.res-ster{font-size:2.8rem;text-align:center;}
+.res-score{font-family:'Nunito',sans-serif;font-weight:900;font-size:3.8rem;color:var(--blauw-donker);text-align:center;line-height:1;}
+.res-score span{font-size:1.5rem;font-weight:400;color:var(--tekst-zacht);}
+.res-bericht{font-size:0.95rem;color:var(--tekst-zacht);font-style:italic;text-align:center;}
+.res-knoppen{display:flex;gap:10px;flex-wrap:wrap;}
+.res-knop{flex:1;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;background:var(--blauw);color:white;border:none;border-radius:50px;padding:12px;cursor:pointer;transition:all 0.17s;box-shadow:0 3px 10px rgba(46,127,193,0.3);}
+.res-knop:hover{background:var(--blauw-donker);}
+.res-knop.wit{background:var(--wit);color:var(--blauw-donker);border:2px solid var(--blauw-mid);box-shadow:none;}
+.res-knop.wit:hover{background:var(--blauw-licht);}
+.res-knop.rood{background:var(--rood);box-shadow:0 3px 10px rgba(224,74,60,0.3);}
+.res-knop.rood:hover{background:#c03a2d;}
+
+/* Fout-overzicht in resultaten */
+.fout-lijst-titel{font-family:'Nunito',sans-serif;font-weight:800;font-size:0.9rem;color:var(--rood);}
+.fout-lijst{display:flex;flex-direction:column;gap:6px;max-height:260px;overflow-y:auto;}
+.fout-item{background:var(--rood-licht);border:1.5px solid rgba(224,74,60,0.2);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;}
+.fout-item-woord{font-family:'Nunito',sans-serif;font-weight:900;font-size:0.95rem;color:var(--rood);}
+.fout-item-info{font-size:0.76rem;color:var(--tekst-zacht);line-height:1.5;}
+.fout-item-gekozen{text-decoration:line-through;color:var(--rood);}
+
+/* Fout-oefenscherm */
+.fout-badge{background:var(--rood);color:white;font-family:'Nunito',sans-serif;font-weight:800;font-size:0.7rem;padding:3px 10px;border-radius:50px;margin-left:6px;}
+
+/* Welkom */
+.welkom{position:fixed;inset:0;z-index:999;background:var(--achter);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;padding:2rem;text-align:center;}
+.welkom-titel{font-family:'Nunito',sans-serif;font-weight:900;font-size:2rem;color:var(--blauw-donker);line-height:1.1;}
+.welkom-titel span{display:block;font-weight:600;font-size:1rem;color:var(--tekst-zacht);margin-top:4px;}
+.welkom-knop{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.1rem;background:var(--blauw);color:white;border:none;border-radius:50px;padding:16px 40px;cursor:pointer;box-shadow:0 4px 18px rgba(46,127,193,0.4);transition:all 0.18s;}
+.welkom-knop:hover{background:var(--blauw-donker);}
+.welkom-sub{font-size:0.82rem;color:var(--tekst-zacht);font-style:italic;}
 </style>
 </head>
 <body>
 
-<div class="welkom-overlay" id="welkom-overlay">
-  <div class="welkom-titel">Staal Dictee<span>Groep 4 – Spelling oefenen</span></div>
+<!-- Welkom -->
+<div class="welkom" id="welkom">
+  <div class="welkom-titel">Staal Spelling<span>Groep 4 – Multiple Choice</span></div>
   <div style="font-size:3rem">&#x1F4DD;</div>
-  <button class="welkom-knop" id="welkom-knop" onclick="startApp()">Tik om te beginnen &#x1F50A;</button>
-  <div id="audio-debug" style="font-size:0.78rem;color:var(--tekst-zacht);font-family:'Nunito Sans',sans-serif;min-height:40px;line-height:1.8;max-width:300px;"></div>
+  <button class="welkom-knop" onclick="startApp()">Tik om te beginnen</button>
   <div class="welkom-sub">Voor Florine</div>
 </div>
 
 <div class="kaart">
-
-  <div class="kaart-header">
-    <div class="kaart-titel">Staal Dictee<span>Groep 4 – Spelling oefenen</span></div>
+  <div class="hdr">
+    <div class="titel">Staal Spelling<span>Groep 4</span></div>
     <div class="score-chip">Score<br><strong id="score-display">0 / 0</strong></div>
   </div>
 
-  <div class="niveau-rij">
-    <label>&#x2B50; Niveau</label>
-    <div class="niveau-knoppen">
-      <button class="niveau-knop actief" id="niveau-0" onclick="kiesNiveau(0)">Alles</button>
-      <button class="niveau-knop" id="niveau-1" onclick="kiesNiveau(1)">Makkelijk</button>
-      <button class="niveau-knop" id="niveau-2" onclick="kiesNiveau(2)">Gemiddeld</button>
-      <button class="niveau-knop" id="niveau-3" onclick="kiesNiveau(3)">Moeilijk</button>
+  <!-- ① Startscherm -->
+  <div class="scherm actief" id="s-start">
+    <div>
+      <div class="sectie-lbl" style="margin-bottom:6px">Kies categorieën (meerdere mogelijk)</div>
+      <div class="cat-grid" id="cat-grid"></div>
     </div>
-  </div>
 
-  <div class="aantal-rij">
-    <label>&#x1F4DD; Woorden</label>
-    <div class="aantal-knoppen">
-      <button class="aantal-knop" onclick="kiesAantal(5)">5</button>
-      <button class="aantal-knop actief" id="aantal-10" onclick="kiesAantal(10)">10</button>
-      <button class="aantal-knop" onclick="kiesAantal(15)">15</button>
-      <button class="aantal-knop" onclick="kiesAantal(20)">20</button>
-    </div>
-  </div>
-
-  <div class="snelheid-rij">
-    <label>&#x1F422; Snelheid</label>
-    <input type="range" id="snelheid-slider" class="snelheid-slider" min="0.4" max="1.1" step="0.05" value="0.8" oninput="updateSnelheid(this.value)">
-    <span class="snelheid-waarde" id="snelheid-waarde">0.80x</span>
-  </div>
-
-  <div id="cat-sectie">
-    <div class="sectie-label">Kies een woordsoort</div>
-    <div class="cat-grid" id="cat-grid"></div>
-  </div>
-
-  <div class="progress-row" id="progress-row" style="display:none"></div>
-
-  <div id="spel-area">
-    <div class="luister-kaart">
-      <div class="woord-num-rij">
-        <div class="woord-num" id="woord-num">Woord 1 van 10</div>
-        <button class="stop-knop" onclick="stopEnTerug()">&#x2190; Stop</button>
-      </div>
-      <button class="luister-knop" id="luister-knop" onclick="speakFull(); focusInput();">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M3 9v6h4l5 5V4L7 9H3z" fill="white"/>
-          <path d="M16.5 12A4.5 4.5 0 0014 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="white"/>
-          <path d="M19 12c0 3.53-2.53 6.44-5.87 7v-2.02A5 5 0 0019 12a5 5 0 00-5.87-4.98V5c3.34.56 5.87 3.47 5.87 7z" fill="white"/>
-        </svg>
-      </button>
-      <div class="golven" id="golven">
-        <div class="golf"></div><div class="golf"></div><div class="golf"></div>
-        <div class="golf"></div><div class="golf"></div>
-      </div>
-      <div class="knop-label" id="knop-label">Druk om de zin te horen</div>
-      <div class="knop-rij-klein">
-        <button class="klein-knop" onclick="speakWoordAlleen(); focusInput();">&#x1F501; Herhaal woord</button>
-        <button class="klein-knop" onclick="speakFull(true); focusInput();">&#x1F422; Langzaam</button>
+    <div class="opties-rij">
+      <span class="opt-lbl">&#x1F4DD; Vragen</span>
+      <div class="opt-knoppen">
+        <button class="opt-knop" onclick="kiesAantal(5)">5</button>
+        <button class="opt-knop actief" onclick="kiesAantal(10)">10</button>
+        <button class="opt-knop" onclick="kiesAantal(20)">20</button>
+        <button class="opt-knop" onclick="kiesAantal(40)">40</button>
       </div>
     </div>
 
-    <div class="invoer-rij">
-      <input type="text" id="spell-input" placeholder="typ het woord..."
-        autocomplete="off" autocorrect="off" autocapitalize="off"
-        spellcheck="false" inputmode="text" onkeydown="handleKey(event)">
-      <button class="controleer-knop" id="controleer-knop" onclick="checkAntwoord()">Controleer</button>
+    <div class="opties-rij">
+      <span class="opt-lbl">&#x2B50; Niveau</span>
+      <div class="opt-knoppen">
+        <button class="opt-knop actief" id="niv-0" onclick="kiesNiveau(0)">Alles</button>
+        <button class="opt-knop" id="niv-1" onclick="kiesNiveau(1)">Makkelijk</button>
+        <button class="opt-knop" id="niv-2" onclick="kiesNiveau(2)">Gemiddeld</button>
+        <button class="opt-knop" id="niv-3" onclick="kiesNiveau(3)">Moeilijk</button>
+      </div>
     </div>
 
-    <div class="feedback">
-      <div class="fb-hoofd" id="fb-hoofd"></div>
-      <div class="fb-woord" id="fb-woord"></div>
-      <div class="char-diff" id="char-diff"></div>
+    <!-- Foutwoordenlijst preview -->
+    <div class="fout-preview" id="fout-preview">
+      <div class="fout-preview-hdr">
+        <span class="fout-preview-titel">&#x26A0; Eerder fout gegaan</span>
+        <button style="font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:700;background:var(--rood);color:white;border:none;border-radius:50px;padding:4px 12px;cursor:pointer;" onclick="oefenFouten()">Oefen deze</button>
+      </div>
+      <div class="fout-chips" id="fout-chips"></div>
+      <button style="font-family:'Nunito',sans-serif;font-size:0.7rem;font-weight:600;background:none;border:none;color:var(--tekst-zacht);cursor:pointer;text-decoration:underline;text-align:left;" onclick="wissFouten()">Lijst wissen</button>
     </div>
+
+    <button class="start-knop" id="start-knop" onclick="startSpel(false)" disabled>Selecteer een categorie</button>
   </div>
 
-  <div class="resultaten" id="resultaten">
-    <div class="score-ster" id="score-ster">&#x2B50;</div>
-    <div class="grote-score" id="grote-score">0 <span>/ 10</span></div>
+  <!-- ② Spelscherm -->
+  <div class="scherm" id="s-spel">
+    <div class="voortgang" id="voortgang"></div>
+    <div class="vraag-teller">
+      <span id="vraag-num">Vraag 1 van 10</span>
+      <button class="stop-knop" onclick="stopSpel()">&#x2190; Stop</button>
+    </div>
+
+    <div class="zin-kaart" id="zin-kaart"></div>
+    <div class="vraag-lbl">Welk woord past hier?</div>
+
+    <div class="antwoord-grid" id="antwoord-grid"></div>
+
+    <div class="feedback-blok" id="feedback-blok">
+      <div class="feedback-titel" id="fb-titel"></div>
+      <div class="feedback-woord" id="fb-woord"></div>
+      <div class="feedback-uitleg" id="fb-uitleg"></div>
+      <div class="feedback-onthoud" id="fb-onthoud"></div>
+    </div>
+
+    <button class="volgende-knop" id="volgende-knop" onclick="volgende()" style="display:none">Volgende vraag &#x2192;</button>
+  </div>
+
+  <!-- ③ Resultaten -->
+  <div class="scherm" id="s-res">
+    <div class="res-ster" id="res-ster">&#x2B50;</div>
+    <div class="res-score" id="res-score">0 <span>/ 10</span></div>
     <div class="res-bericht" id="res-bericht"></div>
-    <div class="woord-lijst" id="woord-lijst"></div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-      <button class="herstart-knop wit" onclick="naarCats()">&#x2190; Andere categorie</button>
-      <button class="herstart-knop" onclick="herstart()">Opnieuw</button>
-    </div>
-  </div>
 
+    <div id="fout-sectie" style="display:none;flex-direction:column;gap:8px;">
+      <div class="fout-lijst-titel">&#x26A0; Fout gegane woorden — onthoud deze goed!</div>
+      <div class="fout-lijst" id="fout-lijst"></div>
+    </div>
+
+    <div class="res-knoppen">
+      <button class="res-knop wit" onclick="naarStart()">&#x2190; Opnieuw instellen</button>
+      <button class="res-knop" onclick="opnieuw()">Opnieuw &#x21BA;</button>
+    </div>
+    <button class="res-knop rood" id="oefen-fout-knop" onclick="oefenFouten()" style="display:none">&#x26A0; Oefen alleen de fout gegane woorden</button>
+  </div>
 </div>
 
 <script>
 
+// ── Data ────────────────────────────────────────────────────────────────────
 var CATS = [
   { id:'hakwoord', label:'Hakwoorden', sub:'MKM – schrijf wat je hoort', items:[
     {word:'as',niveau:1},{word:'baan',niveau:1},{word:'bak',niveau:1},{word:'bal',niveau:1},{word:'bar',niveau:1},{word:'bas',niveau:1},{word:'been',niveau:1},{word:'bek',niveau:1},{word:'bel',niveau:1},{word:'bes',niveau:1},
@@ -421,257 +415,556 @@ var CATS = [
   ]},
 ];
 
-// State
-var huidigeCat=null, items=[], idx=0, score=0, sessieRes=[], beantwoord=false;
-var gekozenAantal=10, gekozenNiveau=0, spraakSnelheid=0.80;
-var gekozenStem=null;
-
-// Zinnen database - ingebakken in het spel
 var ZINNEN = {"as": "Maurits veegt de as uit de open haard.", "baan": "Maurits schaatst op de ijsbaan.", "bak": "Maurits zet de bak met water buiten.", "bal": "Maurits gooit de bal naar zijn vriend.", "bar": "Het is bar koud buiten, zegt Maurits.", "bas": "Maurits speelt de bas in het schoolorkest.", "been": "Maurits heeft pijn aan zijn been na het vallen.", "bek": "Maurits ziet de vogel zijn bek openen.", "bel": "Maurits drukt op de bel van de voordeur.", "bes": "Maurits plukt een rijpe bes van de struik.", "boom": "Maurits klimt in de grote boom in de tuin.", "bos": "Maurits wandelt met zijn hond door het bos.", "bus": "Maurits neemt de bus naar het zwembad.", "dag": "Maurits heeft een fijne dag op school.", "dak": "Maurits ziet een kat op het dak zitten.", "dal": "Maurits fietst het dal in na de heuvel.", "dam": "Maurits staat op de dam en kijkt naar het water.", "dan": "Maurits zegt: dan ga ik maar naar huis.", "das": "Maurits doet een das om voor het schoolfeest.", "dek": "Maurits staat op het dek van het schip.", "den": "Maurits ziet een hoge den in het bos.", "dit": "Maurits zegt: dit is mijn mooiste tekening.", "dom": "Maurits maakt een domme fout bij de som.", "dop": "Maurits draait de dop van de fles.", "dun": "Maurits snijdt een dunne plak brood.", "gas": "Maurits weet dat gas gevaarlijk kan zijn.", "gek": "Maurits vindt zijn kleine broertje soms gek.", "hak": "Maurits slaat de hak van zijn schoen kapot.", "ham": "Maurits legt een plakje ham op zijn brood.", "hap": "Maurits neemt een grote hap van zijn appel.", "heg": "Maurits knipt de heg in de tuin.", "hek": "Maurits klimt over het hek van de speelplaats.", "hes": "Maurits trekt een oranje hes aan op de bouwplaats.", "hik": "Maurits heeft de hik na het snel drinken.", "hof": "Maurits speelt in de hof achter het kasteel.", "hok": "Maurits geeft het konijn eten in zijn hok.", "hol": "Maurits vindt een hol van een vos in het bos.", "hoog": "Maurits springt zo hoog als hij kan.", "hop": "Maurits roept hop als zijn paard springt.", "hut": "Maurits bouwt een hut in het bos.", "jas": "Maurits hangt zijn jas aan de kapstok.", "juf": "Maurits geeft de juf een mooie tekening.", "kan": "Maurits vult de kan met water voor de planten.", "kap": "Maurits zet een kap op de lamp.", "kar": "Maurits duwt de kar vol met zand.", "kas": "Maurits kijkt naar de tomaten in de kas.", "kin": "Maurits raakt zijn kin als hij valt.", "kip": "Maurits geeft de kip wat graan te eten.", "kok": "Maurits wil later kok worden.", "kom": "Maurits eet soep uit een grote kom.", "kon": "Maurits kon gisteren niet naar school.", "kop": "Maurits drinkt een kop thee bij oma.", "lam": "Maurits ziet een wit lam in de wei.", "lef": "Maurits heeft lef en durft van het hoge springplank.", "lek": "Maurits ontdekt dat zijn fietsband lek is.", "les": "Maurits luistert goed tijdens de les.", "lig": "Maurits zegt: lig jij ook zo lekker in bed?", "lip": "Maurits bijt op zijn lip als hij nadenkt.", "los": "Maurits maakt zijn schoenveters los.", "lus": "Maurits maakt een lus in het touw.", "maf": "Maurits vindt het maf dat zijn kat in de wasbak slaapt.", "mag": "Maurits vraagt of hij buiten mag spelen.", "mak": "Maurits aait het makke paard in de wei.", "mal": "Maurits gebruikt een mal om de sterren te tekenen.", "man": "Maurits helpt de oude man met zijn boodschappen.", "map": "Maurits stopt zijn werkbladen in zijn map.", "mat": "Maurits veegt zijn voeten op de mat.", "men": "Maurits weet dat men niet in de bibliotheek mag schreeuwen.", "mep": "Maurits geeft de vlieg een mep met de vliegenmepper.", "mes": "Maurits smeert zijn boterham met een mes.", "mik": "Maurits mikt goed en gooit de bal in de mand.", "min": "Maurits heeft een min van drie graden buiten.", "mis": "Maurits gooit mis en raakt de prullenbak niet.", "mok": "Maurits drinkt chocolademelk uit een grote mok.", "mol": "Maurits ziet een mols gang in de tuin.", "mop": "Maurits vertelt een grappige mop aan zijn klas.", "mot": "Maurits vindt een mot in zijn trui.", "mug": "Maurits krabt de bult van de mug op zijn arm.", "mus": "Maurits gooit broodkruimels voor de mus.", "nat": "Maurits is nat van de regen.", "nek": "Maurits doet zijn nek pijn na het slapen.", "nep": "Maurits weet dat het nep goud is.", "net": "Maurits vist met een net in de sloot.", "nog": "Maurits wil nog een koekje van oma.", "nok": "Maurits kijkt naar de nok van het dak.", "pak": "Maurits draagt een pak op het schoolfeest.", "pan": "Maurits bakt een ei in de pan.", "pap": "Maurits eet elke ochtend pap met fruit.", "pas": "Maurits laat zijn pas zien bij de ingang.", "pen": "Maurits schrijft zijn naam met een blauwe pen.", "pik": "Maurits geeft een pik met zijn vinger.", "pil": "Maurits slikt een pil als hij ziek is.", "pin": "Maurits betaalt met zijn pin in de winkel.", "pit": "Maurits haalt de pit uit de olijf.", "pot": "Maurits plant een bloem in een rode pot.", "ram": "Maurits ziet een ram met grote horens in de wei.", "rap": "Maurits zingt een rap voor de klas.", "rek": "Maurits hangt zijn kleren op het rek.", "rem": "Maurits knijpt de rem van zijn fiets.", "ren": "Maurits loopt zo snel als hij kan in de ren.", "rok": "Maurits vindt de rok van zijn moeder mooi.", "rol": "Maurits speelt een rol in het schooltoneel.", "rot": "Maurits gooit de rotte appel weg.", "rug": "Maurits heeft pijn in zijn rug van het tillen.", "sap": "Maurits drinkt een glas sinaasappelsap.", "sik": "Maurits ziet een geit met een sik.", "sip": "Maurits kijkt sip als hij zijn snoep niet krijgt.", "sok": "Maurits verliest altijd een sok in de was.", "som": "Maurits maakt de som snel in zijn hoofd.", "sop": "Maurits wast de vloer met sop.", "tak": "Maurits breekt een tak van de boom.", "tam": "Maurits heeft een tamme cavia als huisdier.", "tap": "Maurits draait de tap open voor water.", "tas": "Maurits stopt zijn boeken in zijn tas.", "tik": "Maurits geeft zijn vriend een tik bij het tikspel.", "tin": "Maurits maakt een beeldje van tin.", "tip": "Maurits geeft zijn vriend een tip voor het dictee.", "tok": "Maurits hoort de klok tok-tok-tok tikken.", "ton": "Maurits rolt de ton naar het schip.", "top": "Maurits bereikt de top van de berg.", "tot": "Maurits werkt door tot het avondeten.", "val": "Maurits maakt een val voor de muis.", "van": "Maurits rijdt mee in de van van zijn oom.", "vel": "Maurits schrijft op een vel papier.", "vin": "Maurits ziet de vin van de dolfijn boven water.", "vis": "Maurits vangt een vis in de vijver.", "vol": "Maurits heeft zijn bord vol met eten.", "vos": "Maurits ziet een vos in de wei.", "waf": "Maurits geeft zijn hond een waf-koekje.", "wak": "Maurits kijkt door het wak in het ijs.", "wal": "Maurits loopt over de wal langs het water.", "was": "Maurits helpt met de was vouwen.", "wat": "Maurits vraagt wat hij moet doen.", "weg": "Maurits fietst de weg naar school.", "wek": "Maurits stelt de wekker voor zeven uur.", "wen": "Maurits moet wennen aan zijn nieuwe klas.", "wet": "Maurits weet dat je je aan de wet moet houden.", "wip": "Maurits zit op de wip met zijn zus.", "wol": "Maurits voelt de zachte wol van de trui.", "won": "Maurits won het spel van zijn beste vriend.", "zag": "Maurits zag gisteren een regenboog.", "zeg": "Maurits zegt: zeg dat maar aan de juf.", "zes": "Maurits telt zes appels in de mand.", "zin": "Maurits schrijft een lange zin in zijn schrift.", "beuk": "Maurits leunt tegen de dikke beuk in het park.", "bouw": "Maurits helpt mee met de bouw van het boomhuis.", "buur": "Maurits speelt altijd met de buur van naast.", "dauw": "Maurits ziet dauw op het gras.", "deuk": "Maurits ziet een deuk in de auto.", "dief": "Maurits zag de dief snel weglopen.", "dijk": "Maurits fietst op de dijk langs de rivier.", "doek": "Maurits droogt zijn handen aan een doek.", "doel": "Maurits schiet de bal in het doel.", "doon": "Maurits weet dat een doon een soort dennenboom is.", "doof": "Maurits spreekt luid omdat zijn opa doof is.", "doos": "Maurits pakt een doos uit de kast.", "duif": "Maurits gooit brood voor de duif.", "duik": "Maurits maakt een duik in het zwembad.", "duim": "Maurits geeft een duim omhoog als teken van succes.", "duin": "Maurits rent het duin af naar het strand.", "duur": "Maurits vindt het speelgoed te duur.", "faal": "Maurits probeert niet te falen bij het dictee.", "fijn": "Maurits heeft een fijne dag op school.", "gaat": "Maurits gaat morgen op schoolreis.", "gauw": "Maurits komt gauw naar beneden.", "gein": "Maurits maakt een grapje voor de gein.", "geit": "Maurits aait de geit op de kinderboerderij.", "giet": "Maurits giet de planten elke ochtend water.", "goot": "Maurits kijkt hoe het regenwater door de goot stroomt.", "guur": "Maurits blijft binnen want het is guur weer.", "haak": "Maurits hangt zijn jas aan de haak.", "haan": "Maurits hoort de haan elke ochtend kraaien.", "haar": "Maurits borstelt zijn haar voor school.", "haas": "Maurits ziet een haas wegschieten in het veld.", "hees": "Maurits is hees na het zingen.", "heup": "Maurits doet zijn heup pijn bij de val.", "heus": "Maurits zegt: heus waar, ik heb het echt gedaan.", "hier": "Maurits roept: hier ben ik, verstoppertje.", "hoef": "Maurits hoort het hoef van het paard op de stoep.", "hoek": "Maurits zit in de hoek van de klas te lezen.", "hoon": "Maurits lacht niemand uit want dat is hoon.", "hoop": "Maurits heeft hoop dat hij wint.", "huis": "Maurits woont in een rood huis aan de beek.", "huur": "Maurits weet dat zijn ouders huur betalen.", "jaar": "Maurits is dit jaar acht geworden.", "jeuk": "Maurits heeft jeuk van de muggenbult.", "jouw": "Maurits vraagt: is dit jouw fiets?", "kaak": "Maurits heeft pijn aan zijn kaak bij de tandarts.", "kaal": "Maurits ziet de kale boom in de winter.", "kaas": "Maurits legt een plakje kaas op zijn brood.", "kauw": "Maurits kauwt goed voor hij slikt.", "keek": "Maurits keek door het raam naar buiten.", "keus": "Maurits heeft de keus uit twee desserts.", "kiel": "Maurits weet dat een kiel de bodem van een boot is.", "kier": "Maurits kijkt door de kier van de deur.", "kies": "Maurits heeft pijn aan een kies.", "koek": "Maurits eet een koek bij de thee.", "koel": "Maurits zet de melk in de koele kelder.", "koos": "Maurits koos het rode boek uit de bibliotheek.", "kous": "Maurits heeft een gat in zijn kous.", "kuil": "Maurits graaft een diepe kuil in het zand.", "kuit": "Maurits heeft pijn in zijn kuit na het rennen.", "kuur": "Maurits volgt een kuur bij de dokter.", "laag": "Maurits schildert een laag verf op het hout.", "laan": "Maurits fietst door de mooie boomrijke laan.", "lauw": "Maurits drinkt lauw water na het sporten.", "leeg": "Maurits ziet dat zijn glas leeg is.", "leek": "Maurits leek op zijn vader als baby.", "leen": "Maurits vraagt zijn vriend zijn pen te lenen.", "leuk": "Maurits vindt het dictee eigenlijk best leuk.", "lief": "Maurits is lief voor zijn kleine zusje.", "liep": "Maurits liep gisteren naar school.", "lijf": "Maurits trekt een warme trui over zijn lijf.", "lijn": "Maurits trekt een rechte lijn.", "loon": "Maurits weet dat zijn vader loon verdient.", "loop": "Maurits maakt een loop in zijn veter.", "luik": "Maurits opent het luik van de kelder.", "luis": "Maurits heeft soms luis na school.", "maag": "Maurits heeft honger en zijn maag rommelt.", "maak": "Maurits maakt een mooie tekening.", "maan": "Maurits kijkt naar de volle maan.", "maar": "Maurits wil buiten spelen maar het regent.", "mees": "Maurits ziet een mees in de vogelkast.", "mier": "Maurits kijkt naar de mier die een kruimel draagt.", "mijn": "Maurits zegt: dit is mijn boek.", "moer": "Maurits draait de moer van de bout.", "moet": "Maurits moet zijn tanden poetsen voor het slapen.", "mouw": "Maurits trekt aan de mouw van zijn jas.", "muis": "Maurits ziet een muis in de schuur.", "muur": "Maurits tekent een ster op de muur.", "naam": "Maurits schrijft zijn naam op zijn schrift.", "naar": "Maurits gaat naar zijn oma in het weekend.", "nauw": "Maurits past net door het nauwe poortje.", "neef": "Maurits speelt met zijn neef in de tuin.", "neus": "Maurits snuit zijn neus in een zakdoek.", "niet": "Maurits zegt: dat is niet eerlijk.", "paal": "Maurits klimt langs de paal omhoog.", "paar": "Maurits koopt een paar nieuwe schoenen.", "pauw": "Maurits ziet de pauw zijn staart spreiden.", "peen": "Maurits eet een wortelpeen als tussendoortje.", "pees": "Maurits doet zijn pees pijn bij het springen.", "peuk": "Maurits vindt een peuk op de grond.", "piep": "Maurits hoort een piep van de muis.", "pier": "Maurits staat op de pier en kijkt naar de boten.", "pijl": "Maurits schiet een pijl met zijn boog.", "pijn": "Maurits heeft pijn aan zijn knie.", "pijp": "Maurits ziet de pijp van de schoorsteen.", "poes": "Maurits aait de poes van de buren.", "pook": "Maurits pookt het vuur met een pook.", "pool": "Maurits leert over de Noordpool op school.", "raak": "Maurits gooit raak bij het schieten.", "raam": "Maurits kijkt door het raam naar buiten.", "raap": "Maurits trekt een grote raap uit de grond.", "raar": "Maurits vindt het raar dat zijn vriend niet belt.", "rauw": "Maurits lust geen rauw vlees.", "reis": "Maurits gaat op reis met zijn ouders.", "riem": "Maurits doet zijn riem om zijn broek.", "rijk": "Maurits wil later rijk worden.", "rijm": "Maurits bedenkt een rijm voor het gedicht.", "rijp": "Maurits plukt de rijpe aardbei.", "rook": "Maurits ziet rook uit de schoorsteen komen.", "room": "Maurits legt slagroom op zijn taart.", "roos": "Maurits geeft zijn moeder een rode roos.", "rouw": "Maurits weet wat rouw is.", "ruim": "Maurits vindt zijn nieuwe kamer heel ruim.", "ruis": "Maurits hoort ruis op de radio.", "ruit": "Maurits breekt per ongeluk een ruit.", "saus": "Maurits legt tomatensaus op zijn pasta.", "sein": "Maurits wacht op het sein om te vertrekken.", "soep": "Maurits eet tomatensoep bij het middageten.", "taak": "Maurits maakt zijn taak af voor het eten.", "taal": "Maurits leert op school de Nederlandse taal.", "teen": "Maurits stoot zijn teen tegen de deur.", "teil": "Maurits wast zijn sokken in een teil.", "tien": "Maurits telt tot tien voordat hij zoekt.", "toon": "Maurits speelt de goede toon op zijn blokfluit.", "touw": "Maurits klimt aan het touw in de gymzaal.", "tuin": "Maurits speelt in de tuin met zijn vrienden.", "tuit": "Maurits giet water uit de tuit van de gieter.", "vaak": "Maurits gaat vaak naar de bibliotheek.", "vaas": "Maurits zet de bloemen in een vaas.", "vaan": "Maurits ziet de vaan op de kerktoren draaien.", "veen": "Maurits leert over het veen in aardrijkskunde.", "vier": "Maurits is vier minuten te laat.", "vies": "Maurits vindt zijn natte sokken vies.", "vijg": "Maurits proeft voor het eerst een vijg.", "voer": "Maurits geeft de kip voer in de ochtend.", "voet": "Maurits heeft een blaar aan zijn voet.", "vuil": "Maurits gooit zijn vuil in de prullenbak.", "vuur": "Maurits kijkt naar het vuur in de open haard.", "waag": "Maurits durft het te wagen en springt.", "waan": "Maurits leeft niet in een waan.", "week": "Maurits heeft het de hele week druk gehad.", "wees": "Maurits wees naar de regenboog aan de hemel.", "weet": "Maurits weet het antwoord op de vraag.", "wieg": "Maurits wiegt het babytje in de wieg.", "wijk": "Maurits woont in een rustige wijk.", "wijs": "Maurits is een slimme en wijze jongen.", "woon": "Maurits wil wonen naast zijn beste vriend.", "zaak": "Maurits wil later een eigen zaak beginnen.", "zaal": "Maurits staat op het podium in de grote zaal.", "zeep": "Maurits wast zijn handen met zeep.", "zeil": "Maurits leert zeilen op het meer.", "ziek": "Maurits blijft thuis want hij is ziek.", "ziel": "Maurits geeft zich met hart en ziel.", "zien": "Maurits kan de school al zien.", "zijn": "Maurits is trots op zijn werk.", "zoek": "Maurits zoekt zijn verloren sleutel.", "zoen": "Maurits geeft zijn moeder een zoen.", "zool": "Maurits heeft een gat in de zool van zijn schoen.", "zoom": "Maurits zoomt in op de foto.", "zoon": "Maurits is de oudste zoon in zijn gezin.", "zuil": "Maurits tekent een grote zuil voor zijn project.", "zuur": "Maurits trekt een zuur gezicht van de citroen.", "schaaf": "Maurits gebruikt de schaaf om het hout glad te maken.", "schaak": "Maurits speelt schaak met zijn vader.", "schaal": "Maurits weegt de appels op een schaal.", "schaam": "Maurits hoeft zich niet te schamen voor zijn fout.", "schaap": "Maurits telt schapen voor hij in slaap valt.", "schaar": "Maurits knipt met een schaar het papier.", "schap": "Maurits zet het boek terug op het schap.", "schat": "Maurits graaft naar een schat in de zandbak.", "scheef": "Maurits hangt het schilderij scheef aan de muur.", "scheen": "Maurits stoot zijn scheen tegen de tafel.", "schep": "Maurits graaft met de schep in de zandbak.", "schik": "Maurits heeft er schik in tijdens het spel.", "schil": "Maurits schilt een appel voor zijn moeder.", "schim": "Maurits ziet een schim in de donkere gang.", "schip": "Maurits kijkt naar het grote schip in de haven.", "schoen": "Maurits poetst zijn schoenen voor het schoolfeest.", "school": "Maurits gaat elke dag blij naar school.", "schoon": "Maurits maakt zijn kamer schoon.", "schop": "Maurits gooit de bal met een harde schop.", "schor": "Maurits klinkt schor na het zingen.", "schuif": "Maurits schuift de deur van het balkon open.", "schuim": "Maurits maakt veel schuim in bad.", "schuin": "Maurits schrijft schuin als hij haast heeft.", "schuur": "Maurits stalt zijn fiets elke avond in de schuur.", "angst": "Maurits heeft geen angst voor de grote hond.", "bang": "Maurits is niet bang in het donker.", "breng": "Maurits zegt: breng de tas maar naar binnen.", "ding": "Maurits vindt een raar ding in de schuur.", "dong": "Maurits hoort de klok ding-dong slaan.", "drang": "Maurits voelt een sterke drang om te winnen.", "dwang": "Maurits doet zijn huiswerk niet uit dwang maar uit lust.", "eng": "Maurits vindt spinnen eng.", "gang": "Maurits hangt zijn jas in de gang.", "ging": "Maurits ging gisteren naar het zwembad.", "gong": "Maurits slaat op de gong bij gymles.", "hang": "Maurits weet dat hang een soort angst is.", "jong": "Maurits is nog jong maar al heel slim.", "kring": "Maurits zit in de kring op het tapijt.", "lang": "Maurits is lang voor zijn leeftijd.", "meng": "Maurits mengt de verf goed door elkaar.", "ping": "Maurits hoort een ping van zijn tablet.", "pong": "Maurits speelt ping-pong met zijn vriend.", "rang": "Maurits heeft de hoogste rang in het spel.", "ring": "Maurits vindt een gouden ring in de tuin.", "slang": "Maurits is niet bang voor de kleine slang.", "spring": "Maurits let op als hij spring van de trampoline.", "stang": "Maurits houdt de stang van zijn fiets vast.", "tang": "Maurits pakt de tang om de kram eruit te trekken.", "tong": "Maurits brandt zijn tong aan de hete soep.", "vang": "Maurits vangt de bal met twee handen.", "ving": "Maurits ving de vlinder voorzichtig.", "wang": "Maurits heeft rode wangen van de kou.", "zing": "Maurits zingt zijn lievelingslied.", "zwang": "Maurits weet dat zwang een oud woord is.", "bange": "Maurits troost zijn bange kleine zusje.", "bengel": "Maurits is soms een echte bengel.", "brengen": "Maurits moet zijn boeken morgen terugbrengen.", "dingen": "Maurits verzamelt mooie dingen in zijn kamer.", "dringen": "Maurits zegt: niet dringen bij de deur.", "dwingen": "Maurits wil niemand dwingen iets te doen.", "enge": "Maurits kijkt niet graag naar enge films.", "gangen": "Maurits rent door de gangen van de school.", "gongen": "Maurits hoort de gongen van de klokkentoren.", "hangen": "Maurits helpt de was hangen in de tuin.", "hengel": "Maurits vist met een hengel in het meer.", "honger": "Maurits heeft honger na school.", "jonge": "Maurits past op de jonge hond.", "jongen": "Maurits is een aardige jongen.", "jongens": "Maurits speelt met de andere jongens buiten.", "jonger": "Maurits is jonger dan zijn neef.", "jongste": "Maurits is de jongste in zijn klas.", "kringen": "Maurits tekent kringen op zijn schrift.", "lange": "Maurits heeft een lange dag op school gehad.", "langer": "Maurits wordt elke dag langer.", "longen": "Maurits weet dat longen nodig zijn om te ademen.", "mengen": "Maurits mengt rood en blauw tot paars.", "ophangen": "Maurits helpt schilderijen ophangen.", "rangen": "Maurits kent de rangen van de ridders.", "ringen": "Maurits ziet de ringen van saturnus in zijn boek.", "slinger": "Maurits maakt een slinger voor het feest.", "springen": "Maurits gaat springen op de trampoline.", "sprongen": "Maurits maakte grote sprongen over de plassen.", "stangen": "Maurits klimt aan de stangen in de gymzaal.", "tongen": "Maurits likt aan de tongen van zijn ijsje.", "bangerik": "Maurits is geen bangerik en springt als eerste.", "brengt": "Maurits brengt elke dag zijn lunchbox mee.", "langst": "Maurits is de langst in zijn klas.", "langzaam": "Maurits spreekt langzaam en duidelijk.", "mengt": "Maurits mengt de kleuren op het palet.", "springt": "Maurits springt hoog van de trampoline.", "stengel": "Maurits plukt de stengel van de bloem.", "strenge": "Maurits heeft een strenge maar eerlijke juf.", "strenger": "Maurits weet dat de regels strenger worden.", "tangen": "Maurits pakt de tangen uit de gereedschapskist.", "vangen": "Maurits leert vangen bij honkbal.", "vinger": "Maurits steekt zijn vinger op als hij iets weet.", "wangen": "Maurits heeft rode wangen van het rennen.", "zanger": "Maurits wil later zanger worden.", "zangeres": "Maurits bewondert de zangeres op het podium.", "zingen": "Maurits houdt van zingen in het koor.", "zwanger": "Maurits hoort dat de buurvrouw zwanger is.", "acht": "Maurits telt hardop tot acht.", "bocht": "Maurits neemt de bocht te snel en valt bijna.", "dicht": "Maurits doet de deur stevig dicht.", "echt": "Maurits zegt: dit is echt waar.", "gracht": "Maurits vaart in een bootje door de gracht.", "hecht": "Maurits is hecht bevriend met zijn klasgenoot.", "jacht": "Maurits ziet een jacht in de haven.", "klacht": "Maurits dient een klacht in bij de juf.", "knecht": "Maurits leest over een knecht in zijn sprookjesboek.", "kracht": "Maurits tilt de doos op met veel kracht.", "lacht": "Maurits lacht om de grappige clown.", "licht": "Maurits knijpt het licht aan in de donkere gang.", "lucht": "Maurits kijkt naar het vliegtuig in de lucht.", "macht": "Maurits weet dat de koning veel macht heeft.", "nacht": "Maurits slaapt de hele nacht door.", "nicht": "Maurits speelt met zijn nicht in de vakantie.", "och": "Maurits zegt och als hij zijn fout ziet.", "pech": "Maurits heeft pech: zijn fietsband is lek.", "plicht": "Maurits weet dat huiswerk maken zijn plicht is.", "pracht": "Maurits vindt het uitzicht van een grote pracht.", "recht": "Maurits weet dat iedereen recht heeft op onderwijs.", "slecht": "Maurits voelt zich slecht als hij ziek is.", "specht": "Maurits hoort de specht op de boom tikken.", "tocht": "Maurits gaat op een lange tocht door het bos.", "vacht": "Maurits aait de zachte vacht van de hond.", "vecht": "Maurits weet dat je problemen niet met vechten oplost.", "vlucht": "Maurits kijkt naar het vliegtuig in zijn vlucht.", "vocht": "Maurits weet dat planten vocht nodig hebben.", "vracht": "Maurits helpt de zware vracht lossen.", "vrucht": "Maurits weet dat een peer een vrucht is.", "wacht": "Maurits wacht geduldig op zijn beurt.", "zacht": "Maurits spreekt zacht in de bibliotheek.", "zicht": "Maurits heeft goed zicht op het bord.", "zocht": "Maurits zocht zijn rugzak door de hele school.", "zucht": "Maurits geeft een zucht van verlichting.", "achter": "Maurits zoekt zijn bal achter de schuur.", "achteraf": "Maurits begrijpt achteraf dat hij fout zat.", "bochten": "Maurits rijdt door de bochten van de weg.", "brachten": "Maurits en zijn vrienden brachten bloemen mee.", "dachten": "Maurits en zijn klas dachten goed na.", "dichte": "Maurits loopt door het dichte bos.", "dichter": "Maurits loopt dichter naar het podium.", "dochter": "Maurits hoort dat de buurvrouw een dochter heeft.", "echte": "Maurits wil een echte detective worden.", "echter": "Maurits wil echter liever voetballen.", "grachten": "Maurits vaart door de grachten van Amsterdam.", "hechten": "Maurits laat de wond hechten bij de dokter.", "knechten": "Maurits leest over de knechten in het kasteel.", "krachten": "Maurits bundelt zijn krachten met zijn vriend.", "lichten": "Maurits doet alle lichten in huis uit.", "aandacht": "Maurits geeft zijn werk zijn volle aandacht.", "machten": "Maurits leert over de machten in de geschiedenis.", "mochten": "Maurits en zijn vrienden mochten laat opblijven.", "nachten": "Maurits heeft meerdere nachten slecht geslapen.", "opdrachten": "Maurits maakt zijn opdrachten netjes af.", "plichten": "Maurits kent zijn plichten als klassenvertegenwoordiger.", "rechten": "Maurits weet dat kinderen ook rechten hebben.", "rechter": "Maurits staat rechter op als de juf kijkt.", "richten": "Maurits wil zijn pijl richten op het doel.", "slechte": "Maurits heeft een slechte dag gehad.", "slechter": "Maurits voelt zich slechter na de regen.", "tochten": "Maurits maakt lange tochten door het bos.", "vluchten": "Maurits leert over mensen die moeten vluchten.", "vruchten": "Maurits eet elke dag vruchten.", "wachten": "Maurits moet wachten tot de les begint.", "wachter": "Maurits groet de wachter bij de ingang.", "zachte": "Maurits houdt van de zachte vacht van zijn kat.", "zachter": "Maurits spreekt zachter als zijn zusje slaapt.", "zochten": "Maurits en zijn vriend zochten de sleutels.", "zuchten": "Maurits zuchtte diep na de lange dag.", "opdracht": "Maurits maakt zijn opdracht af voor het einde.", "rechtop": "Maurits zit rechtop aan zijn bureau.", "rechts": "Maurits slaat rechts af bij het kruispunt.", "uitzicht": "Maurits geniet van het mooie uitzicht.", "bank": "Maurits zit op de bank met zijn boek.", "bink": "Maurits is geen stoere bink maar wel dapper.", "blank": "Maurits staat blank in de plas na de regen.", "bonk": "Maurits hoort een harde bonk boven zijn hoofd.", "dank": "Maurits zegt dank je wel voor het cadeau.", "denkt": "Maurits denkt goed na voor hij antwoord geeft.", "drank": "Maurits schenkt een glas drank in voor zijn gast.", "drink": "Maurits drink zijn melk elke ochtend op.", "drinkt": "Maurits drinkt water na het sporten.", "flink": "Maurits is flink gegroeid dit jaar.", "hink": "Maurits speelt hink-stap-sprong.", "hinkt": "Maurits hinkt op één been over het schoolplein.", "inkt": "Maurits schrijft met inkt in zijn schrift.", "klink": "Maurits drukt de klink van de deur naar beneden.", "klinkt": "Maurits zegt: dat klinkt als een goed plan.", "mank": "Maurits loopt mank na de valpartij.", "pink": "Maurits steekt zijn pink omhoog bij het drinken.", "plank": "Maurits loopt over de smalle plank.", "rank": "Maurits heeft een slanke en rank figuur.", "schenk": "Maurits zegt: schenk mij ook een glas in.", "schenkt": "Maurits schenkt zijn vriend een glas water in.", "schonk": "Maurits schonk gisteren thee voor zijn oma.", "slank": "Maurits is lang en slank.", "stank": "Maurits ruikt de stank van de vuilnisbak.", "stink": "Maurits zegt: dat begin ik te stink vinden.", "stinkt": "Maurits zegt: het stinkt hier naar natte hond.", "stronk": "Maurits zit op een boomstronk in het bos.", "vink": "Maurits zet een vink bij elk goed antwoord.", "vonk": "Maurits ziet een vonk uit het vuur vliegen.", "wenkt": "Maurits wenkt zijn vriend om te komen.", "zink": "Maurits weet dat zink een soort metaal is.", "zinkt": "Maurits kijkt hoe de steen in het water zinkt.", "zonk": "Maurits zag hoe de zon achter de horizon zonk.", "anker": "Maurits gooit het anker van de boot.", "banken": "Maurits zit op een van de houten banken.", "blanke": "Maurits tekent op het blanke papier.", "bonken": "Maurits hoort zijn hart bonken na het rennen.", "danken": "Maurits wil zijn juf bedanken.", "denken": "Maurits houdt van nadenken over puzzels.", "donker": "Maurits is niet bang in het donker.", "dranken": "Maurits schenkt de dranken in voor iedereen.", "drinken": "Maurits gaat na het sporten drinken halen.", "dronken": "Maurits weet dat dronken rijden gevaarlijk is.", "enkel": "Maurits draait zijn enkel bij het voetballen.", "flinke": "Maurits heeft een flinke klap gehad.", "flinker": "Maurits is flinker dan hij denkt.", "hinken": "Maurits oefent met hinken op school.", "klanken": "Maurits herkent alle klanken in het woord.", "klinken": "Maurits hoort de bellen klinken.", "klinker": "Maurits leert over klinkers en medeklinkers.", "linker": "Maurits schrijft met zijn linker hand.", "linkse": "Maurits draait de linkse kant op.", "nadenken": "Maurits moet goed nadenken over zijn antwoord.", "planken": "Maurits loopt over de houten planken.", "pronken": "Maurits gaat pronken met zijn trofee.", "ranken": "Maurits ziet de ranken van de klimplant.", "schenken": "Maurits wil iets moois schenken aan zijn juf.", "slinken": "Maurits ziet zijn ballon langzaam slinken.", "stinken": "Maurits vindt dat natte sokken stinken.", "stronken": "Maurits telt de boomstronken in het bos.", "vinken": "Maurits is klaar met het vinken van de lijst.", "vonken": "Maurits ziet de vonken uit het vuur springen.", "wankel": "Maurits staat op een wankel krukje.", "wankelt": "Maurits wankelt op het smalle muurtje.", "wenken": "Maurits begint te wenken als hij de bus ziet.", "winkel": "Maurits gaat met zijn moeder naar de winkel.", "winkelier": "Maurits vraagt de winkelier om hulp.", "winkels": "Maurits loopt door de winkels op zaterdag.", "zinken": "Maurits leert dat hout niet zinkt.", "zwenken": "Maurits zwenkt op zijn fiets om de kuil heen.", "dankbaar": "Maurits is dankbaar voor zijn vrienden.", "linksaf": "Maurits slaat linksaf bij de rotonde.", "afkeer": "Maurits heeft een afkeer van spinazie.", "beer": "Maurits ziet een grote beer in het sprookjesboek.", "boor": "Maurits helpt zijn vader met de boor.", "beurs": "Maurits gaat met zijn klas naar de boekenbeurs.", "beurt": "Maurits wacht op zijn beurt bij het tikken.", "deel": "Maurits deelt zijn koek in twee gelijke delen.", "deur": "Maurits houdt de deur open voor zijn moeder.", "door": "Maurits loopt door de gang naar zijn klas.", "eer": "Maurits behandelt iedereen met eer en respect.", "geel": "Maurits schildert zijn kamer geel.", "geur": "Maurits ruikt de geur van versgebakken brood.", "goor": "Maurits vindt het goor als zijn schoenen vies zijn.", "heel": "Maurits heeft een heel grote verrassing.", "heer": "Maurits groet de heer beleefd.", "hoor": "Maurits zegt: hoor je dat mooie geluid?", "hoort": "Maurits hoort de vogels fluiten.", "keel": "Maurits heeft pijn in zijn keel.", "keer": "Maurits probeert het nog een keer.", "keert": "Maurits keert terug naar zijn klas.", "keur": "Maurits kiest uit een grote keur aan kleuren.", "keurt": "Maurits keurt zijn eigen werk streng.", "kleur": "Maurits schildert met zijn lievelingskleur blauw.", "kleurt": "Maurits kleurt de tekening heel netjes in.", "koor": "Maurits zingt mee in het koor op school.", "koorts": "Maurits blijft thuis want hij heeft koorts.", "leer": "Maurits gaat leer rijden op zijn nieuwe fiets.", "meer": "Maurits zwemt in het meer bij het bos.", "meel": "Maurits helpt zijn moeder meel afwegen.", "neer": "Maurits legt zijn pen neer als hij klaar is.", "oor": "Maurits fluistert iets in het oor van zijn vriend.", "peer": "Maurits eet een sappige peer als tussendoortje.", "poort": "Maurits loopt door de grote poort.", "scheel": "Maurits kijkt scheel van het zware tillen.", "scheur": "Maurits ontdekt een scheur in zijn broek.", "sfeer": "Maurits zorgt voor een fijne sfeer in de klas.", "sleur": "Maurits wil geen sleur maar avontuur.", "smoor": "Maurits smoorverliefd op zijn nieuwe boek.", "speer": "Maurits gooit een speer bij atletiek.", "speels": "Maurits is speels en vrolijk.", "speelt": "Maurits speelt elke dag buiten.", "speur": "Maurits gaat op speur naar de schat.", "speurt": "Maurits speurt door de tuin naar zijn bal.", "spoor": "Maurits volgt het spoor van het dier.", "steel": "Maurits pakt de steel van de hamer vast.", "steur": "Maurits gooit geen steur in het water.", "teer": "Maurits is teer als hij ziek is.", "veel": "Maurits heeft veel geleerd dit jaar.", "veer": "Maurits vindt een veer van een vogel.", "veertien": "Maurits telt veertien stappen naar zijn klas.", "voor": "Maurits zet alles klaar voor het feest.", "weer": "Maurits kijkt of het goed weer is.", "zeer": "Maurits heeft zeer aan zijn knie.", "zeur": "Maurits is geen zeur als er iets misgaat.", "zweer": "Maurits zweert dat hij de waarheid spreekt.", "geuren": "Maurits ruikt de mooie geuren in de bloementuin.", "heerser": "Maurits leest over een machtige heerser.", "kleuren": "Maurits mengt de kleuren op zijn palet.", "leerzaam": "Maurits vindt de schoolreis heel leerzaam.", "onweer": "Maurits verstopt zich bij onweer.", "oorzaak": "Maurits zoekt de oorzaak van het probleem.", "scheren": "Maurits kijkt hoe zijn vader zich scheert.", "speuren": "Maurits gaat speuren naar de verloren kat.", "zeuren": "Maurits probeert niet te zeuren.", "aai": "Maurits geeft de hond een aai over zijn kop.", "aait": "Maurits aait de poes zachtjes.", "baai": "Maurits zwemt in de rustige baai.", "bloei": "Maurits ziet de bloemen in volle bloei.", "bloeit": "Maurits kijkt hoe de tulp bloeit.", "dooi": "Maurits ziet de sneeuw smelten bij de dooi.", "dooit": "Maurits weet dat het morgen dooit.", "foei": "Maurits zegt foei tegen de hond die bijt.", "fooi": "Maurits geeft de bezorger een fooi.", "fraai": "Maurits vindt de tekening heel fraai.", "gooi": "Maurits zegt: gooi de bal maar naar mij.", "gooit": "Maurits gooit de bal over het net.", "graai": "Maurits pakt niet en grijpt en graait.", "groei": "Maurits meet zijn groei elke maand.", "groeit": "Maurits groeit elke dag een beetje.", "haai": "Maurits ziet een haai in het aquarium.", "hooi": "Maurits gooit hooi voor de koeien.", "kraai": "Maurits ziet de kraai op de schutting.", "knoeit": "Maurits knoeit met de verf op tafel.", "loei": "Maurits hoort de koe loei in de wei.", "loeit": "Maurits hoort hoe de koe loeit.", "maai": "Maurits ziet zijn vader het gras maaien.", "mooi": "Maurits vindt de tekening heel mooi.", "mooist": "Maurits heeft de mooiste knutselwerkje gemaakt.", "mooiste": "Maurits heeft het mooiste kostuum aan.", "naai": "Maurits kijkt hoe zijn moeder een knoop naait.", "naait": "Maurits naait zijn broek met de hand.", "nooit": "Maurits zegt dat hij nooit liegt.", "ooi": "Maurits leert dat een ooi een vrouwelijk schaap is.", "saai": "Maurits vindt wachten saai.", "ooievaar": "Maurits ziet een ooievaar in het weiland.", "plooi": "Maurits strijkt de plooi uit zijn broek.", "plooit": "Maurits plooit het papier voor een vliegtuigje.", "prooi": "Maurits leest dat de leeuw zijn prooi vangt.", "roei": "Maurits leert roeien op de rivier.", "roeit": "Maurits roeit hard naar de overkant.", "saaie": "Maurits maakt van de saaie les een spel.", "saaier": "Maurits vindt rekenen saaier dan taal.", "sproei": "Maurits sproeit de planten in de tuin.", "sproeit": "Maurits sproeit water over de bloemen.", "strooi": "Maurits strooit zout op de besneeuwde stoep.", "strooit": "Maurits strooit broodkruimels voor de vogels.", "taai": "Maurits kauwt op het taaie vlees.", "taaie": "Maurits bijt door de taaie hap heen.", "vlaai": "Maurits eet een stuk limburgse vlaai.", "vlaaien": "Maurits bakt vlaaien met zijn oma.", "waai": "Maurits ziet de vlag in de wind waaien.", "waaien": "Maurits voelt zijn haar waaien in de wind.", "waaier": "Maurits koelt zich af met een waaier.", "zaai": "Maurits helpt zijn vader zaad zaaien.", "zaaien": "Maurits zaaien bloemenzaad in de tuin.", "zooi": "Maurits maakt een zooi van zijn kamer.", "zwaai": "Maurits geeft een grote zwaai als hij weggaat.", "zwaaien": "Maurits zwaaien naar zijn oma op het perron.", "ooit": "Maurits wil ooit de wereld rond reizen.", "paaien": "Maurits probeert zijn jongere broertje te paaien.", "ronddraaien": "Maurits gaat ronddraaien in het park.", "bloeien": "Maurits kijkt hoe de bloemen beginnen te bloeien.", "boeien": "Maurits vindt wetenschappen hem echt boeien.", "draaien": "Maurits kan goed draaien op zijn skateboard.", "gloeien": "Maurits ziet de kolen gloeien in het vuur.", "groeien": "Maurits wil snel groeien zodat hij op de achtbaan mag.", "koeien": "Maurits telt de koeien in de wei.", "knoeien": "Maurits probeert niet te knoeien bij het schilderen.", "loeien": "Maurits hoort de koeien loeien in de nacht.", "moeizaam": "Maurits loopt moeizaam met zijn zware tas.", "roeien": "Maurits gaat roeien op het meer met zijn vader.", "schroeien": "Maurits past op dat hij zijn vingers niet schroeiet.", "snoeien": "Maurits helpt de heg snoeien.", "stoeien": "Maurits gaat stoeien met zijn hond in de tuin.", "stoeit": "Maurits stoeit met zijn broertje op de grond.", "eeuw": "Maurits leert dat een eeuw honderd jaar duurt.", "geeuw": "Maurits geeft een geeuw omdat hij moe is.", "geeuwt": "Maurits geeuwt maar hij mag niet slapen.", "kieuw": "Maurits ziet de kieuw van de vis bewegen.", "leeuw": "Maurits ziet een leeuw in de dierentuin.", "meeuw": "Maurits gooit brood voor de meeuw aan zee.", "nieuw": "Maurits krijgt een nieuw schrift van de juf.", "nieuws": "Maurits luistert naar het nieuws met zijn vader.", "opnieuw": "Maurits probeert de som opnieuw.", "schreeuw": "Maurits geeft een schreeuw als hij schrikt.", "sneeuw": "Maurits bouwt een sneeuwpop in de tuin.", "spreeuw": "Maurits kijkt naar de spreeuw in de boom.", "eeuwen": "Maurits leert dat mensen al eeuwen in Nederland wonen.", "geeuwen": "Maurits probeert het geeuwen in te houden.", "kieuwen": "Maurits bestudeert de kieuwen van de vis.", "leeuwen": "Maurits leest over leeuwen in Afrika.", "leeuwin": "Maurits weet dat een leeuwin geen manen heeft.", "leeuwinnen": "Maurits leert dat leeuwinnen samen jagen.", "meeuwen": "Maurits ziet de meeuwen boven het strand vliegen.", "nieuwe": "Maurits is blij met zijn nieuwe fiets.", "nieuwer": "Maurits wil een nieuwer model tablet.", "schreeuwen": "Maurits probeert niet te schreeuwen in de klas.", "sneeuwen": "Maurits hoopt dat het gaat sneeuwen.", "spreeuwen": "Maurits ziet een zwerm spreeuwen.", "sneeuwt": "Maurits juicht als het eindelijk sneeuwt.", "schreeuws": "Maurits is nooit schreeuws in de klas.", "avond": "Maurits leest iedere avond voor het slapen.", "baard": "Maurits ziet dat zijn vader een baard heeft.", "bad": "Maurits neemt een warm bad na het sporten.", "band": "Maurits plakt zijn lekke fietsband.", "bed": "Maurits is blij als hij in bed mag.", "beeld": "Maurits kijkt naar een oud beeld in het museum.", "bid": "Maurits bidt elke avond voor het slapen.", "blad": "Maurits raapt een gekleurd blad op.", "blind": "Maurits doet zijn ogen dicht en is blind.", "bloed": "Maurits heeft een wondje dat bloed.", "blond": "Maurits heeft blond haar net als zijn vader.", "bord": "Maurits schrijft het antwoord op het bord.", "brand": "Maurits weet wat hij moet doen bij brand.", "breed": "Maurits springt over de brede sloot.", "brood": "Maurits smeert zijn eigen boterham.", "bruid": "Maurits ziet de bruid in haar mooie jurk.", "dood": "Maurits vindt een dode bij in de tuin.", "draad": "Maurits rijgt een draad door de naald.", "eind": "Maurits is blij aan het eind van de dag.", "glad": "Maurits is voorzichtig op het gladde ijs.", "goed": "Maurits doet altijd zijn best om goed te zijn.", "goud": "Maurits vindt een gouden munt in de tuin.", "grond": "Maurits graaft in de grond voor zijn moestuin.", "hard": "Maurits werkt hard voor zijn dictee.", "held": "Maurits is de held van zijn klas.", "hemd": "Maurits trekt een schoon hemd aan.", "hoed": "Maurits zet een grote hoed op.", "hond": "Maurits speelt elke dag met zijn hond.", "jeugd": "Maurits geniet van zijn jeugd.", "kind": "Maurits is een lief en slim kind.", "beest": "Maurits leest een boek over wilde beesten.", "best": "Maurits doet altijd zijn best.", "biet": "Maurits proeft voor het eerst een biet.", "bont": "Maurits draagt een bont jasje op carnaval.", "boot": "Maurits vaart mee op de boot van zijn oom.", "bot": "Maurits geeft zijn hond een bot.", "bout": "Maurits draait de bout vast.", "buit": "Maurits heeft buit gemaakt tijdens de schattenjacht.", "bult": "Maurits heeft een bult op zijn hoofd van de klap.", "buurt": "Maurits kent iedereen in zijn buurt.", "dorst": "Maurits heeft dorst na het sporten.", "duit": "Maurits doet zijn duit in het zakje.", "feest": "Maurits viert zijn verjaardag met een feest.", "friet": "Maurits eet friet op vrijdag.", "fout": "Maurits maakt een fout maar leert ervan.", "fruit": "Maurits eet elke dag een stuk fruit.", "gast": "Maurits is een fijne gast bij zijn vriend thuis.", "geest": "Maurits verkleedt zich als geest voor Halloween.", "gist": "Maurits weet dat gist nodig is voor brood.", "groot": "Maurits wil groot en sterk worden.", "haast": "Maurits heeft haast want hij is bijna te laat.", "haat": "Maurits weet dat haat niets oplost.", "hart": "Maurits heeft een groot hart.", "heet": "Maurits past op want de soep is heet.", "helft": "Maurits deelt de helft van zijn koek.", "herfst": "Maurits verzamelt bladeren in de herfst.", "hert": "Maurits ziet een hert in het bos.", "hout": "Maurits hakt hout voor het kampvuur.", "juist": "Maurits geeft het juiste antwoord.", "kaart": "Maurits koopt een mooie verjaardagskaart.", "kaft": "Maurits plakt een nieuw kaft om zijn schrift.", "kant": "Maurits staat aan de kant van het veld.", "keet": "Maurits maakt keet in de speeltuin.", "kist": "Maurits verstopt zijn spullen in een kist.", "klant": "Maurits is een vaste klant in de boekenwinkel.", "kleinst": "Maurits pakt het kleinste koekje.", "koest": "Maurits houdt de hond koest.", "komst": "Maurits kijkt uit naar de komst van zijn neven.", "korst": "Maurits bikt de korst van zijn brood.", "kort": "Maurits knipt zijn haar kort.", "kost": "Maurits weet hoeveel het kost.", "krant": "Maurits leest de krant met zijn vader.", "kreeft": "Maurits ziet een kreeft in het aquarium.", "kunst": "Maurits maakt een kunstwerk voor de tentoonstelling.", "kwijt": "Maurits is zijn pen kwijt.", "laat": "Maurits mag laat opblijven in het weekend.", "laatst": "Maurits was de laatste keer eerder klaar.", "liefst": "Maurits houdt het liefst van tekenen.", "lift": "Maurits neemt de lift naar de derde verdieping.", "lijst": "Maurits schrijft een lijstje.", "lint": "Maurits bindt een lint om het cadeau.", "maat": "Maurits heeft dezelfde maat schoenen als zijn vriend.", "malst": "Maurits weet dat malst de meest zachte is.", "mast": "Maurits ziet de mast van het zeilschip.", "mist": "Maurits rijdt voorzichtig in de mist.", "naast": "Maurits zit naast zijn beste vriend.", "noot": "Maurits pakt een noot uit de schaal.", "onrust": "Maurits voelt onrust voor het grote dictee.", "oogst": "Maurits helpt met de oogst in de tuin.", "plaat": "Maurits hangt een plaat van zijn lievelingsband op.", "plant": "Maurits plant een boom in de tuin.", "prent": "Maurits maakt een mooie prent in zijn schrift.", "punt": "Maurits schrijft de punt op de i.", "rust": "Maurits neemt rust na het spelen.", "schrift": "Maurits schrijft zijn dictee in zijn schrift.", "snelst": "Maurits is de snelst in zijn klas bij rennen.", "sport": "Maurits doet elke week aan sport.", "bedankt": "Maurits zegt bedankt voor het cadeau.", "bedekt": "Maurits heeft zijn boek bedekt met een kaft.", "begin": "Maurits maakt een goed begin van de dag.", "begint": "Maurits begint altijd op tijd met zijn werk.", "begrip": "Maurits heeft begrip voor zijn vriend.", "behang": "Maurits helpt het behang plakken.", "bekend": "Maurits is bekend in zijn buurt.", "beleg": "Maurits legt beleg op zijn boterham.", "beleefd": "Maurits is altijd beleefd tegen ouderen.", "belofte": "Maurits houdt zijn belofte altijd.", "bezoek": "Maurits krijgt bezoek van zijn oma.", "gebak": "Maurits eet een stuk gebak bij de thee.", "gebed": "Maurits zegt een gebed voor het slapen.", "gebied": "Maurits woont in een groen gebied.", "gebit": "Maurits heeft een gezond gebit.", "gebouw": "Maurits woont in een groot gebouw.", "gedicht": "Maurits leert een gedicht uit zijn hoofd.", "gedrag": "Maurits heeft goed gedrag op school.", "geheim": "Maurits bewaart het geheim goed.", "geloof": "Maurits heeft geloof in zichzelf.", "geluid": "Maurits hoort een vreemd geluid in de nacht.", "geluk": "Maurits heeft veel geluk gehad.", "gemak": "Maurits doet het met gemak.", "gesprek": "Maurits heeft een goed gesprek met zijn juf.", "gevoel": "Maurits heeft een goed gevoel over het dictee.", "geweld": "Maurits weet dat geweld nooit de oplossing is.", "gewicht": "Maurits weet wat zijn gewicht is.", "gewoon": "Maurits is gewoon een aardige jongen.", "gezin": "Maurits houdt van zijn gezin.", "gezond": "Maurits eet gezond en sport veel.", "verband": "Maurits ziet het verband tussen de twee feiten.", "verbod": "Maurits houdt zich aan het verbod.", "verdacht": "Maurits vindt het verdacht stil in huis.", "verdien": "Maurits weet dat hij dit compliment verdient.", "vergaan": "Maurits weet dat hout kan vergaan.", "vergeet": "Maurits vergeet nooit zijn tas mee te nemen.", "verhaal": "Maurits vertelt een spannend verhaal.", "verhuizen": "Maurits helpt meeverhuizen naar de nieuwe woning.", "verkeer": "Maurits let goed op in het verkeer.", "verlies": "Maurits kan goed omgaan met verlies.", "verslag": "Maurits schrijft een verslag over zijn schoolreis.", "vertrouw": "Maurits vertrouwt zijn vrienden.", "verwacht": "Maurits verwacht een leuke verrassing.", "verzorg": "Maurits verzorgt zijn huisdieren goed.", "beantwoord": "Maurits beantwoord elke vraag goed.", "bedreig": "Maurits weet dat je niemand mag bedreigen.", "bedrijf": "Maurits bezoekt een boerenbedrijf.", "behandel": "Maurits behandelt zijn vrienden met respect.", "bescherm": "Maurits probeert zijn zusje te beschermen.", "besluit": "Maurits neemt een goed besluit.", "betrouw": "Maurits is een betrouwbare vriend.", "bewoner": "Maurits is een fijne bewoner van zijn straat.", "geloven": "Maurits gelooft in zijn eigen kunnen.", "gelukkig": "Maurits is gelukkig op zijn nieuwe school.", "gemakkelijk": "Maurits vindt het dictee niet moeilijk maar gemakkelijk.", "gemeente": "Maurits weet in welke gemeente hij woont.", "gemerkt": "Maurits heeft gemerkt dat oefenen helpt.", "gezeur": "Maurits houdt niet van gezeur.", "gezicht": "Maurits wast zijn gezicht voor het eten.", "beantwoorden": "Maurits kan alle vragen beantwoorden.", "bedanken": "Maurits wil zijn juf bedanken.", "bediende": "Maurits vraagt de bediende om hulp.", "bedoeling": "Maurits kent de bedoeling van het spel.", "bedreiging": "Maurits weet wat een bedreiging is.", "bedriegen": "Maurits wil nooit bedriegen.", "begrijpen": "Maurits probeert alles goed te begrijpen.", "behandelen": "Maurits wil iedereen eerlijk behandelen.", "belemmeren": "Maurits laat zich niet belemmeren.", "belevenis": "Maurits vertelt over zijn bijzondere belevenis.", "beschadigen": "Maurits past op dat hij niets beschadigt.", "beschaving": "Maurits leert over de Egyptische beschaving.", "beschermen": "Maurits wil de natuur beschermen.", "beschrijven": "Maurits kan zijn dag goed beschrijven.", "beslissing": "Maurits neemt een goede beslissing.", "verdachte": "Maurits speelt de verdachte in het toneelstuk.", "verandering": "Maurits houdt van verandering.", "verbouwen": "Maurits helpt het huis verbouwen.", "verklaren": "Maurits kan het antwoord goed verklaren.", "vernieuwen": "Maurits wil zijn kamer vernieuwen.", "aapje": "Maurits ziet een klein aapje in de dierentuin.", "baasje": "Maurits is het baasje van zijn hond.", "bankjes": "Maurits zit op een van de bankjes in het park.", "beestje": "Maurits vindt een klein beestje in de tuin.", "blaadje": "Maurits schrijft op een blaadje papier.", "blikje": "Maurits drinkt een blikje limonade.", "boekje": "Maurits leest een boekje voor het slapen.", "bootje": "Maurits vaart in een klein bootje over het meer.", "bosje": "Maurits plukt een bosje bloemen voor zijn moeder.", "brandje": "Maurits blust het kleine brandje snel.", "briefje": "Maurits schrijft een briefje aan zijn vriend.", "broodje": "Maurits eet een broodje kaas in de pauze.", "buikje": "Maurits heeft een vol buikje na het eten.", "drankje": "Maurits krijgt een drankje bij de verjaardag.", "dropje": "Maurits eet graag een dropje.", "dutje": "Maurits doet een dutje na het eten.", "eendjes": "Maurits voert brood aan de eendjes.", "feestje": "Maurits geeft een feestje voor zijn verjaardag.", "frietje": "Maurits eet een frietje bij de snackbar.", "geitje": "Maurits aait het kleine geitje op de kinderboerderij.", "gebakje": "Maurits kiest een gebakje bij de bakker.", "gedichtje": "Maurits schrijft een gedichtje voor zijn moeder.", "grapje": "Maurits vertelt een grapje aan zijn klas.", "groepje": "Maurits werkt in een groepje van drie.", "handje": "Maurits geeft zijn juf een handje.", "hartje": "Maurits tekent een hartje op de kaart.", "hoedje": "Maurits zet een grappig hoedje op.", "hokje": "Maurits klikt het juiste hokje aan.", "huisje": "Maurits tekent een huisje met een rood dak.", "ijsje": "Maurits koopt een ijsje bij de ijscoman.", "jasje": "Maurits trekt zijn jasje aan want het is koud.", "kaarsjes": "Maurits blaast de kaarsjes op zijn taart uit.", "kastje": "Maurits stopt zijn spullen in het kastje.", "kistje": "Maurits bewaart zijn schatten in een kistje.", "kliekje": "Maurits eet het kliekje van gisteren op.", "klusje": "Maurits helpt met een klein klusje.", "knopje": "Maurits drukt op het groene knopje.", "koekje": "Maurits eet een koekje bij de thee.", "koekjes": "Maurits bakt koekjes met zijn moeder.", "kunstje": "Maurits leert zijn hond een kunstje.", "lichtje": "Maurits brandt het nachtlichtje voor zijn zusje.", "lipje": "Maurits trekt het lipje van de verpakking.", "luchtje": "Maurits ruikt een lekker luchtje.", "meisje": "Maurits speelt met het meisje van naast.", "nichtje": "Maurits speelt met zijn nichtje in de vakantie.", "petje": "Maurits zet zijn petje op tegen de zon.", "plaatjes": "Maurits plakt plaatjes in zijn album.", "plankje": "Maurits loopt over het smalle plankje.", "plantje": "Maurits geeft zijn plantje water.", "poosje": "Maurits wacht een poosje op zijn beurt.", "pootje": "Maurits aait de pootje van zijn hond.", "portretje": "Maurits maakt een portretje van zijn juf.", "praatje": "Maurits maakt een praatje met de buurman.", "reisje": "Maurits gaat op een reisje met zijn klas.", "rietje": "Maurits drinkt zijn sap door een rietje.", "rondje": "Maurits rent een rondje om het plein.", "ruitjes": "Maurits draagt een overhemd met ruitjes.", "sausje": "Maurits dipt zijn friet in het sausje.", "schaapje": "Maurits telt schaapjes voor hij slaapt.", "schepje": "Maurits graaft met een schepje in het zand.", "scheurtje": "Maurits plakt het scheurtje in zijn boek.", "snoepje": "Maurits krijgt een snoepje van de tandarts.", "sprookje": "Maurits luistert naar een sprookje voor het slapen.", "spuitje": "Maurits is niet bang voor het spuitje.", "stokje": "Maurits raak het stokje van de estafette over.", "strookje": "Maurits plakt een strookje pleister op zijn vinger.", "stukje": "Maurits eet een stukje cake.", "tandje": "Maurits verliest een tandje.", "toetje": "Maurits eet een lekker toetje na het eten.", "veldje": "Maurits speelt op het veldje achter school.", "vriendje": "Maurits gaat spelen bij zijn vriendje.", "wijsje": "Maurits fluit een vrolijk wijsje.", "windje": "Maurits voelt een koud windje.", "worstje": "Maurits eet een worstje van de barbecue.", "zusje": "Maurits leest zijn zusje voor.", "armpje": "Maurits houdt het armpje van zijn zusje vast.", "bloempje": "Maurits plukt een klein bloempje.", "boompje": "Maurits plant een klein boompje in de tuin.", "duimpje": "Maurits steekt zijn duimpje omhoog.", "filmpje": "Maurits kijkt een filmpje op zijn tablet.", "kraampje": "Maurits koopt een boek bij het kraampje.", "naampje": "Maurits schrijft zijn naampje op zijn schrift.", "pluimpje": "Maurits verdient een pluimpje voor zijn werk.", "raampje": "Maurits kijkt door het kleine raampje naar buiten.", "riempje": "Maurits doet het riempje van zijn horloge om.", "rijmpje": "Maurits bedenkt een leuk rijmpje.", "stormpje": "Maurits wacht totdat het stormpje voorbij is.", "wormpje": "Maurits vindt een wormpje in de aarde.", "aardig": "Maurits is altijd aardig voor iedereen.", "angstig": "Maurits is angstig voor de grote hond.", "bezig": "Maurits is bezig met zijn huiswerk.", "droevig": "Maurits is droevig als zijn vriend verhuist.", "eerlijk": "Maurits is altijd eerlijk.", "eindelijk": "Maurits is eindelijk klaar met zijn dictee.", "enig": "Maurits is het enige kind in zijn klas met een hond.", "geweldig": "Maurits vindt zijn juf geweldig.", "gezellig": "Maurits vindt het gezellig met zijn vrienden.", "grappig": "Maurits vindt zijn vader heel grappig.", "handig": "Maurits is handig met zijn handen.", "heilig": "Maurits weet dat de kerk een heilig gebouw is.", "jarig": "Maurits is jarig en trakteert de klas.", "lastig": "Maurits vindt de som lastig maar probeert het.", "lelijk": "Maurits vindt de schilderij lelijk.", "levendig": "Maurits is levendig en vol energie.", "lollig": "Maurits vindt zijn vriend heel lollig.", "makkelijk": "Maurits vindt spelling makkelijk na het oefenen.", "moedig": "Maurits is moedig en durft te springen.", "moeilijk": "Maurits vindt langere woorden soms moeilijk.", "nodig": "Maurits heeft een pen nodig voor zijn dictee.", "nuttig": "Maurits doet nuttig werk in de tuin.", "pittig": "Maurits vindt het eten een beetje pittig.", "prachtig": "Maurits vindt het uitzicht prachtig.", "prettig": "Maurits heeft een prettige dag.", "rustig": "Maurits zit rustig te lezen.", "slordig": "Maurits probeert niet slordig te schrijven.", "stevig": "Maurits klopt stevig op de deur.", "toevallig": "Maurits ontmoet toevallig zijn vriend in de winkel.", "treurig": "Maurits kijkt treurig als zijn team verliest.", "twintig": "Maurits telt twintig bladzijden.", "veilig": "Maurits voelt zich veilig thuis.", "verdrietig": "Maurits is verdrietig als zijn vriend ziek is.", "verstandig": "Maurits is verstandig en denkt na voor hij handelt.", "vettig": "Maurits wast zijn handen na het eten van chips.", "vijftig": "Maurits telt vijftig stappen.", "vochtig": "Maurits voelt dat de grond vochtig is.", "vorig": "Maurits weet dat vorig jaar hij al goed kon lezen.", "vrijwillig": "Maurits helpt vrijwillig bij het opruimen.", "waardig": "Maurits gedraagt zich waardig bij de diploma-uitreiking.", "weinig": "Maurits heeft weinig moeite met spelling.", "wollig": "Maurits voelt de wollige trui van zijn oma.", "zalig": "Maurits vindt de vakantie zalig.", "zanderig": "Maurits heeft zanderige voeten na het strand.", "zenuwachtig": "Maurits is zenuwachtig voor zijn spreekbeurt.", "zestig": "Maurits telt zestig seconden.", "zeventig": "Maurits weet dat zeventig meer is dan zestig.", "zonnig": "Maurits gaat buiten spelen op een zonnige dag.", "zorgvuldig": "Maurits werkt zorgvuldig aan zijn tekening.", "zuinig": "Maurits is zuinig op zijn spaargeld.", "kleverig": "Maurits heeft kleverige vingers na het snoepen.", "knapperig": "Maurits eet een knapperig koekje.", "knorrig": "Maurits is knorrig als hij moe is.", "koppig": "Maurits is koppig maar heeft een goed hart.", "krachtig": "Maurits gooit de bal krachtig het veld in.", "kunstig": "Maurits maakt een kunstig knutselwerk.", "machtig": "Maurits vindt chocoladetaart erg machtig.", "mollig": "Maurits knuffelt het mollige beertje.", "avontuurlijk": "Maurits is een avontuurlijk kind.", "besmettelijk": "Maurits weet dat verkoudheid besmettelijk is.", "dadelijk": "Maurits komt dadelijk naar beneden.", "dierlijk": "Maurits studeert over dierlijk gedrag.", "draaglijk": "Maurits maakt de pijn draaglijk.", "feestelijk": "Maurits versiert het lokaal feestelijk.", "feitelijk": "Maurits geeft een feitelijk antwoord.", "gevaarlijk": "Maurits weet dat vuur gevaarlijk kan zijn.", "hartelijk": "Maurits heet zijn gast hartelijk welkom.", "heerlijk": "Maurits vindt de appeltaart heerlijk.", "hinderlijk": "Maurits vindt het lawaai hinderlijk.", "huiselijk": "Maurits houdt van een huiselijk avond.", "huwelijk": "Maurits kijkt naar foto's van het huwelijk van zijn ouders.", "jaarlijks": "Maurits gaat jaarlijks op schoolreis.", "klaaglijk": "Maurits hoort het klaaglijke geluid van de kat.", "kwalijk": "Maurits neemt het hem niet kwalijk.", "landelijk": "Maurits woont in een landelijk gebied.", "menselijk": "Maurits weet dat fouten menselijk zijn.", "misselijk": "Maurits is misselijk in de auto.", "natuurlijk": "Maurits zegt: natuurlijk help ik je.", "nauwelijks": "Maurits kan nauwelijks wachten.", "duidelijk": "Maurits spreekt duidelijk voor de klas.", "persoonlijk": "Maurits geeft het cadeau persoonlijk af.", "pijnlijk": "Maurits heeft een pijnlijke knie.", "plaatselijk": "Maurits gaat naar de plaatselijke bakker.", "schadelijk": "Maurits weet dat roken schadelijk is.", "schriftelijk": "Maurits geeft een schriftelijk antwoord.", "sierlijk": "Maurits schrijft sierlijke letters.", "smakelijk": "Maurits wenst iedereen smakelijk eten.", "bij": "Maurits ziet een bij op de bloem.", "bijl": "Maurits hakt hout met een bijl.", "bijna": "Maurits is bijna klaar met zijn dictee.", "blij": "Maurits is blij als hij een goed punt haalt.", "blijft": "Maurits blijft rustig als er iets misgaat.", "blijven": "Maurits wil blijven logeren bij zijn vriend.", "eik": "Maurits leunt tegen de dikke eik in het park.", "hei": "Maurits wandelt over de paarse hei.", "ijs": "Maurits rijdt op het ijs in de winter.", "ijzer": "Maurits weet dat ijzer een soort metaal is.", "kijken": "Maurits gaat kijken bij de voetbalwedstrijd.", "klei": "Maurits maakt een mooie pot van klei.", "klein": "Maurits heeft een klein zusje.", "mei": "Maurits is jarig in de maand mei.", "meid": "Maurits vindt zijn vriendin een echte meid.", "prijs": "Maurits wint de eerste prijs.", "prei": "Maurits snijdt de prei voor de soep.", "rij": "Maurits staat in de rij voor de kassa.", "rijden": "Maurits leert fietsen en rijden.", "rijst": "Maurits eet rijst bij het avondeten.", "rozijn": "Maurits plukt een rozijn uit zijn brood.", "schijven": "Maurits snijdt de worst in schijven.", "schrijft": "Maurits schrijft zijn dictee netjes op.", "seizoen": "Maurits houdt van het herfstseizoen.", "smijten": "Maurits gooit zijn tas neer maar smijt hem niet.", "spijker": "Maurits slaat een spijker in de muur.", "spijt": "Maurits heeft spijt van zijn fout.", "steil": "Maurits rent het steile pad omhoog.", "stijl": "Maurits schrijft in een mooie stijl.", "strijden": "Maurits wil strijden voor eerlijkheid.", "strijken": "Maurits leert zijn overhemden strijken.", "tijd": "Maurits is altijd op tijd op school.", "tijdens": "Maurits luistert tijdens de les.", "tijdelijk": "Maurits zit tijdelijk in een ander lokaal.", "tijger": "Maurits ziet een tijger in de dierentuin.", "twijfelen": "Maurits twijfelt soms aan zijn antwoord.", "vergelijken": "Maurits vergelijkt twee getallen.", "vijand": "Maurits heeft geen vijanden.", "blauw": "Maurits wijst naar de blauwe lucht.", "flauw": "Maurits vindt de mop een beetje flauw.", "grauw": "Maurits ziet een grauw wolkje.", "klauw": "Maurits kijkt naar de klauw van de arend.", "snauw": "Maurits reageert niet op een snauw.", "bouwen": "Maurits gaat een hut bouwen.", "jou": "Maurits zegt: ik zie jou morgen weer.", "kou": "Maurits rilt van de kou.", "oud": "Maurits vindt zijn opa oud maar wijs.", "sjouwen": "Maurits gaat sjouwen met zware dozen.", "stout": "Maurits is stout geweest en krijgt straf.", "trouwen": "Maurits kijkt naar foto's van zijn ouders trouwen.", "vouw": "Maurits vouwt een vliegtuigje van papier.", "vrouw": "Maurits groet de vrouw van de buurman.", "zout": "Maurits strooit zout op zijn friet.", "applaus": "Maurits krijgt applaus na zijn spreekbeurt.", "astronaut": "Maurits wil later astronaut worden.", "augurk": "Maurits legt een augurk op zijn brood.", "augustus": "Maurits gaat in augustus op vakantie.", "auteur": "Maurits leest een boek van zijn lievelingsauteur.", "automaat": "Maurits trekt geld uit de automaat.", "benauwd": "Maurits voelt zich benauwd in de volle klas.", "nauwkeurig": "Maurits werkt nauwkeurig aan zijn tekening.", "restaurant": "Maurits gaat met zijn ouders naar een restaurant.", "wenkbrauw": "Maurits trekt zijn wenkbrauw op.", "eigenlijk": "Maurits zegt: eigenlijk weet ik het antwoord.", "bijzonder": "Maurits vindt dit een bijzonder moment.", "rijbewijs": "Maurits weet dat je een rijbewijs nodig hebt.", "vergelijking": "Maurits maakt een vergelijking bij zijn som.", "appeltaart": "Maurits eet graag een punt appeltaart.", "badmat": "Maurits staat op de badmat na het douchen.", "bloedneus": "Maurits krijgt een bloedneus van het vallen.", "boomstam": "Maurits zit op een boomstam in het bos.", "bouwwerk": "Maurits bouwt een groot bouwwerk van lego.", "brandalarm": "Maurits weet wat hij moet doen als het brandalarm afgaat.", "broodjeszaak": "Maurits koopt een broodje bij de broodjeszaak.", "dierenpark": "Maurits gaat naar het dierenpark met zijn klas.", "feestjurk": "Maurits vindt de feestjurk van zijn zus mooi.", "fietstocht": "Maurits gaat op een lange fietstocht.", "golfslag": "Maurits springt over de golfslag aan het strand.", "grasveld": "Maurits speelt voetbal op het grasveld.", "hangplek": "Maurits heeft een vaste hangplek met zijn vrienden.", "ijsbaan": "Maurits schaatst op de ijsbaan.", "kleedkamer": "Maurits trekt zijn sportkleding aan in de kleedkamer.", "leerboek": "Maurits vergeet zijn leerboek thuis.", "luiaard": "Maurits ziet een luiaard in de dierentuin hangen.", "marktplein": "Maurits loopt over het marktplein.", "melkboer": "Maurits wacht op de melkboer.", "middagpauze": "Maurits eet zijn boterham tijdens de middagpauze.", "muisstil": "Maurits zit muisstil tijdens de toets.", "muziekstuk": "Maurits speelt een muziekstuk op zijn blokfluit.", "nachtlampje": "Maurits laat het nachtlampje aan.", "nieuwjaar": "Maurits wacht op nieuwjaar voor het vuurwerk.", "nijlpaard": "Maurits ziet een nijlpaard in de dierentuin.", "pannenkoek": "Maurits eet een pannenkoek met stroop.", "papierbak": "Maurits gooit zijn papier in de papierbak.", "pechvogel": "Maurits is vandaag een echte pechvogel.", "pindakaas": "Maurits smeert pindakaas op zijn boterham.", "pretpark": "Maurits gaat naar het pretpark in de vakantie.", "regenworm": "Maurits vindt een regenworm in de tuin.", "schoolbord": "Maurits schrijft het antwoord op het schoolbord.", "schoolplein": "Maurits speelt in de pauze op het schoolplein.", "schoolreis": "Maurits verheugd zich op de schoolreis.", "sneeuwstorm": "Maurits kijkt naar de sneeuwstorm buiten.", "speeltuin": "Maurits gaat naar de speeltuin na school.", "speurtocht": "Maurits organiseert een speurtocht voor zijn klas.", "spinnenweb": "Maurits ziet een spinnenweb in de hoek.", "spookverhaal": "Maurits vertelt een spookverhaal bij het kampvuur.", "spoorweg": "Maurits woont vlak bij de spoorweg.", "springplank": "Maurits springt van de springplank in het bad.", "stoplicht": "Maurits wacht bij het stoplicht.", "tandarts": "Maurits gaat twee keer per jaar naar de tandarts.", "tijdschrift": "Maurits leest een tijdschrift over natuur.", "toneelstuk": "Maurits speelt de hoofdrol in het toneelstuk.", "trouwring": "Maurits ziet de trouwring van zijn moeder.", "verjaardag": "Maurits viert zijn verjaardag met zijn vrienden.", "viswinkel": "Maurits koopt vis bij de viswinkel.", "vlindertuin": "Maurits bezoekt de vlindertuin in de vakantie.", "voetballen": "Maurits gaat voetballen na school.", "voorjaar": "Maurits houdt van het voorjaar als alles bloeit.", "vrachtschip": "Maurits kijkt naar het grote vrachtschip.", "wachttijd": "Maurits heeft een lange wachttijd bij de dokter.", "wedstrijd": "Maurits speelt een wedstrijd tegen een andere klas.", "weervrouw": "Maurits kijkt naar de weervrouw op televisie.", "wereldbol": "Maurits draait de wereldbol in zijn klas.", "zwembad": "Maurits gaat naar het zwembad in de zomer.", "zakdoek": "Maurits neemt een zakdoek mee als hij verkouden is.", "zandkasteel": "Maurits bouwt een groot zandkasteel op het strand.", "zandstrand": "Maurits loopt blootsvoets over het zandstrand.", "zebrapad": "Maurits steekt over op het zebrapad.", "zeehonden": "Maurits ziet de zeehonden in de dierentuin.", "zeilboot": "Maurits vaart mee op een zeilboot.", "brandweer": "Maurits wil later bij de brandweer.", "dierenwinkel": "Maurits koopt een hok bij de dierenwinkel.", "feestbeest": "Maurits is een echt feestbeest.", "fietsslot": "Maurits vergeet zijn fietsslot mee te nemen.", "leeuwenkooien": "Maurits kijkt door de tralies van de leeuwenkooien.", "luchtballon": "Maurits vliegt in een luchtballon.", "melkflessen": "Maurits sjouwt de melkflessen naar binnen.", "nagelvijl": "Maurits gebruikt de nagelvijl van zijn moeder.", "najaar": "Maurits verzamelt bladeren in het najaar.", "neushoorn": "Maurits leert over de neushoorn in zijn boek.", "nieuwsbericht": "Maurits leest een nieuwsbericht op de tablet.", "pannenkoeken": "Maurits bakt pannenkoeken met zijn vader.", "paspoort": "Maurits laat zijn paspoort zien bij de grens.", "piepklein": "Maurits vindt een piepklein lieveheersbeestje.", "prijskaartje": "Maurits kijkt naar het prijskaartje.", "ratelslangen": "Maurits leert over ratelslangen in zijn boek.", "rijmwoord": "Maurits bedenkt een rijmwoord voor het gedicht.", "roltrap": "Maurits staat stil op de roltrap.", "schaafwond": "Maurits heeft een schaafwond op zijn knie.", "schrijfschrift": "Maurits schrijft in zijn schrijfschrift.", "schroevendraaier": "Maurits pakt de schroevendraaier uit de kist.", "sneeuwlaarzen": "Maurits trekt zijn sneeuwlaarzen aan.", "sneeuwpoppen": "Maurits bouwt twee sneeuwpoppen in de tuin."};
 
-function haalZinOp(woord){
-  return Promise.resolve(ZINNEN[woord] || 'Maurits oefent het woord ' + woord + '.');
-}
 
-// Stem
-function laadStemmen(){
-  var s=speechSynthesis.getVoices();
-  var nl=s.filter(function(v){return v.lang.startsWith('nl');});
-  if(nl.length===0){setTimeout(laadStemmen,500);return;}
-  nl.sort(function(a,b){return stemScore(b)-stemScore(a);});
-  gekozenStem=nl[0];
-  console.log('Stem:',gekozenStem?gekozenStem.name:'geen');
-}
-function stemScore(v){
-  var n=v.name.toLowerCase(), l=v.lang.toLowerCase();
-  if(l==='nl-be') return 0;
-  if(/fleur/.test(n)) return 90;
-  if(/ellen/.test(n)) return 85;
-  if(/neural|fenna|colette/.test(n)) return 100;
-  if(/enhanced|premium|wavenet/.test(n)) return 60;
-  if(l==='nl-nl') return 40;
-  if(l.startsWith('nl')) return 20;
-  return 10;
-}
-speechSynthesis.addEventListener('voiceschanged',laadStemmen);
+// ── Fouten generator ─────────────────────────────────────────────────────────
+// Bedenkt plausibele kinderfouten per woord, gebaseerd op spellingcategorie
+function maakFouten(woord, catId) {
+  var f = [];
+  var w = woord;
 
-// Welkom + audio unlock
-function startApp(){
-  var dbg=document.getElementById('audio-debug');
-  var u=new SpeechSynthesisUtterance('Hallo Florine!');
-  u.lang='nl-NL'; u.rate=0.9; u.volume=1;
-  if(gekozenStem) u.voice=gekozenStem;
-  u.onstart=function(){ dbg.textContent=''; };
-  u.onend=function(){
-    dbg.textContent='';
-    document.getElementById('welkom-knop').textContent='Start het spel!';
-    document.getElementById('welkom-knop').onclick=function(){
-      document.getElementById('welkom-overlay').style.display='none';
-    };
+  // Categorie-specifieke fouten
+  var regels = {
+    // Zingwoord: ng -> nk of n
+    'zingwoord': function() {
+      if (w.endsWith('ng'))  f.push(w.slice(0,-2)+'nk', w.slice(0,-2)+'n', w.slice(0,-2)+'nng');
+      if (w.includes('nge')) f.push(w.replace('nge','nke'), w.replace('nge','ne'));
+      if (w.includes('ing')) f.push(w.replace('ing','ink'), w.replace('ing','ieg'));
+    },
+    // Luchtwoord: cht -> gt, ct, cht weggooien
+    'luchtwoord': function() {
+      if (w.includes('cht')) { f.push(w.replace('cht','gt'), w.replace('cht','kt'), w.replace('cht','t')); }
+      if (w.includes('ch'))  { f.push(w.replace('ch','g'), w.replace('ch','k')); }
+    },
+    // Plankwoord: nk -> ng
+    'plankwoord': function() {
+      if (w.includes('nk'))  f.push(w.replace('nk','ng'), w.replace('nk','n'), w.replace('nk','nnk'));
+      if (w.includes('ink')) f.push(w.replace('ink','ieg'), w.replace('ink','ienk'));
+    },
+    // EI/IJ AU/OU fouten
+    'eiij': function() {
+      f.push(
+        w.replace(/ei/g,'ij').replace(/ij/g,'ei'),
+        w.replace(/au/g,'ou').replace(/ou/g,'au'),
+        w.replace(/ui/g,'uy')
+      );
+    },
+    // EER OOR EUR fouten
+    'eerooreur': function() {
+      f.push(
+        w.replace('eer','er').replace('oor','or').replace('eur','ur'),
+        w.replace('eer','ear').replace('oor','oar'),
+        w+'r'
+      );
+    },
+    // AAI OOI OEI: dubbel of enkel
+    'aaiooi': function() {
+      f.push(
+        w.replace('aai','ai').replace('ooi','oi').replace('oei','oi'),
+        w.replace('aai','aay').replace('ooi','ooy'),
+        w.replace('ij','y')
+      );
+    },
+    // EEUW IEUW: vergeet u
+    'eeuwwoord': function() {
+      f.push(
+        w.replace('eeuw','ee').replace('ieuw','ie').replace('uw','w'),
+        w.replace('eeuw','eew').replace('ieuw','iew'),
+        w.replace('uu','u').replace('oe','u')
+      );
+    },
+    // Langermaakwoord: d/t verwarring
+    'langermaak': function() {
+      if (w.endsWith('d')) f.push(w.slice(0,-1)+'t', w.slice(0,-1)+'dd', w+'d');
+      if (w.endsWith('t')) f.push(w.slice(0,-1)+'d', w.slice(0,-1)+'tt');
+      f.push(w.replace(/nd$/,'nt'), w.replace(/rd$/,'rt'));
+    },
+    // Voorvoegsel: be/ge verwarring, stomme e
+    'voorvoegsel': function() {
+      if (w.startsWith('be')) f.push('bi'+w.slice(2), 'ba'+w.slice(2), w.replace('be',''));
+      if (w.startsWith('ge')) f.push('gi'+w.slice(2), w.replace('ge',''), 'je'+w.slice(2));
+      if (w.startsWith('ver')) f.push('fer'+w.slice(3), 'var'+w.slice(3));
+    },
+    // Verkleinwoord: je/tje/pje fouten
+    'verkleinwoord': function() {
+      if (w.endsWith('tje')) f.push(w.slice(0,-3)+'je', w.slice(0,-3)+'dje', w.slice(0,-3)+'sje');
+      if (w.endsWith('pje')) f.push(w.slice(0,-3)+'je', w.slice(0,-3)+'bje');
+      if (w.endsWith('je') && !w.endsWith('tje')) f.push(w.slice(0,-2)+'tje', w.slice(0,-2)+'dje');
+    },
+    // Achtervoegsel: ig/lijk fouten
+    'achtervoegsel': function() {
+      if (w.endsWith('ig'))   f.push(w.slice(0,-2)+'ijk', w.slice(0,-2)+'iek', w.slice(0,-2)+'igg');
+      if (w.endsWith('lijk')) f.push(w.replace('lijk','lik'), w.replace('lijk','leijk'), w.replace('lijk','lijck'));
+    },
+    // Samenstellingen
+    'samenstelling': function() {
+      // Splits het woord en verwissel onderdelen of spel apart
+      f.push(w+w.slice(-2), w.slice(0,-1), w.replace(/ij/g,'y'));
+    }
   };
-  u.onerror=function(e){
-    dbg.textContent='Fout: '+e.error+'. Zet volume hoger en schakel stille modus uit.';
+
+  // Voer categorie-regels uit
+  if (regels[catId]) regels[catId]();
+
+  // Algemene kinderfouten (altijd toegevoegd)
+  var algemeen = [];
+
+  // 1. Klankverwisseling begin: v↔f, z↔s, w↔v, g↔ch
+  var beginverwiss = {v:'f',f:'v',z:'s',s:'z',w:'v',g:'ch',ch:'g',sj:'sh',zh:'z'};
+  var eerste = Object.keys(beginverwiss).find(function(k){return w.toLowerCase().startsWith(k);});
+  if (eerste) algemeen.push(beginverwiss[eerste]+w.slice(eerste.length));
+
+  // 2. Dubbel/enkel klinker
+  algemeen.push(
+    w.replace(/aa/g,'a').replace(/ee/g,'e').replace(/oo/g,'o').replace(/uu/g,'u'),
+    w.replace(/([aeiou])\1/g,'$1$1$1')
+  );
+
+  // 3. Dubbel/enkel medeklinker
+  algemeen.push(
+    w.replace(/([bcdfghjklmnpqrstvwxyz])\1/g,'$1'),
+    w.replace(/([bcdfghjklmnpqrstvwxyz])(?!\1)([bcdfghjklmnpqrstvwxyz])/,'$1$1$2')
+  );
+
+  // 4. ui → uy, ij → y, ei → ay
+  algemeen.push(
+    w.replace(/ui/g,'uy').replace(/ij/g,'ij').replace(/ei/g,'ai'),
+    w.replace(/sch/g,'sk').replace(/sch/g,'sh')
+  );
+
+  // 5. Eindletter weggooien of toevoegen
+  algemeen.push(w+'e', w.slice(0,-1), w.replace(/t$/,'d').replace(/d$/,'t'));
+
+  // Voeg algemeen toe aan f
+  f = f.concat(algemeen);
+
+  // Filter: geen duplicaten, niet gelijk aan het goede woord, minimale lengte
+  var gezien = {};
+  gezien[w.toLowerCase()] = true;
+  f = f.filter(function(x) {
+    if (!x || x.length < 2) return false;
+    var xl = x.toLowerCase();
+    if (gezien[xl]) return false;
+    gezien[xl] = true;
+    // Mag niet bijna identiek zijn (1 karakter verschil max is ok, meer is beter)
+    return true;
+  });
+
+  return f;
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
+var gekozeCats = [];
+var gekozenAantal = 10;
+var gekozenNiveau = 0;
+var vragen = [];
+var vraagIdx = 0;
+var sessionScore = 0;
+var sessionFouten = []; // [{word, catId, gekozen, uitleg}]
+var foutWoorden = {};   // persistent: {word: {catId, uitleg, count}}
+var alFouten = false;   // oefen-fouten-modus
+
+// Laad opgeslagen fouten
+try {
+  var opg = localStorage.getItem('spelling_fouten');
+  if (opg) foutWoorden = JSON.parse(opg);
+} catch(e) {}
+
+function slaFoutenOp() {
+  try { localStorage.setItem('spelling_fouten', JSON.stringify(foutWoorden)); } catch(e) {}
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+function startApp() {
+  document.getElementById('welkom').style.display = 'none';
+  bouwCatGrid();
+  toonFoutPreview();
+}
+
+function bouwCatGrid() {
+  var g = document.getElementById('cat-grid');
+  g.innerHTML = '';
+  CATS.forEach(function(c) {
+    var d = document.createElement('div');
+    d.className = 'cat-vak';
+    d.id = 'cat-'+c.id;
+    d.innerHTML = '<span class="cat-lbl">'+c.label+'</span><span class="cat-sub">'+c.sub+'</span><span class="vinkje">&#x2713;</span>';
+    d.onclick = function() { toggleCat(c.id); };
+    g.appendChild(d);
+  });
+}
+
+function toggleCat(id) {
+  var i = gekozeCats.indexOf(id);
+  if (i === -1) gekozeCats.push(id);
+  else gekozeCats.splice(i, 1);
+  document.getElementById('cat-'+id).classList.toggle('gekozen', gekozeCats.indexOf(id) !== -1);
+  updateStartKnop();
+}
+
+function updateStartKnop() {
+  var knop = document.getElementById('start-knop');
+  knop.disabled = gekozeCats.length === 0;
+  knop.textContent = gekozeCats.length === 0
+    ? 'Selecteer een categorie'
+    : 'Start! (' + gekozeCats.length + ' categorie' + (gekozeCats.length > 1 ? 'en' : '') + ')';
+}
+
+function kiesAantal(n) {
+  gekozenAantal = n;
+  document.querySelectorAll('.opt-knoppen .opt-knop').forEach(function(b,i){
+    if (b.parentElement.previousElementSibling && b.parentElement.previousElementSibling.textContent.includes('Vragen')) {
+      b.classList.toggle('actief', parseInt(b.textContent) === n);
+    }
+  });
+  // simpler: re-find by text content
+  document.querySelectorAll('#s-start .opt-knoppen').forEach(function(rij, ri) {
+    if (ri === 0) rij.querySelectorAll('.opt-knop').forEach(function(b) {
+      b.classList.toggle('actief', parseInt(b.textContent) === n);
+    });
+  });
+}
+
+function kiesNiveau(n) {
+  gekozenNiveau = n;
+  [0,1,2,3].forEach(function(i) {
+    document.getElementById('niv-'+i).classList.toggle('actief', i === n);
+  });
+}
+
+function toonFoutPreview() {
+  var woorden = Object.keys(foutWoorden);
+  var preview = document.getElementById('fout-preview');
+  var chips = document.getElementById('fout-chips');
+  if (woorden.length === 0) { preview.classList.remove('toon'); return; }
+  preview.classList.add('toon');
+  chips.innerHTML = '';
+  woorden.slice(0, 20).forEach(function(w) {
+    var c = document.createElement('span');
+    c.className = 'fout-chip';
+    c.textContent = w + (foutWoorden[w].count > 1 ? ' ('+foutWoorden[w].count+'x)' : '');
+    chips.appendChild(c);
+  });
+  if (woorden.length > 20) {
+    var meer = document.createElement('span');
+    meer.className = 'fout-chip';
+    meer.textContent = '+' + (woorden.length - 20) + ' meer';
+    chips.appendChild(meer);
+  }
+}
+
+function wissFouten() {
+  foutWoorden = {};
+  slaFoutenOp();
+  toonFoutPreview();
+}
+
+function oefenFouten() {
+  var woorden = Object.keys(foutWoorden);
+  if (woorden.length === 0) return;
+  alFouten = true;
+  // Bouw vragen alleen van foutwoorden
+  var items = [];
+  woorden.forEach(function(w) {
+    var catId = foutWoorden[w].catId || 'hakwoord';
+    items.push({ word: w, niveau: 2, catId: catId });
+  });
+  vragen = bouwVragen(items, Math.min(gekozenAantal, items.length));
+  if (vragen.length === 0) return;
+  naarScherm('s-spel');
+  startRonde();
+}
+
+// ── Vragen bouwen ─────────────────────────────────────────────────────────────
+function startSpel(fouten_modus) {
+  alFouten = fouten_modus || false;
+  // Verzamel items uit geselecteerde categorieën
+  var alleItems = [];
+  CATS.forEach(function(c) {
+    if (gekozeCats.indexOf(c.id) === -1) return;
+    c.items.forEach(function(item) {
+      if (gekozenNiveau === 0 || item.niveau === gekozenNiveau) {
+        alleItems.push({ word: item.word, niveau: item.niveau, catId: c.id });
+      }
+    });
+  });
+
+  if (alleItems.length === 0) return;
+  mix(alleItems);
+  vragen = bouwVragen(alleItems, gekozenAantal);
+  if (vragen.length === 0) return;
+  naarScherm('s-spel');
+  startRonde();
+}
+
+function bouwVragen(items, max) {
+  var result = [];
+  var gebruikt = {};
+  var pool = items.slice(0, max * 3); // ruim genoeg
+
+  pool.forEach(function(item) {
+    if (result.length >= max) return;
+    if (gebruikt[item.word]) return;
+    gebruikt[item.word] = true;
+
+    var zin = ZINNEN[item.word] || ('Maurits oefent dit woord: ___.');
+    var fouten = maakFouten(item.word, item.catId);
+
+    // Kies 3 plausibele fouten
+    var gekozenFouten = fouten.slice(0, 3);
+    // Als te weinig, vul aan met willekeurige woorden uit dezelfde cat
+    if (gekozenFouten.length < 3) {
+      var catItems = [];
+      CATS.forEach(function(c) { if (c.id === item.catId) catItems = c.items; });
+      mix(catItems).forEach(function(ci) {
+        if (gekozenFouten.length >= 3) return;
+        if (ci.word !== item.word && !gekozenFouten.includes(ci.word)) {
+          gekozenFouten.push(ci.word);
+        }
+      });
+    }
+    gekozenFouten = gekozenFouten.slice(0, 3);
+
+    // Bouw opties en schud door elkaar
+    var opties = [item.word].concat(gekozenFouten);
+    mix(opties);
+
+    // Maak uitleg over de fout
+    var uitleg = maakUitleg(item.word, item.catId);
+
+    result.push({
+      woord: item.word,
+      catId: item.catId,
+      zin: zin,
+      opties: opties,
+      goed: item.word,
+      uitleg: uitleg
+    });
+  });
+  return result;
+}
+
+function maakUitleg(woord, catId) {
+  var uitlegMap = {
+    'zingwoord': 'Let op: dit is een <strong>zingwoord</strong>. Je schrijft altijd <strong>-ng</strong>, nooit -nk of -n.',
+    'luchtwoord': 'Dit is een <strong>luchtwoord</strong>. Na een korte klinker schrijf je <strong>-cht</strong>.',
+    'plankwoord': 'Dit is een <strong>plankwoord</strong>. Je schrijft <strong>-nk</strong>, er komt nooit een g tussen de n en k.',
+    'eerooreur': 'Let op de lange klinker: schrijf <strong>-eer, -oor</strong> of <strong>-eur</strong>, ook al hoor je die niet altijd.',
+    'aaiooi': 'Dit woord eindigt op <strong>-aai, -ooi</strong> of <strong>-oei</strong>. Je hoort de j, maar schrijft de i.',
+    'eeuwwoord': 'Denk aan de <strong>u</strong>! Bij -eeuw, -ieuw schrijf je altijd een u voor de w.',
+    'eiij': 'Dit is een <strong>twijfelwoord</strong>. Je moet onthouden of het ei of ij is, au of ou.',
+    'langermaak': 'Maak het woord langer om te horen of het <strong>-d</strong> of <strong>-t</strong> is aan het einde.',
+    'voorvoegsel': 'Let op het voorvoegsel. Je hoort een /u/ maar schrijft een <strong>e</strong>: be-, ge-, ver-.',
+    'verkleinwoord': 'Let op het verkleinwoord-achtervoegsel: <strong>-je, -tje</strong> of <strong>-pje</strong>.',
+    'achtervoegsel': 'Let op het achtervoegsel: schrijf je <strong>-ig</strong> of <strong>-lijk</strong>?',
+    'samenstelling': 'Dit is een samenstelling van twee woorden. Schrijf ze achter elkaar.',
+    'hakwoord': 'Schrijf wat je hoort. Let op lange en korte klinkers.',
   };
-  speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+  return uitlegMap[catId] || 'Let goed op de spelling van dit woord.';
 }
 
-window.addEventListener('load',function(){
-  speechSynthesis.getVoices();
-  laadStemmen();
-  bouwGrid();
-  var sn=localStorage.getItem('spraak_snelheid'); if(sn){spraakSnelheid=parseFloat(sn);var sl=document.getElementById('snelheid-slider');sl.value=spraakSnelheid;updateSnelheid(spraakSnelheid);}
-  var nv=localStorage.getItem('niveau'); if(nv!==null) kiesNiveau(parseInt(nv));
-  var an=localStorage.getItem('aantal_woorden'); if(an) kiesAantal(parseInt(an));
-});
-
-// Instellingen
-function kiesNiveau(n){
-  gekozenNiveau=n; localStorage.setItem('niveau',n);
-  document.querySelectorAll('.niveau-knop').forEach(function(b){b.classList.remove('actief');});
-  document.getElementById('niveau-'+n).classList.add('actief');
-}
-function kiesAantal(n){
-  gekozenAantal=n; localStorage.setItem('aantal_woorden',n);
-  document.querySelectorAll('.aantal-knop').forEach(function(b){b.classList.toggle('actief',parseInt(b.textContent)===n);});
-}
-function updateSnelheid(val){
-  spraakSnelheid=parseFloat(val);
-  document.getElementById('snelheid-waarde').textContent=spraakSnelheid.toFixed(2)+'x';
-  var pct=((spraakSnelheid-0.4)/(1.1-0.4))*100;
-  document.getElementById('snelheid-slider').style.background='linear-gradient(to right,var(--blauw) 0%,var(--blauw) '+pct+'%,var(--blauw-mid) '+pct+'%,var(--blauw-mid) 100%)';
-  localStorage.setItem('spraak_snelheid',spraakSnelheid);
+// ── Spel ronde ───────────────────────────────────────────────────────────────
+function startRonde() {
+  vraagIdx = 0;
+  sessionScore = 0;
+  sessionFouten = [];
+  updateScore();
+  bouwVoortgang();
+  toonVraag();
 }
 
-// Grid
-function bouwGrid(){
-  var g=document.getElementById('cat-grid'); g.innerHTML='';
-  CATS.forEach(function(c){
-    var b=document.createElement('button'); b.className='cat-btn';
-    b.innerHTML='<span class="lbl">'+c.label+'</span><span class="sub">'+c.sub+'</span>';
-    b.onclick=function(){start(c);}; g.appendChild(b);
+function bouwVoortgang() {
+  var rij = document.getElementById('voortgang');
+  rij.innerHTML = '';
+  vragen.forEach(function(_, i) {
+    var p = document.createElement('div');
+    p.className = 'pip' + (i === 0 ? ' huidig' : '');
+    p.id = 'pip-'+i;
+    rij.appendChild(p);
   });
 }
 
-function start(c){
-  huidigeCat=c;
-  var gefilterd=gekozenNiveau===0?[].concat(c.items):c.items.filter(function(w){return w.niveau===gekozenNiveau;});
-  if(gefilterd.length===0) gefilterd=[].concat(c.items);
-  items=mix(gefilterd).slice(0,gekozenAantal);
-  idx=0;score=0;sessieRes=[];beantwoord=false;
-  document.getElementById('cat-sectie').style.display='none';
-  document.getElementById('resultaten').classList.remove('toon');
-  document.getElementById('progress-row').style.display='flex';
-  document.getElementById('spel-area').style.display='flex';
-  bouwVoortgang(); updateScore(); toonItem();
+function updateScore() {
+  document.getElementById('score-display').textContent = sessionScore + ' / ' + vragen.length;
 }
 
-function bouwVoortgang(){
-  var r=document.getElementById('progress-row'); r.innerHTML='';
-  items.forEach(function(_,i){
-    var p=document.createElement('div');
-    p.className='pip'+(i===0?' huidig':''); p.id='pip-'+i; r.appendChild(p);
-  });
-}
-function updatePip(i,cls){var p=document.getElementById('pip-'+i);if(p)p.className='pip '+cls;var n=document.getElementById('pip-'+(i+1));if(n)n.classList.add('huidig');}
-function updateScore(){document.getElementById('score-display').textContent=score+' / '+items.length;}
+function toonVraag() {
+  var v = vragen[vraagIdx];
+  document.getElementById('vraag-num').textContent = 'Vraag '+(vraagIdx+1)+' van '+vragen.length;
+  document.getElementById('feedback-blok').className = 'feedback-blok';
+  document.getElementById('volgende-knop').style.display = 'none';
 
-function toonItem(){
-  beantwoord=false;
-  document.getElementById('woord-num').textContent='Woord '+(idx+1)+' van '+items.length;
-  var inp=document.getElementById('spell-input'); inp.value=''; inp.className='';
-  document.getElementById('controleer-knop').textContent='Controleer';
-  verbergFB(); setKnopLabel('Zin ophalen...');
-  if(!isIOS()) setTimeout(function(){inp.focus();},300);
-  var woord=items[idx].word;
-  haalZinOp(woord).then(function(zin){
-    items[idx].sentence=zin;
-    setKnopLabel('Druk om de zin te horen');
-    setTimeout(speakFull,300);
+  // Zin met ___ op de plek van het woord
+  var zinTekst = (v.zin || '').replace(new RegExp('\\b'+escRe(v.woord)+'\\b','i'),
+    '<span class="zin-woord-gat">'+v.woord.replace(/./g,'&nbsp;')+'</span>');
+  // Fallback als woord niet in zin gevonden
+  if (zinTekst === v.zin) {
+    zinTekst = (v.zin||'') + ' <em>(welk woord ontbreekt?)</em>';
+  }
+  document.getElementById('zin-kaart').innerHTML = zinTekst;
+
+  // Antwoordknoppen
+  var grid = document.getElementById('antwoord-grid');
+  grid.innerHTML = '';
+  var letters = ['A','B','C','D'];
+  v.opties.forEach(function(opt, i) {
+    var b = document.createElement('button');
+    b.className = 'antw-knop';
+    b.innerHTML = '<span class="letter">'+letters[i]+'</span> '+opt;
+    b.onclick = function() { checkAntwoord(opt, b); };
+    grid.appendChild(b);
   });
 }
 
-// Spraak
-function spreek(tekst,rate,cb){
-  speechSynthesis.cancel();
-  var u=new SpeechSynthesisUtterance(tekst);
-  u.lang='nl-NL'; u.rate=rate||spraakSnelheid; u.pitch=0.85; u.volume=1;
-  if(gekozenStem) u.voice=gekozenStem;
-  u.onend=function(){setBezigKnop(false);if(cb)cb();};
-  u.onerror=function(){setBezigKnop(false);if(cb)cb();};
-  setBezigKnop(true);
-  speechSynthesis.speak(u);
-}
-function maakU(tekst,rate){
-  var u=new SpeechSynthesisUtterance(tekst);
-  u.lang='nl-NL'; u.rate=rate||spraakSnelheid; u.pitch=0.85; u.volume=1;
-  if(gekozenStem) u.voice=gekozenStem;
-  return u;
-}
-function speakFull(langzaam){
-  if(!items[idx]) return;
-  var zin=items[idx].sentence||('Maurits oefent '+items[idx].word+'.'), woord=items[idx].word;
-  var r=langzaam?spraakSnelheid*0.75:spraakSnelheid;
-  speechSynthesis.cancel(); setBezigKnop(true);
-  var u1=maakU(zin,r), u2=maakU(woord,r*0.82), u3=maakU(woord,r*0.78);
-  u1.onend=function(){setTimeout(function(){speechSynthesis.speak(u2);},800);};
-  u2.onend=function(){setTimeout(function(){speechSynthesis.speak(u3);},650);};
-  u3.onend=function(){setBezigKnop(false);}; u1.onerror=u2.onerror=u3.onerror=function(){setBezigKnop(false);};
-  speechSynthesis.speak(u1);
-}
-function speakWoordAlleen(){
-  if(!items[idx]) return;
-  speechSynthesis.cancel(); setBezigKnop(true);
-  var u=maakU(items[idx].word,spraakSnelheid*0.80);
-  u.onend=function(){setBezigKnop(false);}; u.onerror=function(){setBezigKnop(false);};
-  speechSynthesis.speak(u);
-}
-function setBezigKnop(aan){
-  document.getElementById('luister-knop').classList.toggle('bezig',aan);
-  document.getElementById('golven').classList.toggle('actief',aan);
-  if(!aan) setKnopLabel('Druk om de zin te horen');
-}
-function setKnopLabel(t){document.getElementById('knop-label').textContent=t;}
-function isIOS(){return /iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);}
-function focusInput(){var inp=document.getElementById('spell-input');inp.removeAttribute('readonly');inp.focus();setTimeout(function(){inp.scrollIntoView({behavior:'smooth',block:'center'});},300);}
+function checkAntwoord(gekozen, knop) {
+  var v = vragen[vraagIdx];
+  var goed = gekozen === v.goed;
 
-// Antwoord
-function handleKey(e){if(e.key==='Enter')checkAntwoord();}
-function checkAntwoord(){
-  if(beantwoord){volgende();return;}
-  var inp=document.getElementById('spell-input');
-  var getypt=inp.value.trim().toLowerCase();
-  if(!getypt){speakFull();return;}
-  var correct=items[idx].word.toLowerCase(), ok=(getypt===correct);
-  beantwoord=true; inp.classList.add(ok?'goed-input':'fout-input');
-  var fbH=document.getElementById('fb-hoofd'),fbW=document.getElementById('fb-woord'),chD=document.getElementById('char-diff');
-  if(ok){
-    score++; fbH.textContent=kiesPos(); fbH.className='fb-hoofd toon goed';
-    fbW.textContent='Goed: '+items[idx].word; fbW.className='fb-woord toon';
-    chD.className='char-diff'; updatePip(idx,'goed');
+  // Disable alle knoppen
+  document.querySelectorAll('.antw-knop').forEach(function(b) {
+    b.disabled = true;
+    // Markeer juiste altijd groen
+    if (b.textContent.trim().slice(1).trim() === v.goed) {
+      b.classList.add('juist');
+    } else if (b === knop && !goed) {
+      b.classList.add('fout-keuze');
+    } else {
+      b.classList.add('grijs');
+    }
+  });
+
+  // Pip bijwerken
+  var pip = document.getElementById('pip-'+vraagIdx);
+  if (pip) pip.className = 'pip ' + (goed ? 'goed' : 'fout');
+
+  if (goed) {
+    sessionScore++;
+    updateScore();
+    // Correct feedback - kort
+    var fb = document.getElementById('feedback-blok');
+    fb.className = 'feedback-blok toon goed-blok';
+    document.getElementById('fb-titel').textContent = kiesPos();
+    document.getElementById('fb-woord').textContent = v.goed;
+    document.getElementById('fb-uitleg').innerHTML = v.uitleg;
+    document.getElementById('fb-onthoud').textContent = '';
+
+    // Verwijder uit foutwoordenlijst als het nu goed ging
+    if (foutWoorden[v.goed] && foutWoorden[v.goed].count > 0) {
+      foutWoorden[v.goed].count--;
+      if (foutWoorden[v.goed].count <= 0) delete foutWoorden[v.goed];
+      slaFoutenOp();
+    }
+
+    // Auto-doorgaan na 1.2 sec bij goede antwoord
+    setTimeout(function() {
+      if (document.getElementById('feedback-blok').classList.contains('toon')) volgende();
+    }, 1200);
+
   } else {
-    fbH.textContent='Helaas, niet goed!'; fbH.className='fb-hoofd toon fout';
-    fbW.textContent='Het juiste woord: '+items[idx].word; fbW.className='fb-woord toon';
-    toonDiff(getypt,correct); chD.className='char-diff toon';
-    updatePip(idx,'fout');
-    setTimeout(function(){spreek(correct,spraakSnelheid*0.78,null);},400);
+    // Fout - langer stilstaan, sla op
+    if (!foutWoorden[v.goed]) foutWoorden[v.goed] = { catId: v.catId, uitleg: v.uitleg, count: 0 };
+    foutWoorden[v.goed].count++;
+    slaFoutenOp();
+
+    sessionFouten.push({ word: v.goed, catId: v.catId, gekozen: gekozen, uitleg: v.uitleg });
+
+    var fb = document.getElementById('feedback-blok');
+    fb.className = 'feedback-blok toon fout-blok';
+    document.getElementById('fb-titel').textContent = 'Helaas! Het goede woord is:';
+    document.getElementById('fb-woord').textContent = v.goed;
+    document.getElementById('fb-uitleg').innerHTML = v.uitleg;
+    document.getElementById('fb-onthoud').textContent =
+      'Jij koos: "' + gekozen + '". Onthoud: "' + v.goed + '" is de juiste spelling!';
+
+    // Wacht langer bij fouten: 3 sec of handmatig
+    document.getElementById('volgende-knop').style.display = 'block';
+    setTimeout(function() {
+      if (document.getElementById('feedback-blok').classList.contains('toon')) volgende();
+    }, 3500);
   }
-  sessieRes.push({word:items[idx].word,answer:getypt,correct:ok});
-  updateScore(); document.getElementById('controleer-knop').textContent='Volgende';
-  setTimeout(volgende,2200);
+
+  updateScore();
 }
-function toonDiff(getypt,correct){
-  var box=document.getElementById('char-diff'); box.innerHTML='';
-  var max=Math.max(getypt.length,correct.length);
-  for(var i=0;i<max;i++){
-    var tc=getypt[i]||'',cc=correct[i]||'';
-    var el=document.createElement('div'); el.className='char-box';
-    if(!cc){el.classList.add('extra');el.textContent=tc;}
-    else if(tc===cc){el.classList.add('ok');el.textContent=cc;}
-    else{el.classList.add('fout');el.textContent=cc;el.title='Jij: "'+(tc||'-')+'"';}
-    box.appendChild(el);
+
+function volgende() {
+  vraagIdx++;
+  if (vraagIdx < vragen.length) {
+    // Volgende pip markeren
+    var nextPip = document.getElementById('pip-'+vraagIdx);
+    if (nextPip) nextPip.className = 'pip huidig';
+    toonVraag();
+  } else {
+    toonResultaten();
   }
 }
-function verbergFB(){document.getElementById('fb-hoofd').className='fb-hoofd';document.getElementById('fb-woord').className='fb-woord';document.getElementById('char-diff').className='char-diff';}
-function volgende(){idx++;if(idx<items.length)toonItem();else toonResultaten();}
-function stopEnTerug(){
-  speechSynthesis.cancel(); beantwoord=false;
-  document.getElementById('spel-area').style.display='none';
-  document.getElementById('progress-row').style.display='none';
-  document.getElementById('resultaten').classList.remove('toon');
-  document.getElementById('cat-sectie').style.display='';
-  document.getElementById('score-display').textContent='0 / 0';
+
+function toonResultaten() {
+  naarScherm('s-res');
+  var pct = sessionScore / vragen.length;
+  document.getElementById('res-score').innerHTML = sessionScore + ' <span>/ ' + vragen.length + '</span>';
+  document.getElementById('res-ster').textContent = pct===1?'&#x1F3C6;':pct>=0.8?'&#x2B50;&#x2B50;&#x2B50;':pct>=0.6?'&#x2B50;&#x2B50;':'&#x2B50;';
+  document.getElementById('res-bericht').textContent =
+    pct===1  ?'Perfect! Alle woorden goed! Florine is een spellingskampioen!':
+    pct>=0.8 ?'Heel goed gedaan, Florine! Bijna allemaal goed!':
+    pct>=0.6 ?'Goed bezig, Florine! Blijf oefenen!':
+    pct>=0.4 ?'Aardig begin! Oefen de fout gegane woorden nog eens.':
+              'Probeer het nog eens, Florine! Je kan het!';
+
+  // Foutlijst
+  var foutSectie = document.getElementById('fout-sectie');
+  var foutLijst = document.getElementById('fout-lijst');
+  var oefen = document.getElementById('oefen-fout-knop');
+  foutLijst.innerHTML = '';
+  if (sessionFouten.length > 0) {
+    foutSectie.style.display = 'flex';
+    oefen.style.display = 'block';
+    sessionFouten.forEach(function(f) {
+      var div = document.createElement('div');
+      div.className = 'fout-item';
+      div.innerHTML =
+        '<div><div class="fout-item-woord">'+f.word+'</div><div class="fout-item-info">'+
+        'Jij koos: <span class="fout-item-gekozen">'+f.gekozen+'</span></div></div>'+
+        '<div class="fout-item-info" style="text-align:right">'+
+        (foutWoorden[f.word]?'Al '+(foutWoorden[f.word].count)+'x fout':'')+
+        '</div>';
+      foutLijst.appendChild(div);
+    });
+  } else {
+    foutSectie.style.display = 'none';
+    oefen.style.display = 'none';
+  }
+  toonFoutPreview();
 }
-function toonResultaten(){
-  document.getElementById('spel-area').style.display='none';
-  document.getElementById('progress-row').style.display='none';
-  document.getElementById('resultaten').classList.add('toon');
-  var pct=score/items.length;
-  document.getElementById('grote-score').innerHTML=score+' <span>/ '+items.length+'</span>';
-  document.getElementById('score-ster').textContent=pct===1?'trophy':pct>=0.8?'3 sterren':pct>=0.6?'2 sterren':'1 ster';
-  document.getElementById('score-ster').textContent=pct===1?'🏆':pct>=0.8?'⭐⭐⭐':pct>=0.6?'⭐⭐':'⭐';
-  document.getElementById('res-bericht').textContent=
-    pct===1?'Perfect! Alle woorden goed! Florine is een spellingsheld!':
-    pct>=0.8?'Super goed gedaan, Florine! Bijna allemaal goed!':
-    pct>=0.6?'Goed bezig, Florine! Nog een keer oefenen.':
-    pct>=0.4?'Aardig begin! Blijf oefenen, Florine!':
-    'Probeer het nog eens - jij kan het zeker!';
-  var lijst=document.getElementById('woord-lijst'); lijst.innerHTML='';
-  sessieRes.forEach(function(r){
-    var rij=document.createElement('div'); rij.className='woord-rij';
-    rij.innerHTML='<div class="links"><span>'+(r.correct?'ok':'x')+'</span><span>'+r.word+'</span></div><span class="antwoord '+(r.correct?'ok':'')+'">'+r.answer+'</span>';
-    lijst.appendChild(rij);
-  });
+
+// ── Navigatie ─────────────────────────────────────────────────────────────────
+function naarScherm(id) {
+  document.querySelectorAll('.scherm').forEach(function(s) { s.classList.remove('actief'); });
+  document.getElementById(id).classList.add('actief');
 }
-function naarCats(){
-  speechSynthesis.cancel();
-  document.getElementById('resultaten').classList.remove('toon');
-  document.getElementById('cat-sectie').style.display='';
-  document.getElementById('score-display').textContent='0 / 0';
+function naarStart() {
+  alFouten = false;
+  naarScherm('s-start');
+  toonFoutPreview();
 }
-function herstart(){speechSynthesis.cancel();start(huidigeCat);}
-function mix(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function kiesPos(){return['Goed gedaan!','Helemaal goed!','Super Florine!','Uitstekend!','Top zo!'][Math.floor(Math.random()*5)];}
+function opnieuw() {
+  if (alFouten) oefenFouten();
+  else startSpel(false);
+}
+function stopSpel() { naarStart(); }
+
+// ── Hulpfuncties ─────────────────────────────────────────────────────────────
+function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+function mix(a) { for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+function kiesPos() {
+  return ['Goed zo!','Correct!','Super, Florine!','Uitstekend!','Top!','Precies goed!'][Math.floor(Math.random()*6)];
+}
+
+window.addEventListener('load', function() {
+  // Restore instellingen
+  var an = localStorage.getItem('mc_aantal'); if (an) kiesAantal(parseInt(an));
+  var nv = localStorage.getItem('mc_niveau'); if (nv !== null) kiesNiveau(parseInt(nv));
+});
 
 </script>
 </body>
