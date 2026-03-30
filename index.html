@@ -95,6 +95,8 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
 .antw-knop{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;letter-spacing:0.03em;background:var(--blauw-licht);border:2.5px solid var(--blauw-mid);border-radius:13px;padding:14px 10px;cursor:pointer;transition:all 0.17s;text-align:center;color:var(--tekst);position:relative;}
 .antw-knop:hover:not(:disabled){background:var(--blauw-mid);border-color:var(--blauw);transform:translateY(-1px);}
 .antw-knop:disabled{cursor:default;}
+.antw-knop:focus{outline:none;}
+.antw-knop:focus-visible{outline:2px solid var(--blauw);outline-offset:2px;}
 .antw-knop .letter{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--blauw-mid);color:var(--blauw-donker);font-size:0.72rem;line-height:22px;text-align:center;margin-right:6px;transition:all 0.15s;flex-shrink:0;}
 .antw-knop.juist{background:var(--groen-licht);border-color:var(--groen);color:var(--groen);}
 .antw-knop.juist .letter{background:var(--groen);color:white;}
@@ -158,7 +160,7 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
 <!-- Welkom -->
 <div class="welkom" id="welkom">
   <div class="welkom-titel">Staal Spelling<span>Groep 4 – Multiple Choice</span></div>
-  <div style="font-size:3rem">&#x1F4DD;</div>
+  <div style="font-size:3rem">📝</div>
   <button class="welkom-knop" onclick="startApp()">Tik om te beginnen</button>
   <div class="welkom-sub">Voor Florine</div>
 </div>
@@ -177,7 +179,7 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
     </div>
 
     <div class="opties-rij">
-      <span class="opt-lbl">&#x1F4DD; Vragen</span>
+      <span class="opt-lbl">📝 Vragen</span>
       <div class="opt-knoppen">
         <button class="opt-knop" onclick="kiesAantal(5)">5</button>
         <button class="opt-knop actief" onclick="kiesAantal(10)">10</button>
@@ -187,7 +189,7 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
     </div>
 
     <div class="opties-rij">
-      <span class="opt-lbl">&#x2B50; Niveau</span>
+      <span class="opt-lbl">⭐ Niveau</span>
       <div class="opt-knoppen">
         <button class="opt-knop actief" id="niv-0" onclick="kiesNiveau(0)">Alles</button>
         <button class="opt-knop" id="niv-1" onclick="kiesNiveau(1)">Makkelijk</button>
@@ -199,7 +201,7 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
     <!-- Foutwoordenlijst preview -->
     <div class="fout-preview" id="fout-preview">
       <div class="fout-preview-hdr">
-        <span class="fout-preview-titel">&#x26A0; Eerder fout gegaan</span>
+        <span class="fout-preview-titel">⚠️ Eerder fout gegaan</span>
         <button style="font-family:'Nunito',sans-serif;font-size:0.72rem;font-weight:700;background:var(--rood);color:white;border:none;border-radius:50px;padding:4px 12px;cursor:pointer;" onclick="oefenFouten()">Oefen deze</button>
       </div>
       <div class="fout-chips" id="fout-chips"></div>
@@ -214,7 +216,7 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
     <div class="voortgang" id="voortgang"></div>
     <div class="vraag-teller">
       <span id="vraag-num">Vraag 1 van 10</span>
-      <button class="stop-knop" onclick="stopSpel()">&#x2190; Stop</button>
+      <button class="stop-knop" onclick="stopSpel()">← Stop</button>
     </div>
 
     <div class="zin-kaart" id="zin-kaart"></div>
@@ -234,20 +236,20 @@ body{background:var(--achter);color:var(--tekst);font-family:'Nunito Sans',sans-
 
   <!-- ③ Resultaten -->
   <div class="scherm" id="s-res">
-    <div class="res-ster" id="res-ster">&#x2B50;</div>
+    <div class="res-ster" id="res-ster">⭐</div>
     <div class="res-score" id="res-score">0 <span>/ 10</span></div>
     <div class="res-bericht" id="res-bericht"></div>
 
     <div id="fout-sectie" style="display:none;flex-direction:column;gap:8px;">
-      <div class="fout-lijst-titel">&#x26A0; Fout gegane woorden — onthoud deze goed!</div>
+      <div class="fout-lijst-titel">⚠️ Fout gegane woorden — onthoud deze goed!</div>
       <div class="fout-lijst" id="fout-lijst"></div>
     </div>
 
     <div class="res-knoppen">
-      <button class="res-knop wit" onclick="naarStart()">&#x2190; Opnieuw instellen</button>
-      <button class="res-knop" onclick="opnieuw()">Opnieuw &#x21BA;</button>
+      <button class="res-knop wit" onclick="naarStart()">← Opnieuw instellen</button>
+      <button class="res-knop" onclick="opnieuw()">Opnieuw ↺</button>
     </div>
-    <button class="res-knop rood" id="oefen-fout-knop" onclick="oefenFouten()" style="display:none">&#x26A0; Oefen alleen de fout gegane woorden</button>
+    <button class="res-knop rood" id="oefen-fout-knop" onclick="oefenFouten()" style="display:none">⚠️ Oefen alleen de fout gegane woorden</button>
   </div>
 </div>
 
@@ -419,135 +421,180 @@ var ZINNEN = {"as": "Maurits veegt de as uit de open haard.", "baan": "Maurits s
 
 
 // ── Fouten generator ─────────────────────────────────────────────────────────
-// Bedenkt plausibele kinderfouten per woord, gebaseerd op spellingcategorie
+// Per categorie: doordachte fouten die een kind van 7-8 zou maken
+
 function maakFouten(woord, catId) {
+  var w = woord.toLowerCase();
   var f = [];
-  var w = woord;
 
-  // Categorie-specifieke fouten
-  var regels = {
-    // Zingwoord: ng -> nk of n
-    'zingwoord': function() {
-      if (w.endsWith('ng'))  f.push(w.slice(0,-2)+'nk', w.slice(0,-2)+'n', w.slice(0,-2)+'nng');
-      if (w.includes('nge')) f.push(w.replace('nge','nke'), w.replace('nge','ne'));
-      if (w.includes('ing')) f.push(w.replace('ing','ink'), w.replace('ing','ieg'));
-    },
-    // Luchtwoord: cht -> gt, ct, cht weggooien
-    'luchtwoord': function() {
-      if (w.includes('cht')) { f.push(w.replace('cht','gt'), w.replace('cht','kt'), w.replace('cht','t')); }
-      if (w.includes('ch'))  { f.push(w.replace('ch','g'), w.replace('ch','k')); }
-    },
-    // Plankwoord: nk -> ng
-    'plankwoord': function() {
-      if (w.includes('nk'))  f.push(w.replace('nk','ng'), w.replace('nk','n'), w.replace('nk','nnk'));
-      if (w.includes('ink')) f.push(w.replace('ink','ieg'), w.replace('ink','ienk'));
-    },
-    // EI/IJ AU/OU fouten
-    'eiij': function() {
-      f.push(
-        w.replace(/ei/g,'ij').replace(/ij/g,'ei'),
-        w.replace(/au/g,'ou').replace(/ou/g,'au'),
-        w.replace(/ui/g,'uy')
-      );
-    },
-    // EER OOR EUR fouten
-    'eerooreur': function() {
-      f.push(
-        w.replace('eer','er').replace('oor','or').replace('eur','ur'),
-        w.replace('eer','ear').replace('oor','oar'),
-        w+'r'
-      );
-    },
-    // AAI OOI OEI: dubbel of enkel
-    'aaiooi': function() {
-      f.push(
-        w.replace('aai','ai').replace('ooi','oi').replace('oei','oi'),
-        w.replace('aai','aay').replace('ooi','ooy'),
-        w.replace('ij','y')
-      );
-    },
-    // EEUW IEUW: vergeet u
-    'eeuwwoord': function() {
-      f.push(
-        w.replace('eeuw','ee').replace('ieuw','ie').replace('uw','w'),
-        w.replace('eeuw','eew').replace('ieuw','iew'),
-        w.replace('uu','u').replace('oe','u')
-      );
-    },
-    // Langermaakwoord: d/t verwarring
-    'langermaak': function() {
-      if (w.endsWith('d')) f.push(w.slice(0,-1)+'t', w.slice(0,-1)+'dd', w+'d');
-      if (w.endsWith('t')) f.push(w.slice(0,-1)+'d', w.slice(0,-1)+'tt');
-      f.push(w.replace(/nd$/,'nt'), w.replace(/rd$/,'rt'));
-    },
-    // Voorvoegsel: be/ge verwarring, stomme e
-    'voorvoegsel': function() {
-      if (w.startsWith('be')) f.push('bi'+w.slice(2), 'ba'+w.slice(2), w.replace('be',''));
-      if (w.startsWith('ge')) f.push('gi'+w.slice(2), w.replace('ge',''), 'je'+w.slice(2));
-      if (w.startsWith('ver')) f.push('fer'+w.slice(3), 'var'+w.slice(3));
-    },
-    // Verkleinwoord: je/tje/pje fouten
-    'verkleinwoord': function() {
-      if (w.endsWith('tje')) f.push(w.slice(0,-3)+'je', w.slice(0,-3)+'dje', w.slice(0,-3)+'sje');
-      if (w.endsWith('pje')) f.push(w.slice(0,-3)+'je', w.slice(0,-3)+'bje');
-      if (w.endsWith('je') && !w.endsWith('tje')) f.push(w.slice(0,-2)+'tje', w.slice(0,-2)+'dje');
-    },
-    // Achtervoegsel: ig/lijk fouten
-    'achtervoegsel': function() {
-      if (w.endsWith('ig'))   f.push(w.slice(0,-2)+'ijk', w.slice(0,-2)+'iek', w.slice(0,-2)+'igg');
-      if (w.endsWith('lijk')) f.push(w.replace('lijk','lik'), w.replace('lijk','leijk'), w.replace('lijk','lijck'));
-    },
-    // Samenstellingen
-    'samenstelling': function() {
-      // Splits het woord en verwissel onderdelen of spel apart
-      f.push(w+w.slice(-2), w.slice(0,-1), w.replace(/ij/g,'y'));
-    }
-  };
+  // ── Categorie-specifieke fouten ──
+  if (catId === 'zingwoord') {
+    // ng → nk, n, nng
+    f.push(
+      w.replace(/ng$/, 'nk'),
+      w.replace(/ng$/, 'n'),
+      w.replace(/nge$/, 'ne'),
+      w.replace(/ngen$/, 'nen'),
+      w.replace(/ings/, 'incs'),
+      w.replace(/ing$/, 'ink'),
+      w.replace(/ang/, 'ank'),
+      w.replace(/ong/, 'onk'),
+      w.replace(/ung/, 'unk')
+    );
+  }
+  else if (catId === 'luchtwoord') {
+    // cht → gt, kt, t, cht → ch
+    f.push(
+      w.replace(/cht/g, 'gt'),
+      w.replace(/cht/g, 'kt'),
+      w.replace(/cht/g, 't'),
+      w.replace(/cht/g, 'ch'),
+      w.replace(/pech/, 'peg'),
+      w.replace(/ach/, 'ag'),
+      w.replace(/ech/, 'eg'),
+      w.replace(/ich/, 'ig'),
+      w.replace(/och/, 'og'),
+      w.replace(/uch/, 'ug')
+    );
+  }
+  else if (catId === 'plankwoord') {
+    // nk → ng, nnk, n
+    f.push(
+      w.replace(/nk/g, 'ng'),
+      w.replace(/nk/g, 'n'),
+      w.replace(/ank/, 'ang'),
+      w.replace(/ink/, 'ing'),
+      w.replace(/onk/, 'ong'),
+      w.replace(/unk/, 'ung'),
+      w.replace(/enk/, 'eng')
+    );
+  }
+  else if (catId === 'eiij') {
+    // ei↔ij, au↔ou
+    if (w.includes('ei')) f.push(w.replace(/ei/g,'ij'), w.replace(/ei/g,'ie'), w.replace(/ei/g,'ai'));
+    if (w.includes('ij')) f.push(w.replace(/ij/g,'ei'), w.replace(/ij/g,'ie'), w.replace(/ij/g,'y'));
+    if (w.includes('au')) f.push(w.replace(/au/g,'ou'), w.replace(/au/g,'aw'), w.replace(/au/g,'ao'));
+    if (w.includes('ou')) f.push(w.replace(/ou/g,'au'), w.replace(/ou/g,'ow'), w.replace(/ou/g,'o'));
+    if (w.includes('ui')) f.push(w.replace(/ui/g,'uu'), w.replace(/ui/g,'u'), w.replace(/ui/g,'uy'));
+  }
+  else if (catId === 'eerooreur') {
+    // -eer → -er, -oor → -or, -eur → -ur, -eel → -el
+    f.push(
+      w.replace(/eer/g,'er'), w.replace(/oor/g,'or'), w.replace(/eur/g,'ur'), w.replace(/eel/g,'el'),
+      w.replace(/eer/g,'ear'), w.replace(/oor/g,'oar'), w.replace(/eur/g,'eur').replace(/eu/,'u'),
+      w.replace(/ee/g,'e').replace(/oo/g,'o')
+    );
+  }
+  else if (catId === 'aaiooi') {
+    // aai → ai, ooi → oi, oei → oi, of met y
+    f.push(
+      w.replace(/aai/g,'ai'), w.replace(/ooi/g,'oi'), w.replace(/oei/g,'oei').replace(/oe/,'u'),
+      w.replace(/aai/g,'aay'), w.replace(/ooi/g,'ooy'), w.replace(/oei/g,'oey'),
+      w.replace(/ij$/,'y'), w.replace(/ii/,'i')
+    );
+  }
+  else if (catId === 'eeuwwoord') {
+    // vergeet u: eeuw → ee, ieuw → ie, uw → w
+    f.push(
+      w.replace(/eeuw/g,'ee'), w.replace(/ieuw/g,'ie'), w.replace(/uw$/,'w'),
+      w.replace(/eeuw/g,'eew'), w.replace(/ieuw/g,'iew'),
+      w.replace(/sneeuw/,'snee'), w.replace(/leeuw/,'lee'), w.replace(/nieuw/,'nie')
+    );
+  }
+  else if (catId === 'langermaak') {
+    // d/t verwarring aan einde
+    f.push(
+      w.replace(/d$/, 't'), w.replace(/t$/, 'd'),
+      w.replace(/nd$/, 'nt'), w.replace(/rd$/, 'rt'), w.replace(/ld$/, 'lt'),
+      w.replace(/nd$/, 'n'), w.replace(/st$/, 'sd'),
+      w + 'd', w + 't'
+    );
+  }
+  else if (catId === 'voorvoegsel') {
+    // be/ge stomme e: bewust fout gespeld
+    f.push(
+      w.replace(/^be/, 'bi'), w.replace(/^be/, 'ba'), w.replace(/^ge/, 'gi'),
+      w.replace(/^ver/, 'fer'), w.replace(/^ver/, 'var'),
+      w.replace(/^ge/, 'je'), w.replace(/^be/, 'bu'),
+      // stomme e aan einde
+      w.replace(/en$/, 'un'), w.replace(/ing$/, 'ung')
+    );
+  }
+  else if (catId === 'verkleinwoord') {
+    // je/tje/pje fouten
+    f.push(
+      w.replace(/tje$/, 'je'), w.replace(/tje$/, 'dje'), w.replace(/tje$/, 'sje'),
+      w.replace(/pje$/, 'je'), w.replace(/pje$/, 'bje'),
+      w.replace(/je$/, 'tje'), w.replace(/je$/, 'dje'),
+      // dubbele medeklinker voor je
+      w.replace(/(\w)je$/, '$1$1je'), w.replace(/(\w)tje$/, '$1je')
+    );
+  }
+  else if (catId === 'achtervoegsel') {
+    // -ig/-lijk fouten
+    f.push(
+      w.replace(/ig$/, 'ijk'), w.replace(/ig$/, 'iek'), w.replace(/ig$/, 'igg'),
+      w.replace(/lijk$/, 'lik'), w.replace(/lijk$/, 'lijck'), w.replace(/lijk$/, 'leijk'),
+      w.replace(/ig$/, 'ich'), w.replace(/elijk$/, 'elik')
+    );
+  }
+  else if (catId === 'samenstelling') {
+    // Splits verkeerd of spelt onderdeel fout
+    var mid = Math.floor(w.length / 2);
+    f.push(
+      w.slice(0,mid) + ' ' + w.slice(mid), // met spatie (fout)
+      w.replace(/aa/, 'a').replace(/ee/, 'e').replace(/oo/, 'o'),
+      w.replace(/ij/, 'ei').replace(/ei/, 'ij')
+    );
+  }
+  else {
+    // Hakwoord en overig: klankverwisseling
+    // v↔f, z↔s, w↔v aan begin
+    var bverwiss = {'v':'f','f':'v','z':'s','s':'z','w':'v','g':'ch','ch':'g'};
+    Object.keys(bverwiss).forEach(function(k) {
+      if (w.startsWith(k)) f.push(bverwiss[k] + w.slice(k.length));
+    });
+    // Lange/korte klinker verwarring
+    f.push(
+      w.replace(/aa/,'a'), w.replace(/ee/,'e'), w.replace(/oo/,'o'), w.replace(/uu/,'u'),
+      w.replace(/([aeiou])(?!\1)/, function(m) { return m+m; }) // verdubbel klinker
+    );
+    // Tweeklank fouten
+    f.push(
+      w.replace(/ui/,'uu'), w.replace(/ou/,'oe'), w.replace(/au/,'ao'),
+      w.replace(/ei/,'ee'), w.replace(/ij/,'ie')
+    );
+    // Sch fouten
+    f.push(w.replace(/sch/,'sk'), w.replace(/sch/,'sh'), w.replace(/sch/,'sg'));
+  }
 
-  // Voer categorie-regels uit
-  if (regels[catId]) regels[catId]();
-
-  // Algemene kinderfouten (altijd toegevoegd)
-  var algemeen = [];
-
-  // 1. Klankverwisseling begin: v↔f, z↔s, w↔v, g↔ch
-  var beginverwiss = {v:'f',f:'v',z:'s',s:'z',w:'v',g:'ch',ch:'g',sj:'sh',zh:'z'};
-  var eerste = Object.keys(beginverwiss).find(function(k){return w.toLowerCase().startsWith(k);});
-  if (eerste) algemeen.push(beginverwiss[eerste]+w.slice(eerste.length));
-
-  // 2. Dubbel/enkel klinker
-  algemeen.push(
-    w.replace(/aa/g,'a').replace(/ee/g,'e').replace(/oo/g,'o').replace(/uu/g,'u'),
-    w.replace(/([aeiou])\1/g,'$1$1$1')
+  // ── Universele extra fouten (altijd) ──
+  // Eindletter d/t
+  f.push(w.replace(/d$/, 't'), w.replace(/t$/, 'd'));
+  // Dubbel/enkel
+  f.push(
+    w.replace(/([aeiou])\1/, '$1'),   // aa→a
+    w.replace(/([aeiou])(?!\1)([aeiou]?[bcdfghjklmnpqrstvwxyz])/, '$1$1$2') // a→aa voor medeklinker
   );
 
-  // 3. Dubbel/enkel medeklinker
-  algemeen.push(
-    w.replace(/([bcdfghjklmnpqrstvwxyz])\1/g,'$1'),
-    w.replace(/([bcdfghjklmnpqrstvwxyz])(?!\1)([bcdfghjklmnpqrstvwxyz])/,'$1$1$2')
-  );
-
-  // 4. ui → uy, ij → y, ei → ay
-  algemeen.push(
-    w.replace(/ui/g,'uy').replace(/ij/g,'ij').replace(/ei/g,'ai'),
-    w.replace(/sch/g,'sk').replace(/sch/g,'sh')
-  );
-
-  // 5. Eindletter weggooien of toevoegen
-  algemeen.push(w+'e', w.slice(0,-1), w.replace(/t$/,'d').replace(/d$/,'t'));
-
-  // Voeg algemeen toe aan f
-  f = f.concat(algemeen);
-
-  // Filter: geen duplicaten, niet gelijk aan het goede woord, minimale lengte
+  // ── Schoon filteren ──
+  var goedLc = w;
   var gezien = {};
-  gezien[w.toLowerCase()] = true;
+  gezien[goedLc] = true;
   f = f.filter(function(x) {
-    if (!x || x.length < 2) return false;
-    var xl = x.toLowerCase();
+    if (!x) return false;
+    var xl = x.toLowerCase().trim();
+    // Niet gelijk aan juiste woord
+    if (xl === goedLc) return false;
+    // Niet leeg of te kort
+    if (xl.length < 2) return false;
+    // Niet identiek aan een al-gevonden fout
     if (gezien[xl]) return false;
+    // Niet met spatie (tenzij samenstelling)
+    if (catId !== 'samenstelling' && xl.includes(' ')) return false;
+    // Moet enigszins op het woord lijken (niet te anders)
+    if (Math.abs(xl.length - goedLc.length) > 4) return false;
     gezien[xl] = true;
-    // Mag niet bijna identiek zijn (1 karakter verschil max is ok, meer is beter)
     return true;
   });
 
@@ -589,7 +636,7 @@ function bouwCatGrid() {
     var d = document.createElement('div');
     d.className = 'cat-vak';
     d.id = 'cat-'+c.id;
-    d.innerHTML = '<span class="cat-lbl">'+c.label+'</span><span class="cat-sub">'+c.sub+'</span><span class="vinkje">&#x2713;</span>';
+    d.innerHTML = '<span class="cat-lbl">'+c.label+'</span><span class="cat-sub">'+c.sub+'</span><span class="vinkje">✓</span>';
     d.onclick = function() { toggleCat(c.id); };
     g.appendChild(d);
   });
@@ -795,14 +842,31 @@ function toonVraag() {
   document.getElementById('feedback-blok').className = 'feedback-blok';
   document.getElementById('volgende-knop').style.display = 'none';
 
-  // Zin met ___ op de plek van het woord
-  var zinTekst = (v.zin || '').replace(new RegExp('\\b'+escRe(v.woord)+'\\b','i'),
-    '<span class="zin-woord-gat">'+v.woord.replace(/./g,'&nbsp;')+'</span>');
-  // Fallback als woord niet in zin gevonden
-  if (zinTekst === v.zin) {
-    zinTekst = (v.zin||'') + ' <em>(welk woord ontbreekt?)</em>';
+  // Vervang het woord in de zin altijd door een leeg vak
+  // Probeer case-insensitive, hele woord
+  var zinOrig = v.zin || '';
+  var re = new RegExp('(^|[\\s\\u00AB\\u00BB.,!?:;\'"(\\[{-])(' + escRe(v.woord) + ')([\\s\\u00AB\\u00BB.,!?:;\'"\\])}-]|$)', 'i');
+  var gat = '<span class="zin-woord-gat">____</span>';
+  var zinTekst;
+  if (re.test(zinOrig)) {
+    zinTekst = zinOrig.replace(re, '$1' + gat + '$3');
+  } else {
+    // Fallback: vervang gewoon de string
+    var lc = zinOrig.toLowerCase();
+    var wl = v.woord.toLowerCase();
+    var pos = lc.indexOf(wl);
+    if (pos !== -1) {
+      zinTekst = zinOrig.slice(0, pos) + gat + zinOrig.slice(pos + v.woord.length);
+    } else {
+      // Woord niet gevonden: zet gat aan het einde
+      zinTekst = zinOrig.replace(/\.$/, '') + ' ' + gat + '.';
+    }
   }
   document.getElementById('zin-kaart').innerHTML = zinTekst;
+
+  // Reset feedback en knoppen (wis vorige staat)
+  document.getElementById('feedback-blok').className = 'feedback-blok';
+  document.getElementById('volgende-knop').style.display = 'none';
 
   // Antwoordknoppen
   var grid = document.getElementById('antwoord-grid');
@@ -813,6 +877,7 @@ function toonVraag() {
     b.className = 'antw-knop';
     b.innerHTML = '<span class="letter">'+letters[i]+'</span> '+opt;
     b.onclick = function() { checkAntwoord(opt, b); };
+    b.setAttribute('tabindex', '-1');  // Geen focus-ring via Tab
     grid.appendChild(b);
   });
 }
@@ -859,7 +924,7 @@ function checkAntwoord(gekozen, knop) {
     // Auto-doorgaan na 1.2 sec bij goede antwoord
     setTimeout(function() {
       if (document.getElementById('feedback-blok').classList.contains('toon')) volgende();
-    }, 1200);
+    }, 1500);
 
   } else {
     // Fout - langer stilstaan, sla op
@@ -881,7 +946,7 @@ function checkAntwoord(gekozen, knop) {
     document.getElementById('volgende-knop').style.display = 'block';
     setTimeout(function() {
       if (document.getElementById('feedback-blok').classList.contains('toon')) volgende();
-    }, 3500);
+    }, 5000);
   }
 
   updateScore();
@@ -903,7 +968,7 @@ function toonResultaten() {
   naarScherm('s-res');
   var pct = sessionScore / vragen.length;
   document.getElementById('res-score').innerHTML = sessionScore + ' <span>/ ' + vragen.length + '</span>';
-  document.getElementById('res-ster').textContent = pct===1?'&#x1F3C6;':pct>=0.8?'&#x2B50;&#x2B50;&#x2B50;':pct>=0.6?'&#x2B50;&#x2B50;':'&#x2B50;';
+  document.getElementById('res-ster').textContent = pct===1?'🏆':pct>=0.8?'⭐⭐⭐':pct>=0.6?'⭐⭐':'⭐';
   document.getElementById('res-bericht').textContent =
     pct===1  ?'Perfect! Alle woorden goed! Florine is een spellingskampioen!':
     pct>=0.8 ?'Heel goed gedaan, Florine! Bijna allemaal goed!':
